@@ -8,7 +8,13 @@
 from . import types
 from ._approval import PendingApproval, is_pending_approval
 from ._client import AsyncFinn, Finn
-from ._core import AUTO_IDEMPOTENCY_ROUTES, DEFAULT_BASE_URL, idempotency_key
+from ._core import (
+    AUTO_IDEMPOTENCY_ROUTES,
+    DEFAULT_BASE_URL,
+    IDEMPOTENT_WRITE_ROUTES,
+    honours_idempotency_key,
+    idempotency_key,
+)
 from ._errors import (
     AuthenticationError,
     BadRequestError,
@@ -31,10 +37,24 @@ from ._errors import (
 from ._pagination import AsyncPaginator, SyncPaginator
 from ._types import ApprovalHold, FinnResponse
 from ._version import __version__
+from ._webhooks import (
+    DEFAULT_WEBHOOK_TOLERANCE,
+    WEBHOOK_EVENT_HEADER,
+    WEBHOOK_SIGNATURE_HEADER,
+    FinnWebhookVerificationError,
+    WebhookEvent,
+    parse_signature_header,
+    sign_webhook_payload,
+    verify_webhook,
+)
 
 __all__ = [
     "AUTO_IDEMPOTENCY_ROUTES",
     "DEFAULT_BASE_URL",
+    "DEFAULT_WEBHOOK_TOLERANCE",
+    "IDEMPOTENT_WRITE_ROUTES",
+    "WEBHOOK_EVENT_HEADER",
+    "WEBHOOK_SIGNATURE_HEADER",
     "ApprovalHold",
     "AsyncFinn",
     "AsyncPaginator",
@@ -49,6 +69,7 @@ __all__ = [
     "FinnResponse",
     "FinnSdkError",
     "FinnTimeoutError",
+    "FinnWebhookVerificationError",
     "InternalServerError",
     "NotFoundError",
     "PayloadTooLargeError",
@@ -57,10 +78,15 @@ __all__ = [
     "PermissionDeniedError",
     "RateLimitError",
     "SyncPaginator",
+    "WebhookEvent",
     "__version__",
     "code_for_status",
+    "honours_idempotency_key",
     "idempotency_key",
     "is_pending_approval",
     "parse_retry_after",
+    "parse_signature_header",
+    "sign_webhook_payload",
     "types",
+    "verify_webhook",
 ]

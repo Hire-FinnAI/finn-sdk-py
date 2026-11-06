@@ -39,6 +39,48 @@ AUTO_IDEMPOTENCY_ROUTES = frozenset(
     }
 )
 
+#: POST/PATCH routes where the API dedupes by Idempotency-Key (a retry with the same key and body replays the first
+#: answer). Only these writes are retried, and only when they carry a key: other routes ignore the header, so a retry
+#: after a timeout could create a second resource. ``*`` matches the rest of the path. Mirrors finn-sdk-ts.
+IDEMPOTENT_WRITE_ROUTES: Tuple[str, ...] = (
+    "post /calls",
+    "post /phone_numbers",
+    "post /deployments",
+    "post /deployments/inbound",
+    "post /chat/conversations",
+    "post /chat/conversations/{id}/messages",
+    "post /agents",
+    "post /agents/{id}/cases",
+    "post /crm/*",
+    "patch /crm/*",
+    "post /sales/plays/{slug}/run",
+    "post /sales/drafts/{id}/skip",
+)
+
+
+def _route_matcher(route: str) -> Tuple[str, "re.Pattern[str]"]:
+    method, path = route.split(" ", 1)
+    parts = []
+    for seg in path.split("/"):
+        if seg == "*":
+            parts.append(".+")
+        elif re.fullmatch(r"\{[^}]+\}", seg):
+            parts.append("[^/]+")
+        else:
+            parts.append(re.escape(seg))
+    return method.upper(), re.compile("^" + "/".join(parts) + "/?$")
+
+
+_IDEMPOTENT_WRITE_MATCHERS = [_route_matcher(r) for r in IDEMPOTENT_WRITE_ROUTES]
+
+
+def honours_idempotency_key(method: str, path: str) -> bool:
+    """True when the API dedupes this write by Idempotency-Key. ``path`` may be a template or a filled-in path."""
+    m = method.upper()
+    p = path.split("?", 1)[0]
+    return any(m == mm and rx.match(p) for mm, rx in _IDEMPOTENT_WRITE_MATCHERS)
+
+
 _SAFE_TO_RETRY_METHODS = frozenset({"GET", "HEAD", "OPTIONS", "PUT", "DELETE"})
 _RETRY_BASE_DELAY = 0.5
 _RETRY_MAX_DELAY = 8.0
@@ -63,7 +105,8 @@ def _is_retryable(error: FinnError) -> bool:
         return True
     if error.status == 409:
         return error.code == "idempotency_in_progress"
-    return error.status in (500, 502, 503, 504)
+    # Not 500: a server error is usually not transient, and the write may already have happened.
+    return error.status in (502, 503, 504)
 
 
 def _query_value(v: Any) -> str:
@@ -211,7 +254,8 @@ class BaseCore:
         h["Authorization"] = f"Bearer {self._api_key}"
 
         has_key = any(k.lower() == "idempotency-key" for k in h)
-        can_retry = upper in _SAFE_TO_RETRY_METHODS or has_key
+        # Idempotent methods always; a POST/PATCH only with a key on a route that dedupes by it.
+        can_retry = upper in _SAFE_TO_RETRY_METHODS or (has_key and honours_idempotency_key(upper, path))
         retries = max(0, self.max_retries if max_retries is None else max_retries) if can_retry else 0
         return _Prepared(
             method=upper,

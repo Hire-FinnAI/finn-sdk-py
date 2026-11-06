@@ -29,7 +29,10 @@ VENDORED = ROOT / "spec" / "openapi.json"
 OUT = ROOT / "finn" / "_generated"
 
 # Writes the API may hold for a person to approve (HTTP 202 pending_approval). Mirrors HoldableRoute in finn-sdk-ts.
-HOLDABLE = {"post /calls", "post /deployments", "post /phone_numbers"}
+HOLDABLE = {
+    "post /calls", "post /deployments", "post /phone_numbers",
+    "post /agents/{id}/cases", "post /chat/conversations", "post /chat/conversations/{id}/messages",
+}
 
 # Writes that get an automatic Idempotency-Key. Mirrors AUTO_IDEMPOTENCY_ROUTES in finn-sdk-ts (kept in finn/_core.py).
 AUTO_IDEMPOTENCY_NOTE = {
