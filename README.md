@@ -36,7 +36,8 @@ if is_pending_approval(call):
     print("Waiting for a person to approve:", call.approve_url)
     outcome = finn.wait_for_approval(call.approval_id)
 else:
-    print(call["data"]["call_uuid"])
+    call_uuid = call["data"]["call_uuid"]
+    print(call_uuid)
 
 # Read one
 c = finn.calls.retrieve(call_uuid)
@@ -48,7 +49,7 @@ for summary in finn.calls.list_all(status="completed", limit=100):
 
 # CRM
 rec = finn.contacts.create({"kind": "contact", "name": "Ada Lovelace", "phone": "+14155550142"})
-finn.contacts.add_note(rec["data"]["id"], {"text": "Asked for a callback on Monday."})
+finn.contacts.add_note(rec["contact"]["id"], {"text": "Asked for a callback on Monday."})  # create/retrieve answer {"contact": {...}}
 ```
 
 Async:
@@ -141,6 +142,10 @@ send none:
 finn.calls.create(body, idempotency_key=f"order-{order_id}")
 finn.calls.create(body, idempotency_key=False)
 ```
+
+> **Warning:** `finns.create` (`POST /finns`) ignores `Idempotency-Key` on the server. Passing `idempotency_key=`
+> makes the SDK retry it, and a retry after a lost response can create a duplicate Finn. Leave it unset there (the
+> default, which sends no key and does not retry), or check with `finns.list` before creating again.
 
 ## Errors
 
