@@ -3,7 +3,7 @@ requires = ["hatchling>=1.18"]
 build-backend = "hatchling.build"
 
 [project]
-name = "hirefinn"
+name = "finn-ai"
 version = "0.1.0"
 description = "Python SDK for the Finn API"
 readme = "README.md"
