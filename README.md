@@ -7,7 +7,8 @@ chat.
 - Sync (`Finn`) and async (`AsyncFinn`) clients on [httpx](https://www.python-httpx.org/), the only dependency.
 - Typed: every request body, query parameter and response in the spec is a `TypedDict` (`finn.types`), generated
   from the API's OpenAPI spec.
-- Retries with backoff on network errors, 408, 429 and 5xx, honouring `Retry-After`.
+- Retries with backoff on network errors, 408, 429, 502, 503 and 504, honouring `Retry-After`; writes only when it is safe.
+- `verify_webhook()` for signed webhook deliveries.
 - Automatic `Idempotency-Key` on spending and outward writes, kept the same across retries.
 - One iterator over every list style (cursor, offset, page, before).
 - Typed exceptions for the API's error shapes; held writes come back as `PendingApproval`.
@@ -36,7 +37,8 @@ if is_pending_approval(call):
     print("Waiting for a person to approve:", call.approve_url)
     outcome = finn.wait_for_approval(call.approval_id)
 else:
-    print(call["data"]["call_uuid"])
+    call_uuid = call["data"]["call_uuid"]
+    print(call_uuid)
 
 # Read one
 c = finn.calls.retrieve(call_uuid)
@@ -48,7 +50,7 @@ for summary in finn.calls.list_all(status="completed", limit=100):
 
 # CRM
 rec = finn.contacts.create({"kind": "contact", "name": "Ada Lovelace", "phone": "+14155550142"})
-finn.contacts.add_note(rec["data"]["id"], {"text": "Asked for a callback on Monday."})
+finn.contacts.add_note(rec["contact"]["id"], {"text": "Asked for a callback on Monday."})  # create/retrieve answer {"contact": {...}}
 ```
 
 Async:
@@ -124,11 +126,16 @@ print(res.status, res.request_id, res.idempotent_replayed, res.data)
 
 ## Retries
 
-Failed attempts are retried up to `max_retries` times on network errors, 408, 429, 5xx and
+Failed attempts are retried up to `max_retries` times on network errors, 408, 429, 502, 503, 504 and
 `409 idempotency_in_progress`, waiting `Retry-After` when the API sends it and otherwise backing off exponentially
-(0.5 s, 1 s, 2 s ... up to 8 s, with jitter). A `Retry-After` longer than `max_retry_after` raises at once.
-Only requests that are safe to repeat are retried: `GET`, `PUT`, `DELETE`, and writes that carry an
-`Idempotency-Key`.
+(0.5 s, 1 s, 2 s ... up to 8 s, with jitter). A `Retry-After` longer than `max_retry_after` raises at once. A `500`
+is not retried.
+
+Only requests that are safe to repeat are retried: `GET`, `PUT`, `DELETE`, and `POST`/`PATCH` writes that carry an
+`Idempotency-Key` **on a route that dedupes by it** (`finn.IDEMPOTENT_WRITE_ROUTES`: calls, phone numbers,
+deployments, chat start/send, agents, case start, `/crm/*` writes, sales play runs and draft skips). Other writes,
+such as `finns.create` or `contacts.create`, are sent once even with a key, because the API ignores the key there and
+a retry after a lost response could create a duplicate. Check with `finn.honours_idempotency_key(method, path)`.
 
 ## Idempotency keys
 
@@ -141,6 +148,34 @@ send none:
 finn.calls.create(body, idempotency_key=f"order-{order_id}")
 finn.calls.create(body, idempotency_key=False)
 ```
+
+A key you pass to a write outside `IDEMPOTENT_WRITE_ROUTES` (for example `finns.create`) is sent, but the API
+ignores it there, so the SDK does not retry that write. Check with `finns.list` before creating again.
+
+## Webhooks
+
+Finn signs each delivery with `X-Finn-Signature: t=<unix>,v1=<hex HMAC-SHA256(secret, "<t>.<raw body>")>`.
+`verify_webhook` checks it in constant time, refuses timestamps more than 300 s from now, and returns the parsed
+event. Pass the **raw** body, not re-serialised JSON.
+
+```python
+import os
+from flask import Flask, request
+from finn import FinnWebhookVerificationError, verify_webhook
+
+app = Flask(__name__)
+
+@app.post("/finn-webhook")
+def finn_webhook():
+    try:
+        event = verify_webhook(request.get_data(), headers=request.headers, secret=os.environ["FINN_WEBHOOK_SECRET"])
+    except FinnWebhookVerificationError:
+        return "", 400
+    print(event["event"], event["data"])
+    return "", 200
+```
+
+Options: `tolerance=` (seconds, default 300), and `secret=` can be a list while you rotate secrets.
 
 ## Errors
 
@@ -170,6 +205,9 @@ No HTTP answer at all raises `FinnConnectionError` (`FinnTimeoutError` when an a
 
 Outward and spending writes from OAuth and MCP callers may be held for a person to approve. They answer HTTP 202,
 which the SDK returns as a `PendingApproval` (`approval_id`, `approve_url`, `expires_at`, `action`, `summary`).
+The methods that can be held are `calls.create`, `phone_numbers.rent`, `deployments.create_outbound`,
+`cases.start`, `chat.conversations.start` and `chat.conversations.send`; their return types include
+`PendingApproval`, so check `is_pending_approval(res)` before reading fields such as `res["id"]`.
 `finn.wait_for_approval(id)` polls until the approval is decided and returns it; for a held request, `status` ends
 as `succeeded`, `failed`, `declined` or `expired`, and `result` holds the held request's own answer.
 
@@ -191,6 +229,10 @@ python scripts/generate.py path/or/url/to/openapi.json
 `scripts/generate.py` (standard library only) writes `finn/_generated/`: TypedDicts for every schema, the
 resource classes (grouped by the `RESOURCES` table in the script) and typed overloads for `request()`. It fails if
 the table names an operation the spec lacks, and lists spec operations the table does not cover.
+
+`python scripts/check_drift.py` compares the SDK with the live spec (`https://api.hirefinn.ai/v1/openapi.json`)
+and fails on new or removed endpoints; CI runs it on every PR and daily. Endpoints the SDK knowingly leaves to
+`request_with_response` are listed in `spec/uncovered-ops.json` (`--write-baseline` rewrites it).
 
 ## Development
 

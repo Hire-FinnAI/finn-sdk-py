@@ -51,7 +51,8 @@ class Finn(TypedRequest, SyncCore):
         base_url: Defaults to ``https://api.hirefinn.ai/v1``.
         org: Org to act in (Finn-Org header). Needed only for tokens that can use more than one org.
         version: Pins the API version (Finn-Version header), a date such as ``2026-11-01``.
-        max_retries: Retries after the first attempt, on network errors, 408, 429 and 5xx. Default 2.
+        max_retries: Retries after the first attempt, on network errors, 408, 429, 502, 503 and 504. POST/PATCH are
+            retried only with an Idempotency-Key on IDEMPOTENT_WRITE_ROUTES. Default 2.
         timeout: Timeout per attempt in seconds. Default 60.
         auto_idempotency: Send a generated Idempotency-Key on spending and outward writes (place a call, rent a
             number, deploy, start or send a chat, create an agent, start a case) when the caller did not pass one,
