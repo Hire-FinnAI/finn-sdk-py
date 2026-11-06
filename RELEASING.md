@@ -1,13 +1,13 @@
-# Releasing finn-ai
+# Releasing hirefinn
 
-PyPI distribution: `finn-ai`. Import name: `finn`. Publishing runs only from `.github/workflows/release.yml`
+PyPI distribution: `hirefinn`. Import name: `finn`. Publishing runs only from `.github/workflows/release.yml`
 through PyPI Trusted Publishing (OIDC); there are no API tokens in this repo or its secrets.
 
 ## One-time setup (a person with the PyPI account does this)
 
 1. Sign in to https://pypi.org (turn on 2FA) with the account that will own the project.
 2. Account -> Publishing -> "Add a new pending publisher" -> GitHub:
-   - PyPI project name: `finn-ai`
+   - PyPI project name: `hirefinn`
    - Owner: `Hire-FinnAI`
    - Repository name: `finn-sdk-py`
    - Workflow name: `release.yml`
@@ -22,10 +22,10 @@ through PyPI Trusted Publishing (OIDC); there are no API tokens in this repo or 
 
 1. On a branch, bump `finn/_version.py` and `version` in `pyproject.toml` (same value), merge to `main`.
 2. Optional dry run: Actions -> release -> Run workflow, tick `testpypi`. Check
-   `pip install -i https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ finn-ai`.
+   `pip install -i https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ hirefinn`.
 3. GitHub -> Releases -> Draft a new release, new tag `vX.Y.Z` on `main` (must equal the package version),
    publish it. The workflow tests, builds, runs `twine check`, then waits for approval on `pypi` and publishes.
-4. Check https://pypi.org/p/finn-ai and `pip install finn-ai`.
+4. Check https://pypi.org/p/hirefinn and `pip install hirefinn`.
 
 A version cannot be re-uploaded to PyPI; to fix a bad release, bump the version and release again
 (you can yank the bad one on PyPI).

@@ -17,11 +17,11 @@ Python 3.9 or newer.
 ## Install
 
 ```sh
-pip install finn-ai           # not published yet; until then:
+pip install hirefinn           # not published yet; until then:
 pip install git+https://github.com/Hire-FinnAI/finn-sdk-py.git
 ```
 
-The distribution is called `finn-ai` (the name `finn` on PyPI belongs to another project); you import `finn`.
+The distribution is called `hirefinn` (the name `finn` on PyPI belongs to another project); you import `finn`.
 
 ## Quickstart
 

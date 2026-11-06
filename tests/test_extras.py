@@ -106,12 +106,12 @@ def test_every_spec_operation_has_a_resource_method():
     assert mapped - set(ops) == set()
 
 
-def test_distribution_is_finn_ai_and_versions_agree():
-    # PyPI name is finn-ai (decision 2026-11-06); the release workflow checks the tag against finn/_version.py.
+def test_distribution_is_hirefinn_and_versions_agree():
+    # PyPI name is hirefinn (user choice 2026-11-06, replaces finn-ai); the release workflow checks the tag against finn/_version.py.
     import re
 
     from finn import __version__
 
     pyproject = (ROOT / "pyproject.toml").read_text("utf-8")
-    assert re.search(r'^name = "finn-ai"$', pyproject, re.M)
+    assert re.search(r'^name = "hirefinn"$', pyproject, re.M)
     assert re.search(r'^version = "([^"]+)"$', pyproject, re.M).group(1) == __version__
