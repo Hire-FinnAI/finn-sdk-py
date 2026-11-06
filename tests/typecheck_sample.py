@@ -6,8 +6,15 @@ from typing import Any, Dict, Union
 
 from typing_extensions import assert_type
 
-from finn import AsyncFinn, Finn, PendingApproval, SyncPaginator
-from finn.types import AgentSummary, CallSummary, CreateCallResponse, ListCallsResponse, RetrieveCallResponse
+from finn import AsyncFinn, Finn, PendingApproval, SyncPaginator, WebhookEvent, verify_webhook
+from finn.types import (
+    AgentSummary,
+    CallSummary,
+    CaseStarted,
+    CreateCallResponse,
+    ListCallsResponse,
+    RetrieveCallResponse,
+)
 
 
 def sync_checks(finn: Finn) -> None:
@@ -22,6 +29,14 @@ def sync_checks(finn: Finn) -> None:
 
     assert_type(finn.agents.list_all(), SyncPaginator[AgentSummary])
     assert_type(finn.chat.conversations.list_all(), SyncPaginator[Dict[str, Any]])
+
+    # Chat start/send and case start can be held for approval too.
+    sent = finn.chat.conversations.send("c1", {"content": "hi"})
+    assert_type(sent, Union[Dict[str, Any], PendingApproval])
+    assert_type(finn.chat.conversations.start({}), Union[Dict[str, Any], PendingApproval])
+    assert_type(finn.cases.start("a1"), Union[CaseStarted, PendingApproval])
+
+    assert_type(verify_webhook("{}", "t=1,v1=00", "whsec_x"), WebhookEvent)
 
     got = finn.request("get", "/calls/{call_uuid}", path_params={"call_uuid": "x"})
     assert_type(got, RetrieveCallResponse)

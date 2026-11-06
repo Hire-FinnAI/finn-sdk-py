@@ -11,6 +11,7 @@ import pytest
 from helpers import async_client, body_of, client, json_, text_
 
 from finn import (
+    honours_idempotency_key,
     BadRequestError,
     ConflictError,
     Finn,
@@ -175,7 +176,7 @@ class TestIdempotency:
 class TestRetries:
     def test_retries_get_on_5xx_with_exponential_backoff_then_succeeds(self):
         finn, calls, sleeps = client(
-            [json_(502, {"error": "unavailable"}), json_(500, {"error": "internal_error"}),
+            [json_(502, {"error": "unavailable"}), json_(504, {"error": "unavailable"}),
              json_(200, {"success": True, "data": []})]
         )
         finn.finns.list()
@@ -231,10 +232,43 @@ class TestRetries:
             finn.contacts.create({"phone": "1"})
         assert len(calls) == 1
 
-    def test_retries_a_post_that_has_an_explicit_idempotency_key(self):
-        finn, calls, _ = client([json_(500, {"error": "internal_error"}), json_(201, {})])
-        finn.finns.create({}, idempotency_key="k1")  # type: ignore[typeddict-item]
+    def test_retries_a_post_with_an_explicit_key_on_a_route_that_dedupes_by_it(self):
+        finn, calls, _ = client([json_(503, {"error": "unavailable"}), json_(201, {})])
+        finn.calls.create(CALL_BODY, idempotency_key="k1")
         assert len(calls) == 2
+        assert calls[1].headers["idempotency-key"] == "k1"
+
+    def test_does_not_retry_a_keyed_post_on_a_route_that_ignores_the_key(self):
+        finn, calls, _ = client([json_(503, {"error": "unavailable"}), json_(201, {})])
+        with pytest.raises(FinnError):
+            finn.finns.create({}, idempotency_key="k1")  # type: ignore[typeddict-item]
+        assert len(calls) == 1
+        finn2, calls2, _ = client([httpx.RemoteProtocolError("socket hang up"), json_(201, {})])
+        with pytest.raises(FinnConnectionError):
+            finn2.finns.create({}, idempotency_key="k2")  # type: ignore[typeddict-item]
+        assert len(calls2) == 1
+
+    def test_retries_a_keyed_raw_post_to_a_dedupe_route_given_as_a_filled_in_path(self):
+        finn, calls, _ = client([json_(502, {"error": "unavailable"}), json_(201, {})])
+        finn.request_with_response("post", "/crm/records/r1/notes", body={}, idempotency_key="k3")
+        assert len(calls) == 2
+
+    def test_does_not_retry_500(self):
+        finn, calls, _ = client([json_(500, {"error": "internal_error"}), json_(200, {})])
+        with pytest.raises(FinnError) as ei:
+            finn.wallet.retrieve()
+        assert ei.value.status == 500
+        assert len(calls) == 1
+
+    def test_knows_which_writes_dedupe_by_idempotency_key(self):
+        assert honours_idempotency_key("post", "/calls")
+        assert honours_idempotency_key("POST", "/chat/conversations/c1/messages")
+        assert honours_idempotency_key("post", "/agents/{id}/cases")
+        assert honours_idempotency_key("patch", "/crm/records/r1")
+        assert not honours_idempotency_key("post", "/finns")
+        assert not honours_idempotency_key("post", "/contacts")
+        assert not honours_idempotency_key("post", "/approvals/a1/decide")
+        assert not honours_idempotency_key("post", "/calls/extra")
 
     def test_retries_409_idempotency_in_progress_but_not_other_409s(self):
         a, a_calls, _ = client(

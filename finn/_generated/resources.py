@@ -730,11 +730,12 @@ class Cases(Resource):
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
         )
 
-    def start(self, agent_id: str, body: Optional[t.StartCaseRequest] = None, *, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> t.CaseStarted:
+    def start(self, agent_id: str, body: Optional[t.StartCaseRequest] = None, *, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> Union[t.CaseStarted, PendingApproval]:
         """Start a case.
 
         ``POST /agents/{id}/cases`` (startCase).
         Gets an automatic Idempotency-Key, so it is safe to retry.
+        May answer a PendingApproval (HTTP 202) instead of doing the work; see is_pending_approval().
         """
         return self._do(  # type: ignore[no-any-return]
             'post', '/agents/{id}/cases',
@@ -962,11 +963,12 @@ class ChatConversations(Resource):
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
         )
 
-    def start(self, body: Dict[str, Any], *, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> Dict[str, Any]:
+    def start(self, body: Dict[str, Any], *, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> Union[Dict[str, Any], PendingApproval]:
         """Start a conversation.
 
         ``POST /chat/conversations`` (startChatConversation).
         Gets an automatic Idempotency-Key, so it is safe to retry.
+        May answer a PendingApproval (HTTP 202) instead of doing the work; see is_pending_approval().
         """
         return self._do(  # type: ignore[no-any-return]
             'post', '/chat/conversations',
@@ -1006,11 +1008,12 @@ class ChatConversations(Resource):
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
         )
 
-    def send(self, id: str, body: Dict[str, Any], *, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> Dict[str, Any]:
+    def send(self, id: str, body: Dict[str, Any], *, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> Union[Dict[str, Any], PendingApproval]:
         """Send a message.
 
         ``POST /chat/conversations/{id}/messages`` (sendChatMessage).
         Gets an automatic Idempotency-Key, so it is safe to retry.
+        May answer a PendingApproval (HTTP 202) instead of doing the work; see is_pending_approval().
         """
         return self._do(  # type: ignore[no-any-return]
             'post', '/chat/conversations/{id}/messages',
@@ -1797,11 +1800,12 @@ class AsyncCases(AsyncResource):
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
         )
 
-    async def start(self, agent_id: str, body: Optional[t.StartCaseRequest] = None, *, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> t.CaseStarted:
+    async def start(self, agent_id: str, body: Optional[t.StartCaseRequest] = None, *, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> Union[t.CaseStarted, PendingApproval]:
         """Start a case.
 
         ``POST /agents/{id}/cases`` (startCase).
         Gets an automatic Idempotency-Key, so it is safe to retry.
+        May answer a PendingApproval (HTTP 202) instead of doing the work; see is_pending_approval().
         """
         return await self._do(  # type: ignore[no-any-return]
             'post', '/agents/{id}/cases',
@@ -2029,11 +2033,12 @@ class AsyncChatConversations(AsyncResource):
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
         )
 
-    async def start(self, body: Dict[str, Any], *, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> Dict[str, Any]:
+    async def start(self, body: Dict[str, Any], *, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> Union[Dict[str, Any], PendingApproval]:
         """Start a conversation.
 
         ``POST /chat/conversations`` (startChatConversation).
         Gets an automatic Idempotency-Key, so it is safe to retry.
+        May answer a PendingApproval (HTTP 202) instead of doing the work; see is_pending_approval().
         """
         return await self._do(  # type: ignore[no-any-return]
             'post', '/chat/conversations',
@@ -2073,11 +2078,12 @@ class AsyncChatConversations(AsyncResource):
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
         )
 
-    async def send(self, id: str, body: Dict[str, Any], *, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> Dict[str, Any]:
+    async def send(self, id: str, body: Dict[str, Any], *, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> Union[Dict[str, Any], PendingApproval]:
         """Send a message.
 
         ``POST /chat/conversations/{id}/messages`` (sendChatMessage).
         Gets an automatic Idempotency-Key, so it is safe to retry.
+        May answer a PendingApproval (HTTP 202) instead of doing the work; see is_pending_approval().
         """
         return await self._do(  # type: ignore[no-any-return]
             'post', '/chat/conversations/{id}/messages',
