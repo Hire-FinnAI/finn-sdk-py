@@ -12,9 +12,11 @@ through PyPI Trusted Publishing (OIDC); there are no API tokens in this repo or 
    - Repository name: `finn-sdk-py`
    - Workflow name: `release.yml`
    - Environment name: `pypi`
-   This reserves the name; the project is created on the first successful publish.
-3. GitHub -> repo Settings -> Environments -> New environment `pypi`. Add required reviewers so every
-   publish waits for an approval, and limit deployment tags to `v*`.
+   Done 2026-11-06. A pending publisher does NOT reserve the name: anyone can still register `hirefinn`
+   until the first publish creates the project, so publish soon (or upload once by hand) to hold it.
+3. GitHub -> repo Settings -> Environments -> `pypi`, deployments limited to tags `v*` (done 2026-11-06).
+   Required reviewers are not available for a private repo on the current GitHub plan; until then, anyone
+   who can publish a GitHub release can publish to PyPI. Add reviewers if the repo goes public or the plan allows.
 4. Optional, for dry runs: the same on https://test.pypi.org (separate account) with environment `testpypi`,
    and create a `testpypi` environment on GitHub.
 
@@ -24,7 +26,7 @@ through PyPI Trusted Publishing (OIDC); there are no API tokens in this repo or 
 2. Optional dry run: Actions -> release -> Run workflow, tick `testpypi`. Check
    `pip install -i https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ hirefinn`.
 3. GitHub -> Releases -> Draft a new release, new tag `vX.Y.Z` on `main` (must equal the package version),
-   publish it. The workflow tests, builds, runs `twine check`, then waits for approval on `pypi` and publishes.
+   publish it. The workflow tests, builds, runs `twine check`, then publishes through the `pypi` environment.
 4. Check https://pypi.org/p/hirefinn and `pip install hirefinn`.
 
 A version cannot be re-uploaded to PyPI; to fix a bad release, bump the version and release again
