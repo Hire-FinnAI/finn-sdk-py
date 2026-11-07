@@ -107,6 +107,28 @@ replace `Authorization`.
 | `agents` | `list`, `list_all`, `create`, `draft`, `retrieve`, `save_draft`, `validate`, `test`, `publish`, `drive_test` |
 | `chat` | `list_channels`; `chat.conversations`: `list`, `list_all`, `start`, `retrieve`, `list_messages`, `list_all_messages`, `send`; `chat.contacts`: `list`, `list_all`, `retrieve`, `update` |
 
+### Coverage
+
+<!-- generated:coverage:start (scripts/generate.py; do not edit by hand) -->
+The SDK covers **154 of 154** operations in the spec (Finn API v1):
+72 through the hand-written methods above and 82 through generated ones, listed here.
+
+| Property | Generated methods |
+|---|---|
+| `finn.finns` | `generate`, `get_flow`, `enable_flow`, `disable_flow`, `get_settings`, `get_variables`, `update_variables`, `update_handbook`, `update_speech_settings`, `update_draft`, `duplicate`, `get_share_link`, `create_share_link`, `get_stats`, `get_outcomes` |
+| `finn.crm` | `get_setup`, `get_filter_schema`, `search_records`, `query_records`, `count_records`, `count_records_by_stage`, `get_record`, `update_record`, `get_record_timeline`, `get_stage_gate`, `list_record_documents`, `list_record_files`, `attach_file`, `get_forms_checklist`, `list_form_submissions`, `list_form_drafts`, `list_forms`, `list_follow_ups`, `list_all_follow_ups`, `get_follow_up_stats`, `get_my_work`, `list_views`, `save_view`, `get_summary`, `get_stage_counts`, `get_speed`, `list_duplicates`, `ask`, `add_note`, `create_follow_up`, `update_follow_up`, `create_record`, `set_stage_check`, `assign_reference_no`, `set_document_status`, `save_form_draft`, `draft_document`, `move_record_stage`, `submit_form`, `create_form_link`, `create_upload_link`, `guess_import_columns`, `import_records` |
+| `finn.dialer` | `list_sessions`, `list_all_sessions`, `get_session`, `get_analytics`, `list_follow_ups`, `get_lead_brief` |
+| `finn.webhooks` | `list_endpoints`, `list_all_endpoints`, `create_endpoint`, `get_endpoint`, `update_endpoint`, `delete_endpoint`, `list_deliveries`, `list_all_deliveries`, `list_event_types` |
+| `finn.organization` | `get`, `list_members`, `list_all_members`, `list_integrations`, `list_all_integrations`, `list_api_keys`, `list_all_api_keys` |
+| `finn.sales` (experimental) | `list_plays`, `list_play_runs`, `list_prospects`, `run_play`, `list_drafts`, `update_draft`, `skip_draft`, `list_threads`, `get_thread` |
+<!-- generated:coverage:end -->
+
+Generated methods are named after the spec's `operationId` without the area's noun, in snake_case, the same names
+as the TypeScript SDK (`getFinnFlow` is `finn.finns.get_flow`, `searchCrmRecords` is `finn.crm.search_records`).
+List operations that page by `cursor` also get a `list_all...` paginator. `finn.sales` is **experimental**: the Sales
+API is switched off for every organization, so its calls answer an error until it is on for yours, and its names and
+shapes may change without a major version.
+
 Path parameters are positional, the request body is the next positional argument (a dict), and query parameters
 are keyword arguments (`from` is spelled `from_`). Knowledge-base uploads take `files=`:
 
@@ -115,7 +137,7 @@ with open("policy.pdf", "rb") as f:
     finn.finns.add_knowledge_base_document(finn_id, {"name": "Refund policy"}, files={"file": f})
 ```
 
-Anything else, including endpoints newer than this SDK, goes through `request` (typed by method and path) or
+Endpoints newer than this SDK go through `request` (typed by method and path) or
 `request_with_response` (untyped, returns status, headers and request id):
 
 ```python
@@ -133,15 +155,15 @@ is not retried.
 
 Only requests that are safe to repeat are retried: `GET`, `PUT`, `DELETE`, and `POST`/`PATCH` writes that carry an
 `Idempotency-Key` **on a route that dedupes by it** (`finn.IDEMPOTENT_WRITE_ROUTES`: calls, phone numbers,
-deployments, chat start/send, agents, case start, `/crm/*` writes, sales play runs and draft skips). Other writes,
+deployments, chat start/send, agents, case start, `/crm/*` writes, sales play runs and draft skips, webhook endpoint create). Other writes,
 such as `finns.create` or `contacts.create`, are sent once even with a key, because the API ignores the key there and
 a retry after a lost response could create a duplicate. Check with `finn.honours_idempotency_key(method, path)`.
 
 ## Idempotency keys
 
 The SDK adds a random `Idempotency-Key` to `calls.create`, `phone_numbers.rent`, `deployments.create_outbound`,
-`deployments.create_inbound`, `chat.conversations.start`, `chat.conversations.send`, `agents.create` and
-`cases.start`, and keeps it across retries. Pass your own to make a retry from your side safe too, or `False` to
+`deployments.create_inbound`, `chat.conversations.start`, `chat.conversations.send`, `agents.create`,
+`cases.start` and `webhooks.create_endpoint`, and keeps it across retries. Pass your own to make a retry from your side safe too, or `False` to
 send none:
 
 ```python
@@ -226,13 +248,15 @@ BACKEND=../hirefinn-web-app-backend ./scripts/pull-spec.sh
 python scripts/generate.py path/or/url/to/openapi.json
 ```
 
-`scripts/generate.py` (standard library only) writes `finn/_generated/`: TypedDicts for every schema, the
-resource classes (grouped by the `RESOURCES` table in the script) and typed overloads for `request()`. It fails if
-the table names an operation the spec lacks, and lists spec operations the table does not cover.
+`scripts/generate.py` (standard library only) writes `finn/_generated/`: TypedDicts for every schema, a resource
+method for every operation and typed overloads for `request()`. The hand-written `RESOURCES` table in the script
+keeps the original method names; every other operation gets a generated method on the resource for its tag (the
+`TAGS` table), and the README coverage table above is rewritten. It fails if an operation's tag has no `TAGS` entry,
+if a generated name is already taken, or if `RESOURCES` names an operation the spec lacks.
 
 `python scripts/check_drift.py` compares the SDK with the live spec (`https://api.hirefinn.ai/v1/openapi.json`)
-and fails on new or removed endpoints; CI runs it on every PR and daily. Endpoints the SDK knowingly leaves to
-`request_with_response` are listed in `spec/uncovered-ops.json` (`--write-baseline` rewrites it).
+and fails when the spec has any operation the SDK has no method for, or the SDK calls one the spec dropped. There is
+no allow-list of uncovered operations. CI runs it on every PR and daily.
 
 ## Development
 
