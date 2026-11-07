@@ -116,6 +116,9 @@
           }
         },
         "responses": {
+          "423": {
+            "$ref": "#/components/responses/AiAppsPaused"
+          },
           "202": {
             "description": "The call was accepted for dialing. Or a `PendingApproval` when the request is held for a person to approve (nothing has run yet).",
             "headers": {
@@ -343,9 +346,6 @@
                 }
               }
             }
-          },
-          "423": {
-            "$ref": "#/components/responses/AiAppsPaused"
           },
           "429": {
             "$ref": "#/components/responses/RateLimited"
@@ -589,6 +589,9 @@
       "parameters": [
         {
           "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ]
     },
@@ -771,6 +774,9 @@
       "parameters": [
         {
           "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ]
     },
@@ -922,7 +928,8 @@
           }
         },
         "x-required-scope": "voice:read",
-        "x-legacy-scope": "voice"
+        "x-legacy-scope": "voice",
+        "x-mcp-tool": "list_finns"
       },
       "post": {
         "tags": [
@@ -999,6 +1006,9 @@
           }
         },
         "responses": {
+          "423": {
+            "$ref": "#/components/responses/AiAppsPaused"
+          },
           "201": {
             "description": "The created Finn.",
             "headers": {
@@ -1201,9 +1211,6 @@
               }
             }
           },
-          "423": {
-            "$ref": "#/components/responses/AiAppsPaused"
-          },
           "429": {
             "$ref": "#/components/responses/RateLimited"
           },
@@ -1251,6 +1258,9 @@
       "parameters": [
         {
           "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ]
     },
@@ -1429,7 +1439,8 @@
           }
         },
         "x-required-scope": "voice:read",
-        "x-legacy-scope": "voice"
+        "x-legacy-scope": "voice",
+        "x-mcp-tool": "get_finn"
       },
       "patch": {
         "tags": [
@@ -1519,6 +1530,9 @@
           }
         },
         "responses": {
+          "423": {
+            "$ref": "#/components/responses/AiAppsPaused"
+          },
           "200": {
             "description": "The updated Finn.",
             "headers": {
@@ -1720,9 +1734,6 @@
               }
             }
           },
-          "423": {
-            "$ref": "#/components/responses/AiAppsPaused"
-          },
           "429": {
             "$ref": "#/components/responses/RateLimited"
           },
@@ -1788,6 +1799,9 @@
           }
         ],
         "responses": {
+          "423": {
+            "$ref": "#/components/responses/AiAppsPaused"
+          },
           "200": {
             "description": "The Finn was deleted.",
             "headers": {
@@ -1945,9 +1959,6 @@
               }
             }
           },
-          "423": {
-            "$ref": "#/components/responses/AiAppsPaused"
-          },
           "429": {
             "$ref": "#/components/responses/RateLimited"
           },
@@ -1961,6 +1972,9 @@
       "parameters": [
         {
           "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ]
     },
@@ -1977,6 +1991,9 @@
         },
         {
           "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ],
       "get": {
@@ -2196,6 +2213,9 @@
           }
         },
         "responses": {
+          "423": {
+            "$ref": "#/components/responses/AiAppsPaused"
+          },
           "201": {
             "description": "The document was added.",
             "headers": {
@@ -2303,9 +2323,6 @@
                 }
               }
             }
-          },
-          "423": {
-            "$ref": "#/components/responses/AiAppsPaused"
           },
           "429": {
             "$ref": "#/components/responses/RateLimited"
@@ -2626,11 +2643,15 @@
           }
         },
         "x-required-scope": "voice:read",
-        "x-legacy-scope": "voice"
+        "x-legacy-scope": "voice",
+        "x-mcp-tool": "list_voices"
       },
       "parameters": [
         {
           "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ]
     },
@@ -2864,6 +2885,9 @@
       "parameters": [
         {
           "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ]
     },
@@ -2985,7 +3009,8 @@
           }
         },
         "x-required-scope": "voice:read",
-        "x-legacy-scope": "voice"
+        "x-legacy-scope": "voice",
+        "x-mcp-tool": "list_phone_numbers"
       },
       "post": {
         "tags": [
@@ -3011,6 +3036,9 @@
           }
         },
         "responses": {
+          "423": {
+            "$ref": "#/components/responses/AiAppsPaused"
+          },
           "202": {
             "description": "The wallet was debited and provisioning is queued. Or a `PendingApproval` when the request is held for a person to approve (nothing has run yet).",
             "headers": {
@@ -3244,9 +3272,6 @@
               }
             }
           },
-          "423": {
-            "$ref": "#/components/responses/AiAppsPaused"
-          },
           "429": {
             "$ref": "#/components/responses/RateLimited"
           },
@@ -3342,6 +3367,9 @@
       "parameters": [
         {
           "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ]
     },
@@ -3567,6 +3595,9 @@
       "parameters": [
         {
           "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ]
     },
@@ -3729,7 +3760,8 @@
           }
         },
         "x-required-scope": "voice:read",
-        "x-legacy-scope": "voice"
+        "x-legacy-scope": "voice",
+        "x-mcp-tool": "get_phone_number"
       },
       "delete": {
         "tags": [
@@ -3761,6 +3793,9 @@
           }
         ],
         "responses": {
+          "423": {
+            "$ref": "#/components/responses/AiAppsPaused"
+          },
           "200": {
             "description": "The number was released.",
             "headers": {
@@ -3910,9 +3945,6 @@
               }
             }
           },
-          "423": {
-            "$ref": "#/components/responses/AiAppsPaused"
-          },
           "429": {
             "$ref": "#/components/responses/RateLimited"
           },
@@ -3960,6 +3992,9 @@
       "parameters": [
         {
           "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ]
     },
@@ -4072,7 +4107,8 @@
           }
         },
         "x-required-scope": "voice:read",
-        "x-legacy-scope": "voice"
+        "x-legacy-scope": "voice",
+        "x-mcp-tool": "list_audiences"
       },
       "post": {
         "tags": [
@@ -4109,6 +4145,9 @@
           }
         },
         "responses": {
+          "423": {
+            "$ref": "#/components/responses/AiAppsPaused"
+          },
           "201": {
             "description": "The created audience.",
             "headers": {
@@ -4213,9 +4252,6 @@
           "401": {
             "$ref": "#/components/responses/Unauthorized"
           },
-          "423": {
-            "$ref": "#/components/responses/AiAppsPaused"
-          },
           "429": {
             "$ref": "#/components/responses/RateLimited"
           },
@@ -4229,6 +4265,9 @@
       "parameters": [
         {
           "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ]
     },
@@ -4382,7 +4421,8 @@
           }
         },
         "x-required-scope": "voice:read",
-        "x-legacy-scope": "voice"
+        "x-legacy-scope": "voice",
+        "x-mcp-tool": "get_audience"
       },
       "delete": {
         "tags": [
@@ -4405,6 +4445,9 @@
           }
         ],
         "responses": {
+          "423": {
+            "$ref": "#/components/responses/AiAppsPaused"
+          },
           "200": {
             "description": "The audience was archived.",
             "headers": {
@@ -4520,9 +4563,6 @@
               }
             }
           },
-          "423": {
-            "$ref": "#/components/responses/AiAppsPaused"
-          },
           "429": {
             "$ref": "#/components/responses/RateLimited"
           },
@@ -4536,6 +4576,9 @@
       "parameters": [
         {
           "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ]
     },
@@ -4787,6 +4830,9 @@
           }
         },
         "responses": {
+          "423": {
+            "$ref": "#/components/responses/AiAppsPaused"
+          },
           "200": {
             "description": "The updated audience.",
             "headers": {
@@ -4984,9 +5030,6 @@
               }
             }
           },
-          "423": {
-            "$ref": "#/components/responses/AiAppsPaused"
-          },
           "429": {
             "$ref": "#/components/responses/RateLimited"
           },
@@ -5000,6 +5043,9 @@
       "parameters": [
         {
           "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ]
     },
@@ -5036,6 +5082,9 @@
           }
         ],
         "responses": {
+          "423": {
+            "$ref": "#/components/responses/AiAppsPaused"
+          },
           "200": {
             "description": "The updated audience.",
             "headers": {
@@ -5229,9 +5278,6 @@
               }
             }
           },
-          "423": {
-            "$ref": "#/components/responses/AiAppsPaused"
-          },
           "429": {
             "$ref": "#/components/responses/RateLimited"
           },
@@ -5245,6 +5291,9 @@
       "parameters": [
         {
           "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ]
     },
@@ -5454,6 +5503,9 @@
           }
         },
         "responses": {
+          "423": {
+            "$ref": "#/components/responses/AiAppsPaused"
+          },
           "201": {
             "description": "The created deployment.",
             "headers": {
@@ -5766,9 +5818,6 @@
               }
             }
           },
-          "423": {
-            "$ref": "#/components/responses/AiAppsPaused"
-          },
           "429": {
             "$ref": "#/components/responses/RateLimited"
           },
@@ -5825,6 +5874,9 @@
       "parameters": [
         {
           "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ]
     },
@@ -5835,7 +5887,7 @@
         ],
         "operationId": "createInboundDeployment",
         "summary": "Create an inbound deployment",
-        "description": "Connects a number to a Finn so the Finn answers calls to it. This is how you assign a number to a Finn. A Finn can have one live inbound deployment, and a number can serve one Finn. Inbound calls are billed as they happen; creating the deployment does not check the balance.\n\nSend an `Idempotency-Key` header so a retry after a timeout or a `5xx` returns the first response instead of starting the deployment again.\n\n**Rate limit:** 10 requests per minute per API key, shared by `POST /deployments` and `POST /deployments/inbound`.",
+        "description": "Connects a number to a Finn so the Finn answers calls to it. This is how you assign a number to a Finn. A Finn can have one live inbound deployment, and a number can serve one Finn. Inbound calls are billed as they happen; creating the deployment does not check the balance.\n\nSend an `Idempotency-Key` header so a retry after a timeout or a `5xx` returns the first response instead of starting the deployment again.\n\n**Rate limit:** 10 requests per minute per API key, shared by `POST /deployments` and `POST /deployments/inbound`.\n\n**Approval hold (off by default):** where the organization has `v1_hold_inbound_sales_runs` on, this request can be held for a person to approve, like a campaign launch: it answers 202 `PendingApproval` and nothing runs until it is approved. A member's token cannot call this endpoint; an org key is held where the organization's hold policy holds org keys for `deployment.inbound`.",
         "requestBody": {
           "required": true,
           "content": {
@@ -5852,6 +5904,9 @@
           }
         },
         "responses": {
+          "423": {
+            "$ref": "#/components/responses/AiAppsPaused"
+          },
           "201": {
             "description": "The created deployment.",
             "headers": {
@@ -5911,6 +5966,9 @@
                 }
               }
             }
+          },
+          "202": {
+            "$ref": "#/components/responses/PendingApproval"
           },
           "400": {
             "description": "The request failed validation. `message` names the problem. Also returned when `Idempotency-Key` is not 1 to 255 visible ASCII characters.",
@@ -6093,9 +6151,6 @@
               }
             }
           },
-          "423": {
-            "$ref": "#/components/responses/AiAppsPaused"
-          },
           "429": {
             "$ref": "#/components/responses/RateLimited"
           },
@@ -6143,11 +6198,19 @@
           {
             "$ref": "#/components/parameters/IdempotencyKey"
           }
-        ]
+        ],
+        "x-finn-hold": {
+          "action": "deployment.inbound",
+          "class": "money",
+          "feature": "v1_hold_inbound_sales_runs"
+        }
       },
       "parameters": [
         {
           "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ]
     },
@@ -6315,6 +6378,9 @@
       "parameters": [
         {
           "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ]
     },
@@ -6340,6 +6406,9 @@
           }
         ],
         "responses": {
+          "423": {
+            "$ref": "#/components/responses/AiAppsPaused"
+          },
           "200": {
             "description": "The deployment was stopped.",
             "headers": {
@@ -6497,9 +6566,6 @@
               }
             }
           },
-          "423": {
-            "$ref": "#/components/responses/AiAppsPaused"
-          },
           "429": {
             "$ref": "#/components/responses/RateLimited"
           },
@@ -6547,6 +6613,9 @@
       "parameters": [
         {
           "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ]
     },
@@ -6572,6 +6641,9 @@
           }
         ],
         "responses": {
+          "423": {
+            "$ref": "#/components/responses/AiAppsPaused"
+          },
           "200": {
             "description": "The inbound deployment was stopped.",
             "headers": {
@@ -6696,9 +6768,6 @@
               }
             }
           },
-          "423": {
-            "$ref": "#/components/responses/AiAppsPaused"
-          },
           "429": {
             "$ref": "#/components/responses/RateLimited"
           },
@@ -6746,6 +6815,9 @@
       "parameters": [
         {
           "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ]
     },
@@ -6821,6 +6893,9 @@
       "parameters": [
         {
           "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ]
     },
@@ -6979,6 +7054,9 @@
       "parameters": [
         {
           "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ]
     },
@@ -7134,6 +7212,9 @@
       "parameters": [
         {
           "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ]
     },
@@ -7290,6 +7371,9 @@
       "parameters": [
         {
           "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ]
     },
@@ -7420,6 +7504,9 @@
           }
         },
         "responses": {
+          "423": {
+            "$ref": "#/components/responses/AiAppsPaused"
+          },
           "200": {
             "description": "Already listed from the API.",
             "headers": {
@@ -7521,9 +7608,6 @@
           "401": {
             "$ref": "#/components/responses/Unauthorized"
           },
-          "423": {
-            "$ref": "#/components/responses/AiAppsPaused"
-          },
           "429": {
             "$ref": "#/components/responses/RateLimited"
           },
@@ -7537,6 +7621,9 @@
       "parameters": [
         {
           "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ]
     },
@@ -7560,6 +7647,9 @@
           }
         ],
         "responses": {
+          "423": {
+            "$ref": "#/components/responses/AiAppsPaused"
+          },
           "200": {
             "description": "Removed.",
             "headers": {
@@ -7613,9 +7703,6 @@
                 }
               }
             }
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
           },
           "403": {
             "description": "`insufficient_scope`: the key lacks `dnc:write`.",
@@ -7671,8 +7758,8 @@
               }
             }
           },
-          "423": {
-            "$ref": "#/components/responses/AiAppsPaused"
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
           },
           "429": {
             "$ref": "#/components/responses/RateLimited"
@@ -7687,6 +7774,9 @@
       "parameters": [
         {
           "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ]
     },
@@ -7792,6 +7882,9 @@
       "parameters": [
         {
           "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ]
     },
@@ -7894,6 +7987,9 @@
       "parameters": [
         {
           "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ]
     },
@@ -8131,6 +8227,9 @@
           }
         },
         "responses": {
+          "423": {
+            "$ref": "#/components/responses/AiAppsPaused"
+          },
           "201": {
             "description": "The new record.",
             "content": {
@@ -8242,9 +8341,6 @@
               }
             }
           },
-          "423": {
-            "$ref": "#/components/responses/AiAppsPaused"
-          },
           "429": {
             "$ref": "#/components/responses/RateLimited"
           },
@@ -8282,6 +8378,9 @@
       "parameters": [
         {
           "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ]
     },
@@ -8299,6 +8398,9 @@
         },
         {
           "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ],
       "get": {
@@ -8473,6 +8575,9 @@
           }
         },
         "responses": {
+          "423": {
+            "$ref": "#/components/responses/AiAppsPaused"
+          },
           "200": {
             "description": "The record after the change.",
             "content": {
@@ -8595,9 +8700,6 @@
               }
             }
           },
-          "423": {
-            "$ref": "#/components/responses/AiAppsPaused"
-          },
           "429": {
             "$ref": "#/components/responses/RateLimited"
           },
@@ -8647,6 +8749,9 @@
         },
         {
           "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ],
       "get": {
@@ -8833,6 +8938,9 @@
         },
         {
           "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ],
       "post": {
@@ -8871,6 +8979,9 @@
           }
         },
         "responses": {
+          "423": {
+            "$ref": "#/components/responses/AiAppsPaused"
+          },
           "201": {
             "description": "The note.",
             "content": {
@@ -8943,9 +9054,6 @@
                 }
               }
             }
-          },
-          "423": {
-            "$ref": "#/components/responses/AiAppsPaused"
           },
           "429": {
             "$ref": "#/components/responses/RateLimited"
@@ -9182,11 +9290,15 @@
           }
         },
         "x-required-scope": "operator:read",
-        "x-legacy-scope": "cases:read"
+        "x-legacy-scope": "cases:read",
+        "x-mcp-tool": "list_operator_cases"
       },
       "parameters": [
         {
           "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ]
     },
@@ -9205,6 +9317,9 @@
         },
         {
           "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ],
       "get": {
@@ -9361,6 +9476,9 @@
         },
         {
           "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ],
       "get": {
@@ -9531,6 +9649,9 @@
         },
         {
           "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ],
       "post": {
@@ -9580,6 +9701,9 @@
           }
         },
         "responses": {
+          "423": {
+            "$ref": "#/components/responses/AiAppsPaused"
+          },
           "200": {
             "description": "Matched, reopened or replayed.",
             "content": {
@@ -9719,9 +9843,6 @@
                 }
               }
             }
-          },
-          "423": {
-            "$ref": "#/components/responses/AiAppsPaused"
           },
           "429": {
             "description": "`rate_limited` (more than 60 starts a minute on this key; `Retry-After` header), or Operator's `cap_reached` (a daily case cap; `details.resets_at` says when it resets; no `Retry-After`).",
@@ -10051,6 +10172,9 @@
       "parameters": [
         {
           "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ]
     },
@@ -10069,6 +10193,9 @@
         },
         {
           "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ],
       "get": {
@@ -10261,6 +10388,9 @@
         },
         {
           "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ],
       "post": {
@@ -10299,6 +10429,9 @@
           }
         },
         "responses": {
+          "423": {
+            "$ref": "#/components/responses/AiAppsPaused"
+          },
           "200": {
             "description": "The approval, decided.",
             "content": {
@@ -10411,9 +10544,6 @@
               }
             }
           },
-          "423": {
-            "$ref": "#/components/responses/AiAppsPaused"
-          },
           "429": {
             "$ref": "#/components/responses/RateLimited"
           },
@@ -10486,6 +10616,9 @@
         },
         {
           "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ],
       "post": {
@@ -10516,6 +10649,9 @@
           }
         },
         "responses": {
+          "423": {
+            "$ref": "#/components/responses/AiAppsPaused"
+          },
           "200": {
             "description": "The approval, decided.",
             "content": {
@@ -10628,9 +10764,6 @@
               }
             }
           },
-          "423": {
-            "$ref": "#/components/responses/AiAppsPaused"
-          },
           "429": {
             "$ref": "#/components/responses/RateLimited"
           },
@@ -10703,6 +10836,9 @@
         },
         {
           "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ],
       "post": {
@@ -10733,6 +10869,9 @@
           }
         },
         "responses": {
+          "423": {
+            "$ref": "#/components/responses/AiAppsPaused"
+          },
           "200": {
             "description": "The approval, decided.",
             "content": {
@@ -10844,9 +10983,6 @@
                 }
               }
             }
-          },
-          "423": {
-            "$ref": "#/components/responses/AiAppsPaused"
           },
           "429": {
             "$ref": "#/components/responses/RateLimited"
@@ -11043,7 +11179,8 @@
               }
             }
           }
-        }
+        },
+        "x-required-scope": "operator:read"
       },
       "post": {
         "tags": [
@@ -11095,8 +11232,11 @@
           }
         },
         "responses": {
-          "200": {
-            "description": "A replay of an earlier create with the same Idempotency-Key.",
+          "423": {
+            "$ref": "#/components/responses/AiAppsPaused"
+          },
+          "201": {
+            "description": "The new draft agent.",
             "content": {
               "application/json": {
                 "schema": {
@@ -11125,8 +11265,8 @@
               }
             }
           },
-          "201": {
-            "description": "The new draft agent.",
+          "200": {
+            "description": "A replay of an earlier create with the same Idempotency-Key.",
             "content": {
               "application/json": {
                 "schema": {
@@ -11195,19 +11335,6 @@
               }
             }
           },
-          "422": {
-            "description": "`idempotency_key_reused`, or the runtime refused the draft (`invalid`).",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/V1Error"
-                }
-              }
-            }
-          },
-          "423": {
-            "$ref": "#/components/responses/AiAppsPaused"
-          },
           "429": {
             "description": "Too many requests (`rate_limited`). Retry after the `Retry-After` header.",
             "content": {
@@ -11237,12 +11364,26 @@
                 }
               }
             }
+          },
+          "422": {
+            "description": "`idempotency_key_reused`, or the runtime refused the draft (`invalid`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V1Error"
+                }
+              }
+            }
           }
-        }
+        },
+        "x-required-scope": "operator:build"
       },
       "parameters": [
         {
           "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ]
     },
@@ -11279,6 +11420,9 @@
           }
         },
         "responses": {
+          "423": {
+            "$ref": "#/components/responses/AiAppsPaused"
+          },
           "200": {
             "description": "The draft.",
             "content": {
@@ -11343,19 +11487,6 @@
               }
             }
           },
-          "422": {
-            "description": "The model did not return a usable draft. Rephrase and retry.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/V1Error"
-                }
-              }
-            }
-          },
-          "423": {
-            "$ref": "#/components/responses/AiAppsPaused"
-          },
           "429": {
             "description": "Too many requests (`rate_limited`). Retry after the `Retry-After` header.",
             "content": {
@@ -11385,12 +11516,26 @@
                 }
               }
             }
+          },
+          "422": {
+            "description": "The model did not return a usable draft. Rephrase and retry.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V1Error"
+                }
+              }
+            }
           }
-        }
+        },
+        "x-required-scope": "operator:build"
       },
       "parameters": [
         {
           "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ]
     },
@@ -11408,6 +11553,9 @@
         },
         {
           "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ],
       "get": {
@@ -11518,7 +11666,9 @@
               }
             }
           }
-        }
+        },
+        "x-required-scope": "operator:read",
+        "x-mcp-tool": "get_operator_agent"
       }
     },
     "/agents/{id}/draft": {
@@ -11535,6 +11685,9 @@
         },
         {
           "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ],
       "put": {
@@ -11577,6 +11730,9 @@
           }
         },
         "responses": {
+          "423": {
+            "$ref": "#/components/responses/AiAppsPaused"
+          },
           "200": {
             "description": "The agent with its new draft.",
             "content": {
@@ -11647,19 +11803,6 @@
               }
             }
           },
-          "409": {
-            "description": "The draft changed since your `If-Match` (`conflict`).",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/V1Error"
-                }
-              }
-            }
-          },
-          "423": {
-            "$ref": "#/components/responses/AiAppsPaused"
-          },
           "429": {
             "description": "Too many requests (`rate_limited`). Retry after the `Retry-After` header.",
             "content": {
@@ -11689,8 +11832,19 @@
                 }
               }
             }
+          },
+          "409": {
+            "description": "The draft changed since your `If-Match` (`conflict`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V1Error"
+                }
+              }
+            }
           }
-        }
+        },
+        "x-required-scope": "operator:build"
       }
     },
     "/agents/{id}/validate": {
@@ -11707,6 +11861,9 @@
         },
         {
           "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ],
       "post": {
@@ -11717,6 +11874,9 @@
         "summary": "Validate an agent's draft",
         "description": "**Scope:** `operator:build`. **Needs** building agents by API turned on for your organization.\n\nChecks the draft. An empty `problems` list means a person could publish it.\n\n**Rate limit:** 120 writes per minute per API key.",
         "responses": {
+          "423": {
+            "$ref": "#/components/responses/AiAppsPaused"
+          },
           "200": {
             "description": "The draft's problems.",
             "content": {
@@ -11782,9 +11942,6 @@
               }
             }
           },
-          "423": {
-            "$ref": "#/components/responses/AiAppsPaused"
-          },
           "429": {
             "description": "Too many requests (`rate_limited`). Retry after the `Retry-After` header.",
             "content": {
@@ -11815,7 +11972,8 @@
               }
             }
           }
-        }
+        },
+        "x-required-scope": "operator:build"
       }
     },
     "/agents/{id}/test": {
@@ -11832,6 +11990,9 @@
         },
         {
           "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ],
       "post": {
@@ -11878,6 +12039,9 @@
           }
         },
         "responses": {
+          "423": {
+            "$ref": "#/components/responses/AiAppsPaused"
+          },
           "201": {
             "description": "The test case.",
             "content": {
@@ -11942,8 +12106,134 @@
               }
             }
           },
+          "429": {
+            "description": "Too many requests (`rate_limited`). Retry after the `Retry-After` header.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V1Error"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Finn Operator did not answer (`operator_unavailable`). Safe to retry reads; check state before retrying a write.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V1Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Finn Operator is not configured, or settings could not be read (`operator_unavailable`, `unavailable`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V1Error"
+                }
+              }
+            }
+          }
+        },
+        "x-required-scope": "operator:build"
+      }
+    },
+    "/agents/{id}/archive": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "The Finn Operator agent's ID.",
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        {
+          "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ],
+      "post": {
+        "tags": [
+          "Agents"
+        ],
+        "operationId": "archiveAgent",
+        "summary": "Archive an agent",
+        "description": "**Scope:** `operator:build`. **Needs** building agents by API turned on for your organization.\n\nArchives the agent: a soft archive, nothing is deleted. An archived agent opens no new case (live, test or by trigger) and can no longer be published or paused; the agent, its versions and its cases stay readable, and cases already open finish on the version they started on (pause it first to hold their messages). There is no delete.\n\nA draft-only agent needs only the scope. An agent with a published version also needs the key's role to allow pausing agents (publisher or admin), else `403 forbidden`.\n\nIdempotent: archiving an archived agent changes nothing and answers `200` with the same agent.\n\n**Rate limit:** 120 writes per minute per API key.",
+        "responses": {
           "423": {
             "$ref": "#/components/responses/AiAppsPaused"
+          },
+          "200": {
+            "description": "The agent, `status: archived`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            },
+            "headers": {
+              "RateLimit-Policy": {
+                "$ref": "#/components/headers/RateLimitPolicy"
+              },
+              "RateLimit-Limit": {
+                "$ref": "#/components/headers/RateLimitLimit"
+              },
+              "RateLimit-Remaining": {
+                "$ref": "#/components/headers/RateLimitRemaining"
+              },
+              "RateLimit-Reset": {
+                "$ref": "#/components/headers/RateLimitReset"
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input (`invalid_request` with `fields`) or a bad cursor (`invalid_cursor`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V1Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V1Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "`insufficient_scope`, `agent_build_off` when building agents by API is not turned on for your organization (ask Finn support), or `forbidden` when the agent has a published version and the key's role may not pause agents.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V1Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No such agent in your organization (`not_found`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V1Error"
+                }
+              }
+            }
           },
           "429": {
             "description": "Too many requests (`rate_limited`). Retry after the `Retry-After` header.",
@@ -11975,7 +12265,9 @@
               }
             }
           }
-        }
+        },
+        "x-required-scope": "operator:build",
+        "x-mcp-tool": "archive_operator_agent"
       }
     },
     "/agents/{id}/publish": {
@@ -11992,6 +12284,9 @@
         },
         {
           "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ],
       "post": {
@@ -12002,15 +12297,8 @@
         "summary": "Publish an agent (refused)",
         "description": "Always refused for API keys and tokens: only a signed-in person publishes an agent, in Finn.",
         "responses": {
-          "401": {
-            "description": "Missing or invalid API key.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/V1Error"
-                }
-              }
-            }
+          "423": {
+            "$ref": "#/components/responses/AiAppsPaused"
           },
           "403": {
             "description": "`publish_requires_human` (or `agent_build_off`).",
@@ -12022,10 +12310,18 @@
               }
             }
           },
-          "423": {
-            "$ref": "#/components/responses/AiAppsPaused"
+          "401": {
+            "description": "Missing or invalid API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V1Error"
+                }
+              }
+            }
           }
-        }
+        },
+        "x-required-scope": "none"
       }
     },
     "/cases/{id}/test/{action}": {
@@ -12058,6 +12354,9 @@
         },
         {
           "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ],
       "post": {
@@ -12081,6 +12380,9 @@
           }
         },
         "responses": {
+          "423": {
+            "$ref": "#/components/responses/AiAppsPaused"
+          },
           "200": {
             "description": "The test case.",
             "content": {
@@ -12145,9 +12447,6 @@
               }
             }
           },
-          "423": {
-            "$ref": "#/components/responses/AiAppsPaused"
-          },
           "429": {
             "description": "Too many requests (`rate_limited`). Retry after the `Retry-After` header.",
             "content": {
@@ -12178,7 +12477,8 @@
               }
             }
           }
-        }
+        },
+        "x-required-scope": "operator:build"
       }
     },
     "/chat/channels": {
@@ -12335,6 +12635,9 @@
       "parameters": [
         {
           "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ]
     },
@@ -12617,6 +12920,9 @@
           }
         },
         "responses": {
+          "423": {
+            "$ref": "#/components/responses/AiAppsPaused"
+          },
           "201": {
             "description": "The conversation and its first message.",
             "content": {
@@ -12736,9 +13042,6 @@
               }
             }
           },
-          "423": {
-            "$ref": "#/components/responses/AiAppsPaused"
-          },
           "429": {
             "$ref": "#/components/responses/RateLimited"
           },
@@ -12782,6 +13085,9 @@
       "parameters": [
         {
           "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ]
     },
@@ -13005,6 +13311,9 @@
       "parameters": [
         {
           "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ]
     },
@@ -13263,6 +13572,9 @@
           }
         },
         "responses": {
+          "423": {
+            "$ref": "#/components/responses/AiAppsPaused"
+          },
           "201": {
             "description": "The message was sent, and the conversation is now handled by a person.",
             "content": {
@@ -13427,9 +13739,6 @@
               }
             }
           },
-          "423": {
-            "$ref": "#/components/responses/AiAppsPaused"
-          },
           "429": {
             "$ref": "#/components/responses/RateLimited"
           },
@@ -13473,6 +13782,9 @@
       "parameters": [
         {
           "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ]
     },
@@ -13692,11 +14004,15 @@
             }
           }
         },
-        "x-required-scope": "chat:read"
+        "x-required-scope": "chat:read",
+        "x-mcp-tool": "list_chat_contacts"
       },
       "parameters": [
         {
           "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ]
     },
@@ -13891,7 +14207,8 @@
             }
           }
         },
-        "x-required-scope": "chat:read"
+        "x-required-scope": "chat:read",
+        "x-mcp-tool": "get_chat_contact"
       },
       "patch": {
         "tags": [
@@ -13899,7 +14216,7 @@
         ],
         "operationId": "updateChatContact",
         "summary": "Update a chat contact",
-        "description": "**Scope:** `chat:write`.\n\nChanges the fields sent: any of `name`, `email`, `phone`, `company`, `type`, `fields`.\n\n**Rate limit:** 60 writes per minute per API key, shared by every Chat write.",
+        "description": "**Scope:** `chat:write`.\n\nChanges the fields sent: any of `name`, `email`, `phone`, `company`, `type`, `fields`.\n\n**Approval:** where your organization has turned on approval holds for chat contact changes (`v1_hold_chat_contact_updates`, off by default; ask Finn support), a member's OAuth token or MCP key may call this too, and the change waits for that member to approve it in Finn: the answer is `202` with a `PendingApproval` and nothing has changed yet. An org key changes the contact at once unless your organization holds org keys for `chat.contact_update` too. Send an `Idempotency-Key` so a retry returns the same approval instead of asking again.\n\n**Rate limit:** 60 writes per minute per API key, shared by every Chat write.",
         "parameters": [
           {
             "name": "id",
@@ -13924,6 +14241,9 @@
           }
         },
         "responses": {
+          "423": {
+            "$ref": "#/components/responses/AiAppsPaused"
+          },
           "200": {
             "description": "The contact.",
             "content": {
@@ -13934,6 +14254,9 @@
                 }
               }
             }
+          },
+          "202": {
+            "$ref": "#/components/responses/PendingApproval"
           },
           "400": {
             "description": "The request is not valid (`invalid_request`, with `fields`), or `cursor` came from another list or other filters (`invalid_cursor`).",
@@ -14060,9 +14383,6 @@
               }
             }
           },
-          "423": {
-            "$ref": "#/components/responses/AiAppsPaused"
-          },
           "429": {
             "$ref": "#/components/responses/RateLimited"
           },
@@ -14097,11 +14417,20 @@
             }
           }
         },
-        "x-required-scope": "chat:write"
+        "x-required-scope": "chat:write",
+        "x-mcp-tool": "update_chat_contact",
+        "x-finn-hold": {
+          "action": "chat.contact_update",
+          "class": "outward",
+          "feature": "v1_hold_chat_contact_updates"
+        }
       },
       "parameters": [
         {
           "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ]
     },
@@ -14350,6 +14679,9 @@
       "parameters": [
         {
           "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ]
     },
@@ -14671,6 +15003,9 @@
       "parameters": [
         {
           "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ]
     },
@@ -14817,6 +15152,350 @@
       "parameters": [
         {
           "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ]
+    },
+    "/webhook_endpoints/{id}/test": {
+      "post": {
+        "tags": [
+          "Webhooks"
+        ],
+        "operationId": "testWebhookEndpoint",
+        "summary": "Send a test event",
+        "description": "**Scope:** `admin:webhooks`. **Needs** webhook endpoints by API and webhook test, redeliver and rotation turned on for your organization (ask Finn support).\n\nSends one signed `webhook.test` event to the endpoint now, one attempt, and answers what happened. Use it to check your URL and your signature check. Nothing is recorded: no delivery is listed, and the endpoint's `failure_count` and `last_success_at` stay as they are, so a failed test never switches an endpoint off. Sent to a switched-off endpoint too.\n\nThe body is `{ event: \"webhook.test\", event_id, created_at, org_id, test: true, data: { endpoint_id, message } }`, signed like every event (`X-Finn-Signature`; both secrets during a rotation). A failed send is still `200`, with `delivered: false`.\n\n**Rate limit:** 30 test sends, redeliveries and rotations per minute per API key.",
+        "x-required-scope": "admin:webhooks",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The webhook endpoint's id.",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "What happened.",
+            "headers": {
+              "RateLimit-Policy": {
+                "$ref": "#/components/headers/RateLimitPolicy"
+              },
+              "RateLimit-Limit": {
+                "$ref": "#/components/headers/RateLimitLimit"
+              },
+              "RateLimit-Remaining": {
+                "$ref": "#/components/headers/RateLimitRemaining"
+              },
+              "RateLimit-Reset": {
+                "$ref": "#/components/headers/RateLimitReset"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WebhookTestResult"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key (`api_key_required`, `invalid_api_key`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V1Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "`insufficient_scope` (the key lacks `admin:webhooks`), or `webhooks_api_not_enabled` when webhook endpoints by API are not turned on for your organization.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V1Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No such webhook endpoint in your organization (`webhook_endpoint_not_found`), or `not_found` when webhook test, redeliver and rotation are not turned on for your organization.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V1Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`). Retry after the `Retry-After` header.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V1Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Settings could not be read (`unavailable`). Retry shortly.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V1Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ]
+    },
+    "/webhook_endpoints/{id}/deliveries/{delivery_id}/redeliver": {
+      "post": {
+        "tags": [
+          "Webhooks"
+        ],
+        "operationId": "redeliverWebhookDelivery",
+        "summary": "Redeliver an event",
+        "description": "**Scope:** `admin:webhooks`. **Needs** webhook endpoints by API and webhook test, redeliver and rotation turned on for your organization (ask Finn support).\n\nSends a delivered or failed event to this endpoint again. A new delivery is queued (`202`, `status: pending`) and sent, usually within 15 seconds, signed and retried like any event; read its outcome with `GET /webhook_endpoints/{id}/deliveries`. The body carries the same `event_id` as the first time, so if you de-duplicate on `event_id`, remove the event from your store first. A record event carries the record as it is when sent; a `call.completed` gets a fresh `recording_url`.\n\nNot possible for a `call.completed` sent the in-process way (`event_id` is `null`): its body was not kept.\n\n**Rate limit:** 30 test sends, redeliveries and rotations per minute per API key.",
+        "x-required-scope": "admin:webhooks",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The webhook endpoint's id.",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "delivery_id",
+            "in": "path",
+            "required": true,
+            "description": "The delivery's id, from `GET /webhook_endpoints/{id}/deliveries`.",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "The new delivery, queued.",
+            "headers": {
+              "RateLimit-Policy": {
+                "$ref": "#/components/headers/RateLimitPolicy"
+              },
+              "RateLimit-Limit": {
+                "$ref": "#/components/headers/RateLimitLimit"
+              },
+              "RateLimit-Remaining": {
+                "$ref": "#/components/headers/RateLimitRemaining"
+              },
+              "RateLimit-Reset": {
+                "$ref": "#/components/headers/RateLimitReset"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WebhookDelivery"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key (`api_key_required`, `invalid_api_key`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V1Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "`insufficient_scope` (the key lacks `admin:webhooks`), or `webhooks_api_not_enabled` when webhook endpoints by API are not turned on for your organization.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V1Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No such webhook endpoint (`webhook_endpoint_not_found`) or delivery (`webhook_delivery_not_found`) in your organization, or `not_found` when webhook test, redeliver and rotation are not turned on for your organization.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V1Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "`delivery_not_redeliverable` (a `call.completed` sent the in-process way), `delivery_pending` (still waiting to be sent or retried), or `webhook_endpoint_disabled` (switch the endpoint on first).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V1Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`). Retry after the `Retry-After` header.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V1Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Settings could not be read (`unavailable`). Retry shortly.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V1Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ]
+    },
+    "/webhook_endpoints/{id}/rotate_secret": {
+      "post": {
+        "tags": [
+          "Webhooks"
+        ],
+        "operationId": "rotateWebhookEndpointSecret",
+        "summary": "Rotate the signing secret",
+        "description": "**Scope:** `admin:webhooks`. **Needs** webhook endpoints by API and webhook test, redeliver and rotation turned on for your organization (ask Finn support).\n\nMakes a new signing secret and returns it. It is shown only in this response: store it now. For 24 hours (`previous_secret_expires_at`) every event is signed with both secrets: `X-Finn-Signature` is `t=<unix>,v1=<new>,v1=<old>`. Accept a request when any `v1` entry matches, switch your receiver to the new secret, and the old one stops signing by itself. Rotating again within the 24 hours keeps only the secret just replaced signing; the one before it stops at once.\n\nNot idempotent: a retry makes another secret. If a response was lost, rotate again and use that secret.\n\n**Rate limit:** 30 test sends, redeliveries and rotations per minute per API key.",
+        "x-required-scope": "admin:webhooks",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The webhook endpoint's id.",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The endpoint, with its new secret.",
+            "headers": {
+              "RateLimit-Policy": {
+                "$ref": "#/components/headers/RateLimitPolicy"
+              },
+              "RateLimit-Limit": {
+                "$ref": "#/components/headers/RateLimitLimit"
+              },
+              "RateLimit-Remaining": {
+                "$ref": "#/components/headers/RateLimitRemaining"
+              },
+              "RateLimit-Reset": {
+                "$ref": "#/components/headers/RateLimitReset"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WebhookEndpointRotated"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key (`api_key_required`, `invalid_api_key`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V1Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "`insufficient_scope` (the key lacks `admin:webhooks`), or `webhooks_api_not_enabled` when webhook endpoints by API are not turned on for your organization.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V1Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No such webhook endpoint in your organization (`webhook_endpoint_not_found`), or `not_found` when webhook test, redeliver and rotation are not turned on for your organization.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V1Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`). Retry after the `Retry-After` header.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V1Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Settings could not be read (`unavailable`). Retry shortly.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V1Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ]
     },
@@ -14826,8 +15505,8 @@
           "Webhooks"
         ],
         "operationId": "listEventTypes",
-        "summary": "List webhook events",
-        "description": "**Scope:** `admin:webhooks`. **Needs** webhook endpoints by API turned on for your organization (ask Finn support).\n\nEvery event a webhook endpoint can subscribe to, with what it means. Their bodies are under **Webhooks** in this document. One page; `next_cursor` is always `null`.\n\n**Rate limit:** 300 requests per minute per API key.",
+        "summary": "List webhook event types",
+        "description": "**Scope:** `admin:webhooks`. **Needs** webhook endpoints by API turned on for your organization (ask Finn support).\n\nThe event types: every event a webhook endpoint can subscribe to (the names for `events` on `POST /webhook_endpoints`), with its group and what it means. It lists types, not events that happened: what was sent to an endpoint is `GET /webhook_endpoints/{id}/deliveries`. Their bodies are under **Webhooks** in this document. One page; `next_cursor` is always `null`.\n\n**Rate limit:** 300 requests per minute per API key.",
         "x-required-scope": "admin:webhooks",
         "responses": {
           "200": {
@@ -14899,6 +15578,9 @@
       "parameters": [
         {
           "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ]
     },
@@ -14996,8 +15678,14 @@
             }
           }
         },
-        "x-required-scope": "admin:read"
-      }
+        "x-required-scope": "admin:read",
+        "x-mcp-tool": "get_organization"
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ]
     },
     "/organization/members": {
       "get": {
@@ -15113,8 +15801,14 @@
             }
           }
         },
-        "x-required-scope": "admin:read"
-      }
+        "x-required-scope": "admin:read",
+        "x-mcp-tool": "list_org_members"
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ]
     },
     "/organization/integrations": {
       "get": {
@@ -15230,8 +15924,14 @@
             }
           }
         },
-        "x-required-scope": "admin:read"
-      }
+        "x-required-scope": "admin:read",
+        "x-mcp-tool": "list_org_integrations"
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ]
     },
     "/organization/api_keys": {
       "get": {
@@ -15240,7 +15940,7 @@
         ],
         "operationId": "listOrganizationApiKeys",
         "summary": "List API keys",
-        "description": "**Scope:** `admin:read`. **Needs** admin reads by API turned on for your organization, and an organization API key. An org admin's own OAuth or MCP token also works where member access to admin reads is turned on too; other members are refused.\n\nYour organization's API keys, newest first, revoked ones included. Metadata only: the key itself is shown once, in the dashboard, when it is made, and is never returned by the API. Create and revoke keys in the dashboard under **Settings → Integrations → API keys**.\n\n**Rate limit:** 120 requests per minute per API key, shared by the four admin reads.",
+        "description": "**Scope:** `admin:read`. **Needs** admin reads by API turned on for your organization, and an organization API key. An org admin's own OAuth or MCP token also works where member access to admin reads is turned on too; other members are refused.\n\nYour organization's API keys, newest first, revoked ones included. Metadata only: the key itself is shown once, when it is made or rotated, and is never returned by this list. Create, rotate and revoke keys in the dashboard under **Settings → Integrations → API keys**. `expiring_soon` is true for a key that expires within 14 days.\n\n**Rate limit:** 120 requests per minute per API key, shared by the four admin reads.",
         "parameters": [
           {
             "name": "limit",
@@ -15348,7 +16048,155 @@
           }
         },
         "x-required-scope": "admin:read"
-      }
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ]
+    },
+    "/usage": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "operationId": "getUsage",
+        "summary": "Get API usage by key and day",
+        "description": "**Scope:** `admin:read`. **Needs** usage by API turned on for your organization (`usage_off` otherwise), and an organization API key. An org admin's own OAuth or MCP token also works where member access to admin reads is turned on; other members are refused.\n\nPer credential (org API key, MCP key or OAuth token) and per UTC day: `calls.write` (successful writes), `calls.read` (reads), `calls.refused` (403 refusals) and `holds_created` (writes held for approval). Spend is the organization's wallet ledger per day (`credits_spent`, `credits_added`, `transactions`); it matches `GET /wallet/transactions` over the same days and is not split by key, because a wallet transaction does not record which key caused it.\n\nCounted from what Finn already records: `calls.read` counts only the reads the audit log records (records, cases, approvals, calls, do-not-call, chat and post-call analysis), not reads of Finns, voices, the wallet or schemas, so it is a lower bound (`coverage.reads` is `sensitive_reads_only`). A write held for approval counts when it is held and again when its approved run succeeds. Days and keys with no activity are left out.\n\n`limits` gives the usual per-minute limits (each response's `RateLimit-*` headers give that route's own), and, where per-credential limits are on for your organization, the overall per-credential ceiling and the daily caps with today's use.\n\n**Rate limit:** 120 requests per minute per API key, shared with the admin reads.",
+        "parameters": [
+          {
+            "name": "from",
+            "in": "query",
+            "description": "First day, `YYYY-MM-DD` (UTC). Default: 6 days before `to`.",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "description": "Last day, `YYYY-MM-DD` (UTC), inclusive. Default and maximum: today. The range is at most 92 days.",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "group_by",
+            "in": "query",
+            "description": "Only `day` today.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "day"
+              ],
+              "default": "day"
+            }
+          },
+          {
+            "name": "credential_id",
+            "in": "query",
+            "description": "Only this credential (an API key id from `GET /organization/api_keys`, or an MCP key or OAuth grant id).",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Usage for the range.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UsageReport"
+                }
+              }
+            },
+            "headers": {
+              "RateLimit-Policy": {
+                "$ref": "#/components/headers/RateLimitPolicy"
+              },
+              "RateLimit-Limit": {
+                "$ref": "#/components/headers/RateLimitLimit"
+              },
+              "RateLimit-Remaining": {
+                "$ref": "#/components/headers/RateLimitRemaining"
+              },
+              "RateLimit-Reset": {
+                "$ref": "#/components/headers/RateLimitReset"
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid `from`, `to`, `group_by` or `credential_id`, or a range over 92 days (`invalid_request` with `fields`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V1Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V1Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "`insufficient_scope` (the key lacks `admin:read`), `forbidden` (not an organization API key, or a member who is not an org admin), or `usage_off` when usage by API is not turned on for your organization (ask Finn support).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V1Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`). Retry after the `Retry-After` header.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V1Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Something went wrong on our side (`internal_error`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V1Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Settings could not be read (`unavailable`). Retry shortly.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V1Error"
+                }
+              }
+            }
+          }
+        },
+        "x-required-scope": "admin:read"
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ]
     },
     "/finns/generate": {
       "post": {
@@ -15467,8 +16315,15 @@
           "500": {
             "$ref": "#/components/responses/InternalError"
           }
+        },
+        "x-required-scope": "finn:write",
+        "x-mcp-tool": "generate_finn"
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
-      }
+      ]
     },
     "/finns/{finn_id}/flow": {
       "parameters": [
@@ -15481,6 +16336,9 @@
             "type": "string",
             "format": "uuid"
           }
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ],
       "get": {
@@ -15574,7 +16432,9 @@
           "500": {
             "$ref": "#/components/responses/InternalError"
           }
-        }
+        },
+        "x-required-scope": "finn:read",
+        "x-mcp-tool": "get_finn_flow"
       }
     },
     "/finns/{finn_id}/flow/enable": {
@@ -15588,6 +16448,9 @@
             "type": "string",
             "format": "uuid"
           }
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ],
       "post": {
@@ -15691,7 +16554,9 @@
           "500": {
             "$ref": "#/components/responses/InternalError"
           }
-        }
+        },
+        "x-required-scope": "finn:write",
+        "x-mcp-tool": "set_finn_flow_enabled"
       }
     },
     "/finns/{finn_id}/flow/disable": {
@@ -15705,6 +16570,9 @@
             "type": "string",
             "format": "uuid"
           }
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ],
       "post": {
@@ -15798,7 +16666,9 @@
           "500": {
             "$ref": "#/components/responses/InternalError"
           }
-        }
+        },
+        "x-required-scope": "finn:write",
+        "x-mcp-tool": "set_finn_flow_enabled"
       }
     },
     "/finns/{finn_id}/settings": {
@@ -15812,6 +16682,9 @@
             "type": "string",
             "format": "uuid"
           }
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ],
       "get": {
@@ -15905,7 +16778,9 @@
           "500": {
             "$ref": "#/components/responses/InternalError"
           }
-        }
+        },
+        "x-required-scope": "finn:read",
+        "x-mcp-tool": "get_finn_settings"
       }
     },
     "/finns/{finn_id}/variables": {
@@ -15919,6 +16794,9 @@
             "type": "string",
             "format": "uuid"
           }
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ],
       "get": {
@@ -16012,7 +16890,9 @@
           "500": {
             "$ref": "#/components/responses/InternalError"
           }
-        }
+        },
+        "x-required-scope": "finn:read",
+        "x-mcp-tool": "get_finn_variables"
       },
       "patch": {
         "tags": [
@@ -16115,7 +16995,9 @@
           "500": {
             "$ref": "#/components/responses/InternalError"
           }
-        }
+        },
+        "x-required-scope": "finn:write",
+        "x-mcp-tool": "update_finn_variables"
       }
     },
     "/finns/{finn_id}/handbook": {
@@ -16129,6 +17011,9 @@
             "type": "string",
             "format": "uuid"
           }
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ],
       "patch": {
@@ -16252,7 +17137,9 @@
           "500": {
             "$ref": "#/components/responses/InternalError"
           }
-        }
+        },
+        "x-required-scope": "finn:write",
+        "x-mcp-tool": "update_finn_handbook"
       }
     },
     "/finns/{finn_id}/speech_settings": {
@@ -16266,6 +17153,9 @@
             "type": "string",
             "format": "uuid"
           }
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ],
       "patch": {
@@ -16390,7 +17280,9 @@
           "500": {
             "$ref": "#/components/responses/InternalError"
           }
-        }
+        },
+        "x-required-scope": "finn:write",
+        "x-mcp-tool": "update_finn_speech_settings"
       }
     },
     "/finns/{finn_id}/draft": {
@@ -16404,6 +17296,9 @@
             "type": "string",
             "format": "uuid"
           }
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ],
       "patch": {
@@ -16507,7 +17402,9 @@
           "500": {
             "$ref": "#/components/responses/InternalError"
           }
-        }
+        },
+        "x-required-scope": "finn:write",
+        "x-mcp-tool": "update_finn_draft"
       }
     },
     "/finns/{finn_id}/duplicate": {
@@ -16521,6 +17418,9 @@
             "type": "string",
             "format": "uuid"
           }
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ],
       "post": {
@@ -16641,7 +17541,9 @@
           "500": {
             "$ref": "#/components/responses/InternalError"
           }
-        }
+        },
+        "x-required-scope": "finn:write",
+        "x-mcp-tool": "duplicate_finn"
       }
     },
     "/finns/{finn_id}/share_link": {
@@ -16655,6 +17557,9 @@
             "type": "string",
             "format": "uuid"
           }
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ],
       "get": {
@@ -16755,7 +17660,9 @@
           "500": {
             "$ref": "#/components/responses/InternalError"
           }
-        }
+        },
+        "x-required-scope": "finn:read",
+        "x-mcp-tool": "get_share_link"
       },
       "post": {
         "tags": [
@@ -16885,7 +17792,9 @@
           "500": {
             "$ref": "#/components/responses/InternalError"
           }
-        }
+        },
+        "x-required-scope": "finn:write",
+        "x-mcp-tool": "get_share_link"
       }
     },
     "/finns/{finn_id}/stats": {
@@ -16899,6 +17808,9 @@
             "type": "string",
             "format": "uuid"
           }
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ],
       "get": {
@@ -17015,7 +17927,9 @@
           "500": {
             "$ref": "#/components/responses/InternalError"
           }
-        }
+        },
+        "x-required-scope": "finn:read",
+        "x-mcp-tool": "get_finn_stats"
       }
     },
     "/finns/{finn_id}/outcomes": {
@@ -17029,6 +17943,9 @@
             "type": "string",
             "format": "uuid"
           }
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
         }
       ],
       "get": {
@@ -17145,7 +18062,9 @@
           "500": {
             "$ref": "#/components/responses/InternalError"
           }
-        }
+        },
+        "x-required-scope": "finn:read",
+        "x-mcp-tool": "summarize_finn_outcomes"
       }
     },
     "/sales/plays": {
@@ -17355,8 +18274,14 @@
             }
           }
         },
-        "x-required-scope": "sales:read"
-      }
+        "x-required-scope": "sales:read",
+        "x-mcp-tool": "list_sales_plays"
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ]
     },
     "/sales/plays/{slug}/runs": {
       "get": {
@@ -17590,8 +18515,14 @@
             }
           }
         },
-        "x-required-scope": "sales:read"
-      }
+        "x-required-scope": "sales:read",
+        "x-mcp-tool": "list_sales_play_runs"
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ]
     },
     "/sales/plays/{slug}/prospects": {
       "get": {
@@ -17869,8 +18800,14 @@
             }
           }
         },
-        "x-required-scope": "sales:read"
-      }
+        "x-required-scope": "sales:read",
+        "x-mcp-tool": "list_sales_prospects"
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ]
     },
     "/sales/plays/{slug}/run": {
       "post": {
@@ -17879,7 +18816,7 @@
         ],
         "operationId": "runSalesPlay",
         "summary": "Run a play",
-        "description": "**Scope:** `sales:write`.\n\nQueues a run of the play (202). The drafts it makes wait for a person to approve them in Finn: the API never approves or sends. Objects are sdr-service's, passed through as they are (camelCase).\n\n**Rate limit:** 300 reads and 60 writes per minute per API key across the Sales API.",
+        "description": "**Scope:** `sales:write`.\n\nQueues a run of the play (202). The drafts it makes wait for a person to approve them in Finn: the API never approves or sends. Objects are sdr-service's, passed through as they are (camelCase).\n\n**Rate limit:** 300 reads and 60 writes per minute per API key across the Sales API.\n\n**Approval hold (off by default):** where the organization has `v1_hold_inbound_sales_runs` on, this request can be held for a person to approve, like a campaign launch: it answers 202 `PendingApproval` and nothing runs until it is approved. A member's token is held unless the organization relaxed `sales.run`; an org key is held where the hold policy holds org keys for it.",
         "parameters": [
           {
             "name": "slug",
@@ -17897,12 +18834,19 @@
         ],
         "responses": {
           "202": {
-            "description": "Queued.",
+            "description": "Queued. Or a `PendingApproval` when the request is held for a person to approve (nothing has run yet).",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "additionalProperties": true
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "additionalProperties": true
+                    },
+                    {
+                      "$ref": "#/components/schemas/PendingApproval"
+                    }
+                  ]
                 }
               }
             }
@@ -18096,8 +19040,19 @@
             }
           }
         },
-        "x-required-scope": "sales:write"
-      }
+        "x-required-scope": "sales:write",
+        "x-mcp-tool": "run_sales_play",
+        "x-finn-hold": {
+          "action": "sales.run",
+          "class": "outward",
+          "feature": "v1_hold_inbound_sales_runs"
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ]
     },
     "/sales/drafts": {
       "get": {
@@ -18374,8 +19329,14 @@
             }
           }
         },
-        "x-required-scope": "sales:read"
-      }
+        "x-required-scope": "sales:read",
+        "x-mcp-tool": "list_sales_drafts"
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ]
     },
     "/sales/drafts/{id}": {
       "patch": {
@@ -18624,8 +19585,14 @@
             }
           }
         },
-        "x-required-scope": "sales:write"
-      }
+        "x-required-scope": "sales:write",
+        "x-mcp-tool": "edit_sales_draft"
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ]
     },
     "/sales/drafts/{id}/skip": {
       "post": {
@@ -18867,8 +19834,14 @@
             }
           }
         },
-        "x-required-scope": "sales:write"
-      }
+        "x-required-scope": "sales:write",
+        "x-mcp-tool": "skip_sales_draft"
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ]
     },
     "/sales/threads": {
       "get": {
@@ -19135,8 +20108,14 @@
             }
           }
         },
-        "x-required-scope": "sales:read"
-      }
+        "x-required-scope": "sales:read",
+        "x-mcp-tool": "list_sales_threads"
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ]
     },
     "/sales/threads/{id}": {
       "get": {
@@ -19359,8 +20338,14 @@
             }
           }
         },
-        "x-required-scope": "sales:read"
-      }
+        "x-required-scope": "sales:read",
+        "x-mcp-tool": "read_sales_thread"
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ]
     },
     "/dialer/sessions": {
       "get": {
@@ -19604,8 +20589,14 @@
             }
           }
         },
-        "x-required-scope": "dialer:read"
-      }
+        "x-required-scope": "dialer:read",
+        "x-mcp-tool": "list_rep_sessions"
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ]
     },
     "/dialer/sessions/{id}": {
       "get": {
@@ -19828,8 +20819,14 @@
             }
           }
         },
-        "x-required-scope": "dialer:read"
-      }
+        "x-required-scope": "dialer:read",
+        "x-mcp-tool": "get_rep_session"
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ]
     },
     "/dialer/analytics": {
       "get": {
@@ -20061,8 +21058,14 @@
             }
           }
         },
-        "x-required-scope": "dialer:read"
-      }
+        "x-required-scope": "dialer:read",
+        "x-mcp-tool": "get_rep_analytics"
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ]
     },
     "/dialer/follow-ups": {
       "get": {
@@ -20271,8 +21274,14 @@
             }
           }
         },
-        "x-required-scope": "dialer:read"
-      }
+        "x-required-scope": "dialer:read",
+        "x-mcp-tool": "list_rep_follow_ups"
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ]
     },
     "/dialer/leads/{id}/brief": {
       "get": {
@@ -20506,8 +21515,14 @@
             }
           }
         },
-        "x-required-scope": "dialer:read"
-      }
+        "x-required-scope": "dialer:read",
+        "x-mcp-tool": "get_lead_brief"
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ]
     },
     "/crm/setup": {
       "get": {
@@ -20632,8 +21647,14 @@
             }
           }
         },
-        "x-required-scope": "crm:read"
-      }
+        "x-required-scope": "crm:read",
+        "x-mcp-tool": "crm_get_schema"
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ]
     },
     "/crm/filter_schema": {
       "get": {
@@ -20758,8 +21779,14 @@
             }
           }
         },
-        "x-required-scope": "crm:read"
-      }
+        "x-required-scope": "crm:read",
+        "x-mcp-tool": "crm_get_schema"
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ]
     },
     "/crm/records/search": {
       "post": {
@@ -20905,8 +21932,14 @@
             }
           }
         },
-        "x-required-scope": "crm:read"
-      }
+        "x-required-scope": "crm:read",
+        "x-mcp-tool": "crm_search_records"
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ]
     },
     "/crm/records/query": {
       "post": {
@@ -21100,8 +22133,14 @@
             }
           }
         },
-        "x-required-scope": "crm:read"
-      }
+        "x-required-scope": "crm:read",
+        "x-mcp-tool": "crm_search_records"
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ]
     },
     "/crm/records/query/count": {
       "post": {
@@ -21242,8 +22281,14 @@
             }
           }
         },
-        "x-required-scope": "crm:read"
-      }
+        "x-required-scope": "crm:read",
+        "x-mcp-tool": "crm_count_records"
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ]
     },
     "/crm/records/query/stage_counts": {
       "post": {
@@ -21384,8 +22429,14 @@
             }
           }
         },
-        "x-required-scope": "crm:read"
-      }
+        "x-required-scope": "crm:read",
+        "x-mcp-tool": "crm_count_records"
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ]
     },
     "/crm/records/{id}": {
       "patch": {
@@ -21627,7 +22678,8 @@
             }
           }
         },
-        "x-required-scope": "crm:write"
+        "x-required-scope": "crm:write",
+        "x-mcp-tool": "crm_update_fields"
       },
       "get": {
         "tags": [
@@ -21792,8 +22844,14 @@
             }
           }
         },
-        "x-required-scope": "crm:read"
-      }
+        "x-required-scope": "crm:read",
+        "x-mcp-tool": "crm_get_record"
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ]
     },
     "/crm/records/{id}/timeline": {
       "get": {
@@ -21999,8 +23057,14 @@
             }
           }
         },
-        "x-required-scope": "crm:read"
-      }
+        "x-required-scope": "crm:read",
+        "x-mcp-tool": "crm_get_timeline"
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ]
     },
     "/crm/records/{id}/stage_gate": {
       "get": {
@@ -22174,8 +23238,14 @@
             }
           }
         },
-        "x-required-scope": "crm:read"
-      }
+        "x-required-scope": "crm:read",
+        "x-mcp-tool": "crm_get_stage_gate"
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ]
     },
     "/crm/records/{id}/documents": {
       "get": {
@@ -22341,8 +23411,14 @@
             }
           }
         },
-        "x-required-scope": "crm:read"
-      }
+        "x-required-scope": "crm:read",
+        "x-mcp-tool": "crm_list_documents"
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ]
     },
     "/crm/records/{id}/files": {
       "post": {
@@ -22536,7 +23612,8 @@
             }
           }
         },
-        "x-required-scope": "crm:docs:write"
+        "x-required-scope": "crm:docs:write",
+        "x-mcp-tool": "crm_attach_document"
       },
       "get": {
         "tags": [
@@ -22701,8 +23778,14 @@
             }
           }
         },
-        "x-required-scope": "crm:read"
-      }
+        "x-required-scope": "crm:read",
+        "x-mcp-tool": "crm_list_documents"
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ]
     },
     "/crm/records/{id}/forms_checklist": {
       "get": {
@@ -22868,8 +23951,14 @@
             }
           }
         },
-        "x-required-scope": "crm:read"
-      }
+        "x-required-scope": "crm:read",
+        "x-mcp-tool": "crm_list_documents"
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ]
     },
     "/crm/records/{id}/submissions": {
       "get": {
@@ -23035,8 +24124,14 @@
             }
           }
         },
-        "x-required-scope": "crm:read"
-      }
+        "x-required-scope": "crm:read",
+        "x-mcp-tool": "crm_get_form_submissions"
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ]
     },
     "/crm/records/{id}/form_drafts": {
       "get": {
@@ -23202,8 +24297,14 @@
             }
           }
         },
-        "x-required-scope": "crm:read"
-      }
+        "x-required-scope": "crm:read",
+        "x-mcp-tool": "crm_get_form_submissions"
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ]
     },
     "/crm/forms": {
       "get": {
@@ -23328,8 +24429,14 @@
             }
           }
         },
-        "x-required-scope": "crm:read"
-      }
+        "x-required-scope": "crm:read",
+        "x-mcp-tool": "crm_list_forms"
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ]
     },
     "/crm/follow_ups": {
       "get": {
@@ -23548,8 +24655,14 @@
             }
           }
         },
-        "x-required-scope": "crm:read"
-      }
+        "x-required-scope": "crm:read",
+        "x-mcp-tool": "crm_list_follow_ups"
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ]
     },
     "/crm/follow_ups/stats": {
       "get": {
@@ -23684,8 +24797,14 @@
             }
           }
         },
-        "x-required-scope": "crm:read"
-      }
+        "x-required-scope": "crm:read",
+        "x-mcp-tool": "crm_list_follow_ups"
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ]
     },
     "/crm/my_work": {
       "get": {
@@ -23810,8 +24929,14 @@
             }
           }
         },
-        "x-required-scope": "crm:read"
-      }
+        "x-required-scope": "crm:read",
+        "x-mcp-tool": "crm_my_work"
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ]
     },
     "/crm/views": {
       "post": {
@@ -23974,7 +25099,8 @@
             }
           }
         },
-        "x-required-scope": "crm:write"
+        "x-required-scope": "crm:write",
+        "x-mcp-tool": "crm_save_view"
       },
       "get": {
         "tags": [
@@ -24098,8 +25224,14 @@
             }
           }
         },
-        "x-required-scope": "crm:read"
-      }
+        "x-required-scope": "crm:read",
+        "x-mcp-tool": "crm_list_views"
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ]
     },
     "/crm/summary": {
       "get": {
@@ -24224,8 +25356,14 @@
             }
           }
         },
-        "x-required-scope": "crm:read"
-      }
+        "x-required-scope": "crm:read",
+        "x-mcp-tool": "crm_get_pipeline_stats"
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ]
     },
     "/crm/stage_counts": {
       "get": {
@@ -24350,8 +25488,14 @@
             }
           }
         },
-        "x-required-scope": "crm:read"
-      }
+        "x-required-scope": "crm:read",
+        "x-mcp-tool": "crm_get_pipeline_stats"
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ]
     },
     "/crm/speed": {
       "get": {
@@ -24486,8 +25630,14 @@
             }
           }
         },
-        "x-required-scope": "crm:read"
-      }
+        "x-required-scope": "crm:read",
+        "x-mcp-tool": "crm_get_pipeline_stats"
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ]
     },
     "/crm/duplicates": {
       "get": {
@@ -24612,8 +25762,14 @@
             }
           }
         },
-        "x-required-scope": "crm:read"
-      }
+        "x-required-scope": "crm:read",
+        "x-mcp-tool": "crm_find_duplicates"
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ]
     },
     "/crm/ask": {
       "post": {
@@ -24756,8 +25912,14 @@
             }
           }
         },
-        "x-required-scope": "crm:read"
-      }
+        "x-required-scope": "crm:read",
+        "x-mcp-tool": "crm_ask"
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ]
     },
     "/crm/records/{id}/notes": {
       "post": {
@@ -24960,8 +26122,14 @@
             }
           }
         },
-        "x-required-scope": "crm:write"
-      }
+        "x-required-scope": "crm:write",
+        "x-mcp-tool": "crm_add_note"
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ]
     },
     "/crm/records/{id}/follow_ups": {
       "post": {
@@ -25161,8 +26329,14 @@
             }
           }
         },
-        "x-required-scope": "crm:write"
-      }
+        "x-required-scope": "crm:write",
+        "x-mcp-tool": "crm_create_follow_up"
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ]
     },
     "/crm/follow_ups/{id}": {
       "patch": {
@@ -25368,8 +26542,14 @@
             }
           }
         },
-        "x-required-scope": "crm:write"
-      }
+        "x-required-scope": "crm:write",
+        "x-mcp-tool": "crm_update_follow_up"
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ]
     },
     "/crm/records": {
       "post": {
@@ -25565,8 +26745,14 @@
             }
           }
         },
-        "x-required-scope": "crm:write"
-      }
+        "x-required-scope": "crm:write",
+        "x-mcp-tool": "crm_create_record"
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ]
     },
     "/crm/records/{id}/stage_checks/{stage}/{check}": {
       "put": {
@@ -25779,8 +26965,14 @@
             }
           }
         },
-        "x-required-scope": "crm:write"
-      }
+        "x-required-scope": "crm:write",
+        "x-mcp-tool": "crm_tick_stage_check"
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ]
     },
     "/crm/records/{id}/ref_no": {
       "post": {
@@ -25949,8 +27141,14 @@
             }
           }
         },
-        "x-required-scope": "crm:write"
-      }
+        "x-required-scope": "crm:write",
+        "x-mcp-tool": "crm_assign_reference_no"
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ]
     },
     "/crm/records/{id}/documents/{type}/status": {
       "post": {
@@ -26156,8 +27354,14 @@
             }
           }
         },
-        "x-required-scope": "crm:write"
-      }
+        "x-required-scope": "crm:write",
+        "x-mcp-tool": "crm_set_document_status"
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ]
     },
     "/crm/records/{id}/forms/{form_id}/draft": {
       "put": {
@@ -26388,8 +27592,14 @@
             }
           }
         },
-        "x-required-scope": "crm:write"
-      }
+        "x-required-scope": "crm:write",
+        "x-mcp-tool": "crm_save_form_draft"
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ]
     },
     "/crm/records/{id}/doc_drafts": {
       "post": {
@@ -26577,8 +27787,14 @@
             }
           }
         },
-        "x-required-scope": "crm:write"
-      }
+        "x-required-scope": "crm:write",
+        "x-mcp-tool": "crm_draft_document"
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ]
     },
     "/crm/records/{id}/stage_moves": {
       "post": {
@@ -26644,8 +27860,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "additionalProperties": true
+                  "$ref": "#/components/schemas/PendingApproval"
                 }
               }
             }
@@ -26783,8 +27998,18 @@
             }
           }
         },
-        "x-required-scope": "crm:stage"
-      }
+        "x-required-scope": "crm:stage",
+        "x-mcp-tool": "crm_move_stage",
+        "x-finn-hold": {
+          "action": "contact.stage_move",
+          "class": "outward"
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ]
     },
     "/crm/records/{id}/forms/{form_id}/submissions": {
       "post": {
@@ -26861,8 +28086,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "additionalProperties": true
+                  "$ref": "#/components/schemas/PendingApproval"
                 }
               }
             }
@@ -27030,8 +28254,18 @@
             }
           }
         },
-        "x-required-scope": "crm:stage"
-      }
+        "x-required-scope": "crm:stage",
+        "x-mcp-tool": "crm_submit_form",
+        "x-finn-hold": {
+          "action": "contact.form_submit",
+          "class": "outward"
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ]
     },
     "/crm/records/{id}/forms/{form_id}/links": {
       "post": {
@@ -27108,8 +28342,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "additionalProperties": true
+                  "$ref": "#/components/schemas/PendingApproval"
                 }
               }
             }
@@ -27247,8 +28480,18 @@
             }
           }
         },
-        "x-required-scope": "crm:share"
-      }
+        "x-required-scope": "crm:share",
+        "x-mcp-tool": "crm_create_outside_party_link",
+        "x-finn-hold": {
+          "action": "contact.form_link",
+          "class": "outward"
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ]
     },
     "/crm/records/{id}/upload_links": {
       "post": {
@@ -27316,8 +28559,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "additionalProperties": true
+                  "$ref": "#/components/schemas/PendingApproval"
                 }
               }
             }
@@ -27455,8 +28697,18 @@
             }
           }
         },
-        "x-required-scope": "crm:share"
-      }
+        "x-required-scope": "crm:share",
+        "x-mcp-tool": "crm_create_outside_party_link",
+        "x-finn-hold": {
+          "action": "contact.upload_link",
+          "class": "outward"
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ]
     },
     "/crm/imports/columns": {
       "post": {
@@ -27611,8 +28863,14 @@
             }
           }
         },
-        "x-required-scope": "crm:import"
-      }
+        "x-required-scope": "crm:import",
+        "x-mcp-tool": "crm_import_csv"
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ]
     },
     "/crm/imports": {
       "post": {
@@ -27679,8 +28937,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "additionalProperties": true
+                  "$ref": "#/components/schemas/PendingApproval"
                 }
               }
             }
@@ -27788,7 +29045,1631 @@
             }
           }
         },
-        "x-required-scope": "crm:import"
+        "x-required-scope": "crm:import",
+        "x-mcp-tool": "crm_import_csv",
+        "x-finn-hold": {
+          "action": "contact.import",
+          "class": "outward"
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ]
+    },
+    "/dialer/follow-ups/{call_id}/done": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ],
+      "post": {
+        "tags": [
+          "Dialer"
+        ],
+        "operationId": "markDialerFollowUpDone",
+        "summary": "Mark a dialer follow-up done",
+        "description": "**Scope:** `dialer:write`.\n\nMarks the call's follow-up done; it leaves the follow-up list. Answers `{callId, state: \"done\"}`.\n\n**Off unless** your organization has dialer writes switched on (registry flag `v1_dialer_writes`, off by default; ask Finn support): until then this answers `404 not_found`. Only calls that have ended: a live call's wrap-up stays with the rep (`409 illegal_state`). An org key reaches the whole team's calls; a member's OAuth token or MCP key reaches the member's own calls, or the team's for an admin or supervisor. Not held for approval: these are internal records, like CRM notes. Send an `Idempotency-Key` so a retry does not write twice.\n\n**Rate limit:** 60 writes per minute per API key across the Dialer API.",
+        "parameters": [
+          {
+            "name": "call_id",
+            "in": "path",
+            "required": true,
+            "description": "The call's id (a line id from GET /dialer/sessions/{id}).",
+            "schema": {
+              "type": "string",
+              "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The request is not valid (`invalid_request` / `validation_failed`, with `fields`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/V1Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "error": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "invalid_request",
+                                "validation_failed"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown or revoked credentials.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/V1Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "error": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "api_key_required",
+                                "invalid_api_key",
+                                "unauthorized",
+                                "key_expired"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The key lacks the scope (`insufficient_scope`), the credential cannot use this endpoint (`credential_not_supported`), or the dialer refused (`forbidden`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/V1Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "error": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "insufficient_scope",
+                                "credential_not_supported",
+                                "forbidden"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or dialer writes are not switched on for this organization (registry flags `v1_dialer`, `v1_dialer_writes`): `not_found`, `follow_up_not_found`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/V1Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "error": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "not_found",
+                                "follow_up_not_found"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "The call has not ended, or (a note) it has no disposition yet (`illegal_state`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/V1Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "error": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "illegal_state"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`). Retry after the `Retry-After` header.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/V1Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "error": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "rate_limited"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "The dialer is briefly unavailable (`unavailable`). Safe to retry.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/V1Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "error": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "unavailable"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "x-required-scope": "dialer:write",
+        "x-mcp-tool": "dialer_mark_follow_up_done"
+      }
+    },
+    "/dialer/calls/{call_id}/disposition": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ],
+      "put": {
+        "tags": [
+          "Dialer"
+        ],
+        "operationId": "setDialerCallDisposition",
+        "summary": "Set a finished call's disposition",
+        "description": "**Scope:** `dialer:write`.\n\nSets the call's wrap-up outcome, as if the rep had saved it: analytics, follow-ups, the do-not-call list and Contacts read it. The call's notes are kept. A call already sent to Contacts is sent again with the new outcome. `callback_at` (unix milliseconds, within the next 365 days) goes with `callback` only. Answers the call's disposition (rep-dialer-service's object, camelCase).\n\n**Off unless** your organization has dialer writes switched on (registry flag `v1_dialer_writes`, off by default; ask Finn support): until then this answers `404 not_found`. Only calls that have ended: a live call's wrap-up stays with the rep (`409 illegal_state`). An org key reaches the whole team's calls; a member's OAuth token or MCP key reaches the member's own calls, or the team's for an admin or supervisor. Not held for approval: these are internal records, like CRM notes. Send an `Idempotency-Key` so a retry does not write twice.\n\n**Rate limit:** 60 writes per minute per API key across the Dialer API.",
+        "parameters": [
+          {
+            "name": "call_id",
+            "in": "path",
+            "required": true,
+            "description": "The call's id (a line id from GET /dialer/sessions/{id}).",
+            "schema": {
+              "type": "string",
+              "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "outcome"
+                ],
+                "properties": {
+                  "outcome": {
+                    "type": "string",
+                    "enum": [
+                      "interested",
+                      "callback",
+                      "send_info",
+                      "left_voicemail",
+                      "wrong_person",
+                      "not_interested",
+                      "do_not_call"
+                    ]
+                  },
+                  "callback_at": {
+                    "type": "integer",
+                    "description": "Unix milliseconds; required with `callback`, refused otherwise."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The request is not valid (`invalid_request` / `validation_failed`, with `fields`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/V1Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "error": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "invalid_request",
+                                "validation_failed"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown or revoked credentials.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/V1Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "error": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "api_key_required",
+                                "invalid_api_key",
+                                "unauthorized",
+                                "key_expired"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The key lacks the scope (`insufficient_scope`), the credential cannot use this endpoint (`credential_not_supported`), or the dialer refused (`forbidden`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/V1Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "error": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "insufficient_scope",
+                                "credential_not_supported",
+                                "forbidden"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or dialer writes are not switched on for this organization (registry flags `v1_dialer`, `v1_dialer_writes`): `not_found`, `call_not_found`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/V1Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "error": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "not_found",
+                                "call_not_found"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "The call has not ended, or (a note) it has no disposition yet (`illegal_state`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/V1Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "error": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "illegal_state"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`). Retry after the `Retry-After` header.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/V1Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "error": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "rate_limited"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "The dialer is briefly unavailable (`unavailable`). Safe to retry.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/V1Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "error": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "unavailable"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "x-required-scope": "dialer:write",
+        "x-mcp-tool": "dialer_set_disposition"
+      }
+    },
+    "/dialer/calls/{call_id}/notes": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ],
+      "post": {
+        "tags": [
+          "Dialer"
+        ],
+        "operationId": "addDialerCallNote",
+        "summary": "Add a note to a finished call",
+        "description": "**Scope:** `dialer:write`.\n\nAppends `note` (1 to 4000 characters) to the call's notes as a new paragraph (10,000 characters in all). The call needs a disposition first. Answers the call's disposition with its notes.\n\n**Off unless** your organization has dialer writes switched on (registry flag `v1_dialer_writes`, off by default; ask Finn support): until then this answers `404 not_found`. Only calls that have ended: a live call's wrap-up stays with the rep (`409 illegal_state`). An org key reaches the whole team's calls; a member's OAuth token or MCP key reaches the member's own calls, or the team's for an admin or supervisor. Not held for approval: these are internal records, like CRM notes. Send an `Idempotency-Key` so a retry does not write twice.\n\n**Rate limit:** 60 writes per minute per API key across the Dialer API.",
+        "parameters": [
+          {
+            "name": "call_id",
+            "in": "path",
+            "required": true,
+            "description": "The call's id (a line id from GET /dialer/sessions/{id}).",
+            "schema": {
+              "type": "string",
+              "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "note"
+                ],
+                "properties": {
+                  "note": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 4000
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The request is not valid (`invalid_request` / `validation_failed`, with `fields`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/V1Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "error": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "invalid_request",
+                                "validation_failed"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown or revoked credentials.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/V1Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "error": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "api_key_required",
+                                "invalid_api_key",
+                                "unauthorized",
+                                "key_expired"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The key lacks the scope (`insufficient_scope`), the credential cannot use this endpoint (`credential_not_supported`), or the dialer refused (`forbidden`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/V1Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "error": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "insufficient_scope",
+                                "credential_not_supported",
+                                "forbidden"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or dialer writes are not switched on for this organization (registry flags `v1_dialer`, `v1_dialer_writes`): `not_found`, `call_not_found`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/V1Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "error": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "not_found",
+                                "call_not_found"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "The call has not ended, or (a note) it has no disposition yet (`illegal_state`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/V1Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "error": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "illegal_state"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`). Retry after the `Retry-After` header.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/V1Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "error": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "rate_limited"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "The dialer is briefly unavailable (`unavailable`). Safe to retry.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/V1Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "error": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "unavailable"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "x-required-scope": "dialer:write",
+        "x-mcp-tool": "dialer_add_call_note"
+      }
+    },
+    "/chat/agents/{agent_id}": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Chat"
+        ],
+        "operationId": "getChatAgent",
+        "summary": "Get a chat agent's settings",
+        "description": "**Scope:** `chat:read`.\n\nThe agent's own settings (`overrides`: Setup → Agents in Finn), what the agent uses (`effective`: the workspace's Setup with the overrides on top, `timezone` resolved) and the settings `version`. An OAuth token or MCP key may call this.\n\n**Off unless** your organization has chat agent settings switched on (registry flag `v1_chat_agent_writes`, off by default; ask Finn support): until then this answers `404 not_found`. The agent's instructions and first message are the Finn agent's: change them with `PATCH /finns/{finn_id}/draft`.\n\n**Rate limit:** 300 requests per minute per API key across the Chat API.",
+        "parameters": [
+          {
+            "name": "agent_id",
+            "in": "path",
+            "required": true,
+            "description": "The chat agent's Finn id (a UUID).",
+            "schema": {
+              "type": "string",
+              "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The request is not valid (`invalid_request`, with `fields`), or `cursor` came from another list or other filters (`invalid_cursor`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/V1Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "error": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "invalid_request",
+                                "invalid_cursor"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown or revoked credentials.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/V1Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "error": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "api_key_required",
+                                "invalid_api_key",
+                                "key_expired"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The key lacks the scope (`insufficient_scope`), or the Chat API is not switched on for this organization (`chat_api_not_enabled`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/V1Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "error": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "insufficient_scope",
+                                "chat_api_not_enabled"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No such chat agent in your organization (`agent_not_found`), or chat agent settings are not switched on for it (`not_found`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/V1Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "error": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "agent_not_found",
+                                "not_found"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "description": "Chat is briefly unavailable (`unavailable`). Safe to retry; a send retried with the same `Idempotency-Key` is not sent twice.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/V1Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "error": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "unavailable"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "x-required-scope": "chat:read",
+        "x-mcp-tool": "chat_get_agent"
+      },
+      "patch": {
+        "tags": [
+          "Chat"
+        ],
+        "operationId": "updateChatAgent",
+        "summary": "Change a chat agent's settings",
+        "description": "**Scope:** `chat:write`.\n\nChanges the settings sent: any of `hours`, `handoff`, `quick_replies`, `resolution`, `booking`. A setting sent replaces the agent's own; `null` drops it, so the agent follows the workspace's (for `booking`, no booking). The change is live: the agent uses it on its next reply. Answers the agent as `GET` does.\n\n**Approval:** an org key changes the agent at once unless your organization holds org keys for `chat.agent_update`. A member's OAuth token or MCP key needs an org admin role (`403 forbidden` otherwise), and the change waits for that member to approve it in Finn: the answer is `202` with a `PendingApproval` and nothing has changed yet. Held because the settings change what the agent tells customers, unlike a Finn draft, which waits for someone to publish it. Send an `Idempotency-Key` so a retry returns the same approval instead of asking again.\n\n**Off unless** your organization has chat agent settings switched on (registry flag `v1_chat_agent_writes`, off by default; ask Finn support): until then this answers `404 not_found`. The agent's instructions and first message are the Finn agent's: change them with `PATCH /finns/{finn_id}/draft`.\n\n**Rate limit:** 60 writes per minute per API key, shared by every Chat write.",
+        "parameters": [
+          {
+            "name": "agent_id",
+            "in": "path",
+            "required": true,
+            "description": "The chat agent's Finn id (a UUID).",
+            "schema": {
+              "type": "string",
+              "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "hours": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "description": "Opening hours (time zone and days); null follows the workspace's."
+                  },
+                  "handoff": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "description": "When the agent hands over to a person (keywords and rules)."
+                  },
+                  "quick_replies": {
+                    "type": [
+                      "array",
+                      "object",
+                      "null"
+                    ],
+                    "description": "Quick replies the agent offers."
+                  },
+                  "resolution": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "description": "When a conversation counts as resolved."
+                  },
+                  "booking": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "description": "The booking event type; null means none."
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "202": {
+            "$ref": "#/components/responses/PendingApproval"
+          },
+          "400": {
+            "description": "The request is not valid (`invalid_request`, with `fields`), or `cursor` came from another list or other filters (`invalid_cursor`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/V1Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "error": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "invalid_request",
+                                "invalid_cursor"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown or revoked credentials.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/V1Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "error": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "api_key_required",
+                                "invalid_api_key",
+                                "key_expired"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The key lacks the scope (`insufficient_scope`), the Chat API is not switched on (`chat_api_not_enabled`), a member is not an org admin (`forbidden`), or approval holds are off for this organization (`approval_unavailable`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/V1Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "error": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "insufficient_scope",
+                                "chat_api_not_enabled",
+                                "forbidden",
+                                "approval_unavailable"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No such chat agent in your organization (`agent_not_found`), or chat agent settings are not switched on for it (`not_found`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/V1Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "error": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "agent_not_found",
+                                "not_found"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "The settings changed at the same time (`setup_stale`): read the agent again and retry.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/V1Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "error": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "setup_stale"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "423": {
+            "$ref": "#/components/responses/AiAppsPaused"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "description": "Chat is briefly unavailable (`unavailable`). Safe to retry; a send retried with the same `Idempotency-Key` is not sent twice.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/V1Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "error": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "unavailable"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "x-required-scope": "chat:write",
+        "x-mcp-tool": "chat_update_agent",
+        "x-finn-hold": {
+          "action": "chat.agent_update",
+          "class": "outward"
+        }
+      }
+    },
+    "/chat/agents/{agent_id}/test_turn": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/FinnOrg"
+        },
+        {
+          "$ref": "#/components/parameters/FinnVersion"
+        }
+      ],
+      "post": {
+        "tags": [
+          "Chat"
+        ],
+        "operationId": "testChatAgent",
+        "summary": "Test a chat agent",
+        "description": "**Scope:** `chat:write`.\n\nAsks the agent for its next reply as it would answer a customer, but as a test: nothing is sent to anyone, a booking is simulated, the agent's own HTTP tools are not called and nothing is billed. Send the conversation so far (`history`, at most 50 messages) and the next message (`latest`, at most 4000 characters). Answers `{text, options, handoff, end, booking, tools, turn_id, latency_ms, simulated: true}`. Not held for approval: nothing leaves Finn. At most 30 test turns per organization a minute (`429 rate_limited`).\n\n**Off unless** your organization has chat agent settings switched on (registry flag `v1_chat_agent_writes`, off by default; ask Finn support): until then this answers `404 not_found`. The agent's instructions and first message are the Finn agent's: change them with `PATCH /finns/{finn_id}/draft`.\n\n**Rate limit:** 60 writes per minute per API key, shared by every Chat write.",
+        "parameters": [
+          {
+            "name": "agent_id",
+            "in": "path",
+            "required": true,
+            "description": "The chat agent's Finn id (a UUID).",
+            "schema": {
+              "type": "string",
+              "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "latest"
+                ],
+                "properties": {
+                  "latest": {
+                    "type": "string",
+                    "maxLength": 4000
+                  },
+                  "history": {
+                    "type": "array",
+                    "maxItems": 50,
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "role",
+                        "content"
+                      ],
+                      "properties": {
+                        "role": {
+                          "type": "string",
+                          "enum": [
+                            "user",
+                            "assistant"
+                          ]
+                        },
+                        "content": {
+                          "type": "string",
+                          "maxLength": 8000
+                        }
+                      }
+                    }
+                  },
+                  "channel": {
+                    "type": "string",
+                    "description": "Default `widget`."
+                  },
+                  "session": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The request is not valid (`invalid_request`, with `fields`), or `cursor` came from another list or other filters (`invalid_cursor`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/V1Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "error": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "invalid_request",
+                                "invalid_cursor"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown or revoked credentials.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/V1Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "error": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "api_key_required",
+                                "invalid_api_key",
+                                "key_expired"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The key lacks the scope (`insufficient_scope`), or the Chat API is not switched on for this organization (`chat_api_not_enabled`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/V1Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "error": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "insufficient_scope",
+                                "chat_api_not_enabled"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No such chat agent in your organization (`agent_not_found`), or chat agent settings are not switched on for it (`not_found`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/V1Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "error": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "agent_not_found",
+                                "not_found"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "The runtime refused the turn (`content_filtered`, `validation_failed`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/V1Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "error": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "content_filtered",
+                                "validation_failed"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "503": {
+            "description": "Chat is briefly unavailable (`unavailable`). Safe to retry; a send retried with the same `Idempotency-Key` is not sent twice.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/V1Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "error": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "unavailable"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "x-required-scope": "chat:write",
+        "x-mcp-tool": "chat_test_agent"
       }
     }
   },
@@ -27797,7 +30678,7 @@
       "post": {
         "operationId": "callCompleted",
         "summary": "call.completed",
-        "description": "Sent once per call to each webhook endpoint after the call ends, answered or not: calls from outbound and inbound deployments and calls placed with `POST /calls`. If the Finn has a **Data webhook URL** (set in the dashboard under the Finn's **Deployment settings**), that URL also receives the event, signed with the Finn's own secret.\n\nUnanswered calls, and calls on a Finn without analysis questions, are usually sent within about 5 minutes. For an answered call on a Finn with analysis questions, the event waits for the analysis, so `analysis` is normally filled in; if analysis has not arrived after about an hour, the event is sent with what exists. New endpoints are not backfilled with older calls.\n\n**Verify the signature.** `X-Finn-Signature` is `t=<unix seconds>,v1=<hex>`, where `v1` is the HMAC-SHA256 of `<t>.<raw request body>` keyed with the whole signing secret, including its `whsec_` prefix, as UTF-8. Compute it over the raw body bytes before parsing JSON, compare in constant time, and reject timestamps older than a few minutes.\n\n**Delivery and retries.** Endpoints must use `https` and resolve to a public address. Each attempt times out after 10 seconds, and redirects are not followed. Any `2xx` response marks the event delivered. Timeouts, connection errors, `429`, `5xx`, `3xx` and responses larger than 64 KB are retried, up to 3 attempts in total (waiting 1 second, then 2 seconds). Other `4xx` responses are not retried. Each endpoint gets at most one `call.completed` per call; after 3 failed attempts the event is not sent again, so reconcile with `GET /calls/{call_uuid}`. De-duplicate on `call_uuid`.\n\n**Durable delivery.** When your organization has durable webhooks switched on (ask Finn support), `call.completed` goes through the same queue as record events: it survives a Finn restart, carries `event_id` (`call.completed:<call_uuid>`), `occurred_at` and `org_id`, goes out in order with the endpoint's other events, and a send that failed with a timeout, connection error, `429` or `5xx` is tried again after 1 min, 5 min, 30 min, 2 h and 6 h. `recording_url` is signed when the event is sent and is valid for one hour. An endpoint with 30 failed sends in a row and no success for a day is switched off (`enabled: false`); `GET /webhook_endpoints/{id}/deliveries` shows what happened.",
+        "description": "Sent once per call to each webhook endpoint after the call ends, answered or not: calls from outbound and inbound deployments and calls placed with `POST /calls`. If the Finn has a **Data webhook URL** (set in the dashboard under the Finn's **Deployment settings**), that URL also receives the event, signed with the Finn's own secret.\n\nUnanswered calls, and calls on a Finn without analysis questions, are usually sent within about 5 minutes. For an answered call on a Finn with analysis questions, the event waits for the analysis, so `analysis` is normally filled in; if analysis has not arrived after about an hour, the event is sent with what exists. New endpoints are not backfilled with older calls.\n\n**Verify the signature.** `X-Finn-Signature` is `t=<unix seconds>,v1=<hex>`, where `v1` is the HMAC-SHA256 of `<t>.<raw request body>` keyed with the whole signing secret, including its `whsec_` prefix, as UTF-8. Compute it over the raw body bytes before parsing JSON, compare in constant time, and reject timestamps older than a few minutes. For 24 hours after a secret rotation (`POST /webhook_endpoints/{id}/rotate_secret`) the header carries two `v1` entries, one per secret: accept the request when any of them matches.\n\n**Delivery and retries.** Endpoints must use `https` and resolve to a public address. Each attempt times out after 10 seconds, and redirects are not followed. Any `2xx` response marks the event delivered. Timeouts, connection errors, `429`, `5xx`, `3xx` and responses larger than 64 KB are retried, up to 3 attempts in total (waiting 1 second, then 2 seconds). Other `4xx` responses are not retried. Each endpoint gets at most one `call.completed` per call; after 3 failed attempts the event is not sent again, so reconcile with `GET /calls/{call_uuid}`. De-duplicate on `call_uuid`.\n\n**Durable delivery.** When your organization has durable webhooks switched on (ask Finn support), `call.completed` goes through the same queue as record events: it survives a Finn restart, carries `event_id` (`call.completed:<call_uuid>`), `occurred_at` and `org_id`, goes out in order with the endpoint's other events, and a send that failed with a timeout, connection error, `429` or `5xx` is tried again after 1 min, 5 min, 30 min, 2 h and 6 h. `recording_url` is signed when the event is sent and is valid for one hour. An endpoint with 30 failed sends in a row and no success for a day is switched off (`enabled: false`); `GET /webhook_endpoints/{id}/deliveries` shows what happened.",
         "security": [],
         "parameters": [
           {
@@ -33640,6 +36521,7 @@
               },
               "fields": {
                 "type": "array",
+                "description": "Each invalid input, plus context entries (`code: \"context\"`) for extra facts an error carries: `action_url`, `deployment_id`, `contact_id`, `required_credits`, `available_credits`, `transaction_id`, `allowed_answers`, Operator's `details.resets_at`, and so on. A context entry's `field` names the fact and `value` holds it.",
                 "items": {
                   "type": "object",
                   "properties": {
@@ -33647,10 +36529,14 @@
                       "type": "string"
                     },
                     "code": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "Why the field is not valid, or `context` for a context entry."
                     },
                     "message": {
                       "type": "string"
+                    },
+                    "value": {
+                      "description": "Context entries only: the value itself (a URL, id, number, list or object)."
                     }
                   },
                   "required": [
@@ -34105,7 +36991,8 @@
           "error",
           "created_at",
           "delivered_at",
-          "next_attempt_at"
+          "next_attempt_at",
+          "redelivery_of"
         ],
         "properties": {
           "id": {
@@ -34144,7 +37031,7 @@
               "string",
               "null"
             ],
-            "description": "The body's `event_id`. `null` for a `call.completed` sent the in-process way."
+            "description": "The body's `event_id` (a redelivery carries the original event's). `null` for a `call.completed` sent the in-process way."
           },
           "call_uuid": {
             "type": [
@@ -34153,6 +37040,14 @@
             ],
             "format": "uuid",
             "description": "For `call.completed`."
+          },
+          "redelivery_of": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid",
+            "description": "For a redelivery (`POST /webhook_endpoints/{id}/deliveries/{delivery_id}/redeliver`): the delivery it repeats."
           },
           "status": {
             "type": "string",
@@ -35224,7 +38119,8 @@
           "created_at",
           "last_used_at",
           "revoked_at",
-          "expires_at"
+          "expires_at",
+          "expiring_soon"
         ],
         "properties": {
           "id": {
@@ -35293,7 +38189,11 @@
               "null"
             ],
             "format": "date-time",
-            "description": "When the key stops working (90 days after it was made). Null for a key made before keys expired; it never expires. An expired key gets 401 key_expired."
+            "description": "When the key stops working (30, 90, 180 or 365 days after it was made, 90 by default; a rotated key's grace period can end it sooner). Null for a key made before keys expired; it never expires. An expired key gets 401 key_expired."
+          },
+          "expiring_soon": {
+            "type": "boolean",
+            "description": "True when the key has not been revoked and expires within 14 days. Rotate it before then."
           }
         }
       },
@@ -35849,6 +38749,381 @@
                 "type": "integer"
               },
               "body": {}
+            }
+          }
+        }
+      },
+      "WebhookTestResult": {
+        "type": "object",
+        "description": "The outcome of one test send.",
+        "required": [
+          "object",
+          "endpoint_id",
+          "event",
+          "delivered",
+          "response_status",
+          "error",
+          "duration_ms"
+        ],
+        "properties": {
+          "object": {
+            "type": "string",
+            "const": "webhook_test"
+          },
+          "endpoint_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "event": {
+            "type": "string",
+            "const": "webhook.test"
+          },
+          "delivered": {
+            "type": "boolean",
+            "description": "Your endpoint answered `2xx`."
+          },
+          "response_status": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "Your endpoint's HTTP status; `null` when no answer came."
+          },
+          "error": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Why it failed (`HTTP 500`, a timeout, a URL that is not public `https`)."
+          },
+          "duration_ms": {
+            "type": "integer",
+            "description": "How long the send took."
+          }
+        }
+      },
+      "WebhookEndpointRotated": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/WebhookEndpoint"
+          },
+          {
+            "type": "object",
+            "required": [
+              "secret",
+              "previous_secret_expires_at"
+            ],
+            "properties": {
+              "secret": {
+                "type": "string",
+                "pattern": "^whsec_",
+                "description": "The new signing secret. Shown only in this response: store it now."
+              },
+              "previous_secret_expires_at": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Until then events are signed with the previous secret as well (a second `v1=` in `X-Finn-Signature`)."
+              }
+            }
+          }
+        ]
+      },
+      "UsageReport": {
+        "type": "object",
+        "required": [
+          "data"
+        ],
+        "properties": {
+          "data": {
+            "type": "object",
+            "required": [
+              "from",
+              "to",
+              "group_by",
+              "timezone",
+              "credentials",
+              "spend",
+              "limits",
+              "coverage"
+            ],
+            "properties": {
+              "from": {
+                "type": "string",
+                "format": "date"
+              },
+              "to": {
+                "type": "string",
+                "format": "date"
+              },
+              "group_by": {
+                "type": "string",
+                "enum": [
+                  "day"
+                ]
+              },
+              "timezone": {
+                "type": "string",
+                "enum": [
+                  "UTC"
+                ]
+              },
+              "credentials": {
+                "type": "array",
+                "description": "Credentials with activity in the range, busiest first.",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "credential_id",
+                    "credential_kind",
+                    "channel",
+                    "name",
+                    "totals",
+                    "days"
+                  ],
+                  "properties": {
+                    "credential_id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "credential_kind": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "enum": [
+                        "org_key",
+                        "mcp_key",
+                        "oauth_token",
+                        null
+                      ]
+                    },
+                    "channel": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "description": "`api`, `mcp` or `oauth`."
+                    },
+                    "name": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "description": "The key's name, or the OAuth client's name."
+                    },
+                    "totals": {
+                      "type": "object",
+                      "required": [
+                        "calls",
+                        "holds_created"
+                      ],
+                      "properties": {
+                        "calls": {
+                          "type": "object",
+                          "required": [
+                            "read",
+                            "write",
+                            "refused"
+                          ],
+                          "properties": {
+                            "read": {
+                              "type": "integer",
+                              "description": "Reads the audit log records (see `coverage.reads`)."
+                            },
+                            "write": {
+                              "type": "integer",
+                              "description": "Successful writes (2xx)."
+                            },
+                            "refused": {
+                              "type": "integer",
+                              "description": "Requests refused with 403."
+                            }
+                          }
+                        },
+                        "holds_created": {
+                          "type": "integer"
+                        }
+                      }
+                    },
+                    "days": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "calls",
+                          "holds_created",
+                          "date"
+                        ],
+                        "properties": {
+                          "date": {
+                            "type": "string",
+                            "format": "date"
+                          },
+                          "calls": {
+                            "type": "object",
+                            "required": [
+                              "read",
+                              "write",
+                              "refused"
+                            ],
+                            "properties": {
+                              "read": {
+                                "type": "integer",
+                                "description": "Reads the audit log records (see `coverage.reads`)."
+                              },
+                              "write": {
+                                "type": "integer",
+                                "description": "Successful writes (2xx)."
+                              },
+                              "refused": {
+                                "type": "integer",
+                                "description": "Requests refused with 403."
+                              }
+                            }
+                          },
+                          "holds_created": {
+                            "type": "integer"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "spend": {
+                "type": "object",
+                "required": [
+                  "scope",
+                  "totals",
+                  "days"
+                ],
+                "properties": {
+                  "scope": {
+                    "type": "string",
+                    "enum": [
+                      "organization"
+                    ]
+                  },
+                  "totals": {
+                    "type": "object",
+                    "required": [
+                      "credits_spent",
+                      "credits_added",
+                      "transactions"
+                    ],
+                    "properties": {
+                      "credits_spent": {
+                        "type": "number",
+                        "description": "Credits debited (sum of negative `credits_delta`, as a positive number)."
+                      },
+                      "credits_added": {
+                        "type": "number",
+                        "description": "Credits added (top-ups, refunds)."
+                      },
+                      "transactions": {
+                        "type": "integer"
+                      }
+                    }
+                  },
+                  "days": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "date",
+                        "credits_spent",
+                        "credits_added",
+                        "transactions"
+                      ],
+                      "properties": {
+                        "date": {
+                          "type": "string",
+                          "format": "date"
+                        },
+                        "credits_spent": {
+                          "type": "number",
+                          "description": "Credits debited (sum of negative `credits_delta`, as a positive number)."
+                        },
+                        "credits_added": {
+                          "type": "number",
+                          "description": "Credits added (top-ups, refunds)."
+                        },
+                        "transactions": {
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "limits": {
+                "type": "object",
+                "required": [
+                  "per_minute",
+                  "daily_caps"
+                ],
+                "properties": {
+                  "per_minute": {
+                    "type": "object",
+                    "properties": {
+                      "read": {
+                        "type": "integer",
+                        "description": "Usual read limit per key per minute (300)."
+                      },
+                      "write": {
+                        "type": "integer",
+                        "description": "Usual write limit per key per minute (120); some writes are lower."
+                      },
+                      "credential_ceiling": {
+                        "type": [
+                          "integer",
+                          "null"
+                        ],
+                        "description": "Overall requests per credential per minute across the API, where per-credential limits are on; else null."
+                      }
+                    }
+                  },
+                  "daily_caps": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "description": "Where per-credential limits are on: the organization's daily caps (UTC) for sends by AI apps, with today's use (null if it could not be read).",
+                    "additionalProperties": {
+                      "type": "object",
+                      "properties": {
+                        "cap": {
+                          "type": "integer"
+                        },
+                        "used_today": {
+                          "type": [
+                            "integer",
+                            "null"
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "coverage": {
+                "type": "object",
+                "description": "What each count covers: `all`, `sensitive_reads_only`, `organization`, or `unavailable` where the source is not set up yet.",
+                "properties": {
+                  "reads": {
+                    "type": "string"
+                  },
+                  "writes": {
+                    "type": "string"
+                  },
+                  "holds": {
+                    "type": "string"
+                  },
+                  "spend": {
+                    "type": "string"
+                  }
+                }
+              }
             }
           }
         }

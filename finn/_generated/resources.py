@@ -597,11 +597,12 @@ class Deployments(Resource):
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
         )
 
-    def create_inbound(self, body: t.CreateInboundDeploymentRequest, *, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> t.CreateInboundDeploymentResponse:
+    def create_inbound(self, body: t.CreateInboundDeploymentRequest, *, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> Union[t.CreateInboundDeploymentResponse, PendingApproval]:
         """Create an inbound deployment.
 
         ``POST /deployments/inbound`` (createInboundDeployment).
         Gets an automatic Idempotency-Key, so it is safe to retry.
+        May answer a PendingApproval (HTTP 202) instead of doing the work; see is_pending_approval().
         """
         return self._do(
             'post', '/deployments/inbound',
@@ -1109,6 +1110,17 @@ class Agents(Resource):
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
         )
 
+    def archive(self, id: str, *, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> Dict[str, Any]:
+        """Archive an agent.
+
+        ``POST /agents/{id}/archive`` (archiveAgent).
+        """
+        return self._do(
+            'post', '/agents/{id}/archive',
+            path_params={'id': id}, query={},
+            idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
+        )
+
 
 
 class ChatConversations(Resource):
@@ -1229,10 +1241,11 @@ class ChatContacts(Resource):
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
         )
 
-    def update(self, id: str, body: Dict[str, Any], *, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> Dict[str, Any]:
+    def update(self, id: str, body: Dict[str, Any], *, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> Union[Dict[str, Any], PendingApproval]:
         """Update a chat contact.
 
         ``PATCH /chat/contacts/{id}`` (updateChatContact).
+        May answer a PendingApproval (HTTP 202) instead of doing the work; see is_pending_approval().
         """
         return self._do(
             'patch', '/chat/contacts/{id}',
@@ -1259,6 +1272,42 @@ class Chat(Resource):
         return self._do(
             'get', '/chat/channels',
             path_params={}, query={},
+            idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
+        )
+
+    def get_agent(self, agent_id: str, *, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> Dict[str, Any]:
+        """Get a chat agent's settings.
+
+        ``GET /chat/agents/{agent_id}`` (getChatAgent).
+        """
+        return self._do(
+            'get', '/chat/agents/{agent_id}',
+            path_params={'agent_id': agent_id}, query={},
+            idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
+        )
+
+    def update_agent(self, agent_id: str, body: t.UpdateChatAgentBody, *, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> Union[Dict[str, Any], PendingApproval]:
+        """Change a chat agent's settings.
+
+        ``PATCH /chat/agents/{agent_id}`` (updateChatAgent).
+        May answer a PendingApproval (HTTP 202) instead of doing the work; see is_pending_approval().
+        """
+        return self._do(
+            'patch', '/chat/agents/{agent_id}',
+            path_params={'agent_id': agent_id}, query={},
+            body=body,
+            idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
+        )
+
+    def test_agent(self, agent_id: str, body: t.TestChatAgentBody, *, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> Dict[str, Any]:
+        """Test a chat agent.
+
+        ``POST /chat/agents/{agent_id}/test_turn`` (testChatAgent).
+        """
+        return self._do(
+            'post', '/chat/agents/{agent_id}/test_turn',
+            path_params={'agent_id': agent_id}, query={},
+            body=body,
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
         )
 
@@ -1835,6 +1884,41 @@ class Dialer(Resource):
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
         )
 
+    def mark_follow_up_done(self, call_id: str, *, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> Dict[str, Any]:
+        """Mark a dialer follow-up done.
+
+        ``POST /dialer/follow-ups/{call_id}/done`` (markDialerFollowUpDone).
+        """
+        return self._do(
+            'post', '/dialer/follow-ups/{call_id}/done',
+            path_params={'call_id': call_id}, query={},
+            idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
+        )
+
+    def set_call_disposition(self, call_id: str, body: t.SetDialerCallDispositionBody, *, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> Dict[str, Any]:
+        """Set a finished call's disposition.
+
+        ``PUT /dialer/calls/{call_id}/disposition`` (setDialerCallDisposition).
+        """
+        return self._do(
+            'put', '/dialer/calls/{call_id}/disposition',
+            path_params={'call_id': call_id}, query={},
+            body=body,
+            idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
+        )
+
+    def add_call_note(self, call_id: str, body: t.AddDialerCallNoteBody, *, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> Dict[str, Any]:
+        """Add a note to a finished call.
+
+        ``POST /dialer/calls/{call_id}/notes`` (addDialerCallNote).
+        """
+        return self._do(
+            'post', '/dialer/calls/{call_id}/notes',
+            path_params={'call_id': call_id}, query={},
+            body=body,
+            idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
+        )
+
 
 
 class Webhooks(Resource):
@@ -1927,8 +2011,41 @@ class Webhooks(Resource):
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
         )
 
+    def test_endpoint(self, id: str, *, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> t.WebhookTestResult:
+        """Send a test event.
+
+        ``POST /webhook_endpoints/{id}/test`` (testWebhookEndpoint).
+        """
+        return self._do(
+            'post', '/webhook_endpoints/{id}/test',
+            path_params={'id': id}, query={},
+            idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
+        )
+
+    def redeliver_delivery(self, id: str, delivery_id: str, *, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> t.WebhookDelivery:
+        """Redeliver an event.
+
+        ``POST /webhook_endpoints/{id}/deliveries/{delivery_id}/redeliver`` (redeliverWebhookDelivery).
+        """
+        return self._do(
+            'post', '/webhook_endpoints/{id}/deliveries/{delivery_id}/redeliver',
+            path_params={'id': id, 'delivery_id': delivery_id}, query={},
+            idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
+        )
+
+    def rotate_endpoint_secret(self, id: str, *, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> t.WebhookEndpointRotated:
+        """Rotate the signing secret.
+
+        ``POST /webhook_endpoints/{id}/rotate_secret`` (rotateWebhookEndpointSecret).
+        """
+        return self._do(
+            'post', '/webhook_endpoints/{id}/rotate_secret',
+            path_params={'id': id}, query={},
+            idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
+        )
+
     def list_event_types(self, *, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> t.EventTypeList:
-        """List webhook events.
+        """List webhook event types.
 
         ``GET /events`` (listEventTypes).
         """
@@ -2014,6 +2131,17 @@ class Organization(Resource):
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
         )
 
+    def get_usage(self, *, from_: Optional[str] = None, to: Optional[str] = None, group_by: Optional[Literal['day']] = None, credential_id: Optional[str] = None, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> t.UsageReport:
+        """Get API usage by key and day.
+
+        ``GET /usage`` (getUsage).
+        """
+        return self._do(
+            'get', '/usage',
+            path_params={}, query={'from': from_, 'to': to, 'group_by': group_by, 'credential_id': credential_id},
+            idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
+        )
+
 
 
 class Sales(Resource):
@@ -2060,10 +2188,11 @@ class Sales(Resource):
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
         )
 
-    def run_play(self, slug: str, *, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> Dict[str, Any]:
+    def run_play(self, slug: str, *, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> Union[Dict[str, Any], PendingApproval]:
         """Run a play.
 
         ``POST /sales/plays/{slug}/run`` (runSalesPlay).
+        May answer a PendingApproval (HTTP 202) instead of doing the work; see is_pending_approval().
         Experimental: the Sales API is switched off for every organization, so these calls answer an error until it is switched on for yours. Names and shapes may change without a major version.
         """
         return self._do(
@@ -2710,11 +2839,12 @@ class AsyncDeployments(AsyncResource):
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
         )
 
-    async def create_inbound(self, body: t.CreateInboundDeploymentRequest, *, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> t.CreateInboundDeploymentResponse:
+    async def create_inbound(self, body: t.CreateInboundDeploymentRequest, *, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> Union[t.CreateInboundDeploymentResponse, PendingApproval]:
         """Create an inbound deployment.
 
         ``POST /deployments/inbound`` (createInboundDeployment).
         Gets an automatic Idempotency-Key, so it is safe to retry.
+        May answer a PendingApproval (HTTP 202) instead of doing the work; see is_pending_approval().
         """
         return await self._do(
             'post', '/deployments/inbound',
@@ -3222,6 +3352,17 @@ class AsyncAgents(AsyncResource):
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
         )
 
+    async def archive(self, id: str, *, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> Dict[str, Any]:
+        """Archive an agent.
+
+        ``POST /agents/{id}/archive`` (archiveAgent).
+        """
+        return await self._do(
+            'post', '/agents/{id}/archive',
+            path_params={'id': id}, query={},
+            idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
+        )
+
 
 
 class AsyncChatConversations(AsyncResource):
@@ -3342,10 +3483,11 @@ class AsyncChatContacts(AsyncResource):
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
         )
 
-    async def update(self, id: str, body: Dict[str, Any], *, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> Dict[str, Any]:
+    async def update(self, id: str, body: Dict[str, Any], *, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> Union[Dict[str, Any], PendingApproval]:
         """Update a chat contact.
 
         ``PATCH /chat/contacts/{id}`` (updateChatContact).
+        May answer a PendingApproval (HTTP 202) instead of doing the work; see is_pending_approval().
         """
         return await self._do(
             'patch', '/chat/contacts/{id}',
@@ -3372,6 +3514,42 @@ class AsyncChat(AsyncResource):
         return await self._do(
             'get', '/chat/channels',
             path_params={}, query={},
+            idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
+        )
+
+    async def get_agent(self, agent_id: str, *, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> Dict[str, Any]:
+        """Get a chat agent's settings.
+
+        ``GET /chat/agents/{agent_id}`` (getChatAgent).
+        """
+        return await self._do(
+            'get', '/chat/agents/{agent_id}',
+            path_params={'agent_id': agent_id}, query={},
+            idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
+        )
+
+    async def update_agent(self, agent_id: str, body: t.UpdateChatAgentBody, *, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> Union[Dict[str, Any], PendingApproval]:
+        """Change a chat agent's settings.
+
+        ``PATCH /chat/agents/{agent_id}`` (updateChatAgent).
+        May answer a PendingApproval (HTTP 202) instead of doing the work; see is_pending_approval().
+        """
+        return await self._do(
+            'patch', '/chat/agents/{agent_id}',
+            path_params={'agent_id': agent_id}, query={},
+            body=body,
+            idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
+        )
+
+    async def test_agent(self, agent_id: str, body: t.TestChatAgentBody, *, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> Dict[str, Any]:
+        """Test a chat agent.
+
+        ``POST /chat/agents/{agent_id}/test_turn`` (testChatAgent).
+        """
+        return await self._do(
+            'post', '/chat/agents/{agent_id}/test_turn',
+            path_params={'agent_id': agent_id}, query={},
+            body=body,
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
         )
 
@@ -3948,6 +4126,41 @@ class AsyncDialer(AsyncResource):
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
         )
 
+    async def mark_follow_up_done(self, call_id: str, *, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> Dict[str, Any]:
+        """Mark a dialer follow-up done.
+
+        ``POST /dialer/follow-ups/{call_id}/done`` (markDialerFollowUpDone).
+        """
+        return await self._do(
+            'post', '/dialer/follow-ups/{call_id}/done',
+            path_params={'call_id': call_id}, query={},
+            idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
+        )
+
+    async def set_call_disposition(self, call_id: str, body: t.SetDialerCallDispositionBody, *, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> Dict[str, Any]:
+        """Set a finished call's disposition.
+
+        ``PUT /dialer/calls/{call_id}/disposition`` (setDialerCallDisposition).
+        """
+        return await self._do(
+            'put', '/dialer/calls/{call_id}/disposition',
+            path_params={'call_id': call_id}, query={},
+            body=body,
+            idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
+        )
+
+    async def add_call_note(self, call_id: str, body: t.AddDialerCallNoteBody, *, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> Dict[str, Any]:
+        """Add a note to a finished call.
+
+        ``POST /dialer/calls/{call_id}/notes`` (addDialerCallNote).
+        """
+        return await self._do(
+            'post', '/dialer/calls/{call_id}/notes',
+            path_params={'call_id': call_id}, query={},
+            body=body,
+            idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
+        )
+
 
 
 class AsyncWebhooks(AsyncResource):
@@ -4040,8 +4253,41 @@ class AsyncWebhooks(AsyncResource):
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
         )
 
+    async def test_endpoint(self, id: str, *, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> t.WebhookTestResult:
+        """Send a test event.
+
+        ``POST /webhook_endpoints/{id}/test`` (testWebhookEndpoint).
+        """
+        return await self._do(
+            'post', '/webhook_endpoints/{id}/test',
+            path_params={'id': id}, query={},
+            idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
+        )
+
+    async def redeliver_delivery(self, id: str, delivery_id: str, *, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> t.WebhookDelivery:
+        """Redeliver an event.
+
+        ``POST /webhook_endpoints/{id}/deliveries/{delivery_id}/redeliver`` (redeliverWebhookDelivery).
+        """
+        return await self._do(
+            'post', '/webhook_endpoints/{id}/deliveries/{delivery_id}/redeliver',
+            path_params={'id': id, 'delivery_id': delivery_id}, query={},
+            idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
+        )
+
+    async def rotate_endpoint_secret(self, id: str, *, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> t.WebhookEndpointRotated:
+        """Rotate the signing secret.
+
+        ``POST /webhook_endpoints/{id}/rotate_secret`` (rotateWebhookEndpointSecret).
+        """
+        return await self._do(
+            'post', '/webhook_endpoints/{id}/rotate_secret',
+            path_params={'id': id}, query={},
+            idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
+        )
+
     async def list_event_types(self, *, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> t.EventTypeList:
-        """List webhook events.
+        """List webhook event types.
 
         ``GET /events`` (listEventTypes).
         """
@@ -4127,6 +4373,17 @@ class AsyncOrganization(AsyncResource):
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
         )
 
+    async def get_usage(self, *, from_: Optional[str] = None, to: Optional[str] = None, group_by: Optional[Literal['day']] = None, credential_id: Optional[str] = None, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> t.UsageReport:
+        """Get API usage by key and day.
+
+        ``GET /usage`` (getUsage).
+        """
+        return await self._do(
+            'get', '/usage',
+            path_params={}, query={'from': from_, 'to': to, 'group_by': group_by, 'credential_id': credential_id},
+            idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
+        )
+
 
 
 class AsyncSales(AsyncResource):
@@ -4173,10 +4430,11 @@ class AsyncSales(AsyncResource):
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
         )
 
-    async def run_play(self, slug: str, *, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> Dict[str, Any]:
+    async def run_play(self, slug: str, *, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> Union[Dict[str, Any], PendingApproval]:
         """Run a play.
 
         ``POST /sales/plays/{slug}/run`` (runSalesPlay).
+        May answer a PendingApproval (HTTP 202) instead of doing the work; see is_pending_approval().
         Experimental: the Sales API is switched off for every organization, so these calls answer an error until it is switched on for yours. Names and shapes may change without a major version.
         """
         return await self._do(

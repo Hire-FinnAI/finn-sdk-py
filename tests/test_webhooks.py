@@ -65,6 +65,25 @@ def test_accepts_any_of_several_secrets_while_rotating():
     assert verify_webhook(BODY, backend_sign(SECRET, T, BODY), ["whsec_new", SECRET], now=T)
 
 
+def test_accepts_a_two_signature_header_during_the_24h_rotation_overlap_with_either_secret():
+    # Backend (P3-04 rotate_secret): t=<unix>,v1=<hmac current secret>,v1=<hmac previous secret>.
+    old, new = SECRET, "whsec_rotated_fedcba9876543210"
+
+    def mac(s: str) -> str:
+        return hmac.new(s.encode(), f"{T}.{BODY}".encode(), hashlib.sha256).hexdigest()
+
+    header = f"t={T},v1={mac(new)},v1={mac(old)}"
+    assert verify_webhook(BODY, header, old, now=T)
+    assert verify_webhook(BODY, header, new, now=T)
+    assert verify_webhook(BODY, header, [new, old], now=T)
+    with pytest.raises(FinnWebhookVerificationError):
+        verify_webhook(BODY, header, "whsec_other", now=T)
+    with pytest.raises(FinnWebhookVerificationError):
+        verify_webhook(BODY + " ", header, [new, old], now=T)
+    with pytest.raises(FinnWebhookVerificationError, match="tolerance"):
+        verify_webhook(BODY, header, new, now=T + 301)
+
+
 def test_refuses_parsed_json_as_the_payload():
     with pytest.raises(FinnWebhookVerificationError, match="raw request body"):
         verify_webhook(json.loads(BODY), backend_sign(SECRET, T, BODY), SECRET, now=T)  # type: ignore[arg-type]

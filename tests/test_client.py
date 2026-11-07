@@ -11,6 +11,7 @@ import pytest
 from helpers import async_client, body_of, client, json_, text_
 
 from finn import (
+    DEFAULT_MAX_RETRY_WAIT,
     honours_idempotency_key,
     AUTO_IDEMPOTENCY_ROUTES,
     BadRequestError,
@@ -224,7 +225,7 @@ class TestRetries:
     def test_does_not_retry_a_post_without_an_idempotency_key(self):
         finn, calls, _ = client([json_(503, {"error": "unavailable"}), json_(201, {})])
         with pytest.raises(FinnError):
-            finn.finns.create({})  # type: ignore[typeddict-item]
+            finn.finns.create({})
         assert len(calls) == 1
 
     def test_does_not_retry_a_post_without_a_key_on_network_errors_either(self):
@@ -261,11 +262,11 @@ class TestRetries:
     def test_does_not_retry_a_keyed_post_on_a_route_that_ignores_the_key(self):
         finn, calls, _ = client([json_(503, {"error": "unavailable"}), json_(201, {})])
         with pytest.raises(FinnError):
-            finn.finns.create({}, idempotency_key="k1")  # type: ignore[typeddict-item]
+            finn.finns.create({}, idempotency_key="k1")
         assert len(calls) == 1
         finn2, calls2, _ = client([httpx.RemoteProtocolError("socket hang up"), json_(201, {})])
         with pytest.raises(FinnConnectionError):
-            finn2.finns.create({}, idempotency_key="k2")  # type: ignore[typeddict-item]
+            finn2.finns.create({}, idempotency_key="k2")
         assert len(calls2) == 1
 
     def test_retries_a_keyed_raw_post_to_a_dedupe_route_given_as_a_filled_in_path(self):
@@ -299,7 +300,7 @@ class TestRetries:
         assert len(a_calls) == 2
         b, b_calls, _ = client([json_(409, {"error": "deployment_already_active", "message": "x", "deployment_id": "d1"})])
         with pytest.raises(ConflictError) as ei:
-            b.deployments.create_outbound({})  # type: ignore[typeddict-item]
+            b.deployments.create_outbound({})
         assert len(b_calls) == 1
         assert ei.value.code == "deployment_already_active"
         assert ei.value.details["deployment_id"] == "d1"
@@ -369,7 +370,7 @@ class TestErrors:
                                          "action_url": "https://app/wallet", "required_credits": 50},
                                    {"x-request-id": "req_9"})])
         with pytest.raises(PaymentRequiredError) as ei:
-            finn.phone_numbers.rent({})  # type: ignore[typeddict-item]
+            finn.phone_numbers.rent({})
         e = ei.value
         assert (e.status, e.code, e.message, e.request_id, e.action_url) == (
             402, "insufficient_credits", "Top up", "req_9", "https://app/wallet")
@@ -508,3 +509,64 @@ class TestPendingApproval:
         with pytest.raises(FinnApprovalTimeoutError) as ei:
             finn.wait_for_approval("h", interval=0.01, timeout=0, sleep=lambda s: None)
         assert ei.value.last_status == "pending"
+
+
+class TestRetryBudget:
+    """max_retry_wait (default 20 s) caps the total wait between retries of one request."""
+
+    def test_waits_out_retry_after_on_503_for_a_get_while_it_fits_the_budget(self):
+        finn, calls, sleeps = client(
+            [json_(503, {"error": "unavailable"}, {"retry-after": "8"}),
+             json_(503, {"error": "unavailable"}, {"retry-after": "8"}),
+             json_(200, {"success": True, "data": []})]
+        )
+        finn.finns.list()
+        assert len(calls) == 3
+        assert sleeps == [8, 8]
+
+    def test_stops_before_the_total_wait_would_pass_20s_and_raises_the_last_error(self):
+        finn, calls, sleeps = client(
+            [json_(503, {"error": "unavailable"}, {"retry-after": "15"}),
+             json_(503, {"error": "unavailable"}, {"retry-after": "15"})],
+            max_retries=5,
+        )
+        with pytest.raises(FinnError) as ei:
+            finn.finns.list()
+        assert ei.value.status == 503
+        assert len(calls) == 2
+        assert sleeps == [15]
+
+    def test_can_be_raised_per_client(self):
+        finn, calls, _ = client(
+            [json_(504, {}, {"retry-after": "30"}), json_(200, {"success": True, "data": []})], max_retry_wait=60
+        )
+        finn.finns.list()
+        assert len(calls) == 2
+
+    def test_async_respects_the_budget_too(self):
+        finn, calls, sleeps = async_client(
+            [json_(502, {}, {"retry-after": "12"}), json_(502, {}, {"retry-after": "12"})], max_retries=5
+        )
+        with pytest.raises(FinnError):
+            asyncio.run(finn.finns.list())
+        assert len(calls) == 2
+        assert sleeps == [12]
+
+    def test_retries_a_keyed_dialer_note_but_never_an_unkeyed_one(self):
+        finn, calls, _ = client([json_(502, {}), json_(201, {"success": True, "data": {}})])
+        finn.dialer.add_call_note("c1", {"note": "hi"}, idempotency_key="k1")
+        assert len(calls) == 2
+        assert calls[0].headers["idempotency-key"] == calls[1].headers["idempotency-key"] == "k1"
+
+        finn, calls, _ = client([json_(502, {}), json_(201, {})])
+        with pytest.raises(FinnError):
+            finn.dialer.add_call_note("c1", {"note": "hi"})
+        assert len(calls) == 1
+
+    def test_new_rolling_out_writes_are_deduped_only_where_the_api_dedupes_them(self):
+        assert honours_idempotency_key("PATCH", "/chat/agents/a1")
+        assert honours_idempotency_key("POST", "/chat/agents/a1/test_turn")
+        assert honours_idempotency_key("POST", "/dialer/follow-ups/c1/done")
+        assert not honours_idempotency_key("POST", "/webhook_endpoints/w1/rotate_secret")
+        assert not honours_idempotency_key("POST", "/agents/a1/archive")
+        assert DEFAULT_MAX_RETRY_WAIT == 20.0

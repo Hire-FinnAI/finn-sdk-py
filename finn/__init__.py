@@ -11,6 +11,7 @@ from ._client import AsyncFinn, Finn
 from ._core import (
     AUTO_IDEMPOTENCY_ROUTES,
     DEFAULT_BASE_URL,
+    DEFAULT_MAX_RETRY_WAIT,
     IDEMPOTENT_WRITE_ROUTES,
     honours_idempotency_key,
     idempotency_key,
@@ -53,6 +54,7 @@ __all__ = [
     "DEFAULT_BASE_URL",
     "DEFAULT_WEBHOOK_TOLERANCE",
     "IDEMPOTENT_WRITE_ROUTES",
+    "DEFAULT_MAX_RETRY_WAIT",
     "WEBHOOK_EVENT_HEADER",
     "WEBHOOK_SIGNATURE_HEADER",
     "ApprovalHold",

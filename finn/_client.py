@@ -6,7 +6,14 @@ from typing import Any, Awaitable, Callable, Mapping, Optional
 import httpx
 
 from ._approval import ApprovalResult
-from ._core import DEFAULT_MAX_RETRIES, DEFAULT_MAX_RETRY_AFTER, DEFAULT_TIMEOUT, AsyncCore, SyncCore
+from ._core import (
+    DEFAULT_MAX_RETRIES,
+    DEFAULT_MAX_RETRY_AFTER,
+    DEFAULT_MAX_RETRY_WAIT,
+    DEFAULT_TIMEOUT,
+    AsyncCore,
+    SyncCore,
+)
 from ._generated.request import AsyncTypedRequest, TypedRequest
 from ._generated.resources import (
     Agents,
@@ -68,6 +75,8 @@ class Finn(TypedRequest, SyncCore):
             number, deploy, start or send a chat, create an agent, start a case) when the caller did not pass one,
             so they can be retried safely. Default True.
         max_retry_after: Longest Retry-After (seconds) the SDK will wait out; a longer one raises instead. Default 60.
+        max_retry_wait: Most seconds one request waits between its retries, Retry-After included; a retry that would
+            go past it is not made and the last error is raised. Default 20.
         default_headers: Headers sent on every request.
         http_client: Your own httpx.Client (proxies, transports, tests). The SDK does not close it.
         sleep: Replaces the wait between retries (for tests).
@@ -84,13 +93,14 @@ class Finn(TypedRequest, SyncCore):
         timeout: float = DEFAULT_TIMEOUT,
         auto_idempotency: bool = True,
         max_retry_after: float = DEFAULT_MAX_RETRY_AFTER,
+        max_retry_wait: float = DEFAULT_MAX_RETRY_WAIT,
         default_headers: Optional[Mapping[str, str]] = None,
         http_client: Optional[httpx.Client] = None,
         sleep: Optional[Callable[[float], None]] = None,
     ) -> None:
         super().__init__(
             api_key=api_key, base_url=base_url, org=org, version=version, max_retries=max_retries,
-            timeout=timeout, auto_idempotency=auto_idempotency, max_retry_after=max_retry_after,
+            timeout=timeout, auto_idempotency=auto_idempotency, max_retry_after=max_retry_after, max_retry_wait=max_retry_wait,
             default_headers=default_headers, http_client=http_client, sleep=sleep,
         )
         self.calls = Calls(self)
@@ -146,13 +156,14 @@ class AsyncFinn(AsyncTypedRequest, AsyncCore):
         timeout: float = DEFAULT_TIMEOUT,
         auto_idempotency: bool = True,
         max_retry_after: float = DEFAULT_MAX_RETRY_AFTER,
+        max_retry_wait: float = DEFAULT_MAX_RETRY_WAIT,
         default_headers: Optional[Mapping[str, str]] = None,
         http_client: Optional[httpx.AsyncClient] = None,
         sleep: Optional[Callable[[float], Awaitable[None]]] = None,
     ) -> None:
         super().__init__(
             api_key=api_key, base_url=base_url, org=org, version=version, max_retries=max_retries,
-            timeout=timeout, auto_idempotency=auto_idempotency, max_retry_after=max_retry_after,
+            timeout=timeout, auto_idempotency=auto_idempotency, max_retry_after=max_retry_after, max_retry_wait=max_retry_wait,
             default_headers=default_headers, http_client=http_client, sleep=sleep,
         )
         self.calls = AsyncCalls(self)

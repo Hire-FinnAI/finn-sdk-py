@@ -24,6 +24,8 @@ DEFAULT_BASE_URL = "https://api.hirefinn.ai/v1"
 DEFAULT_MAX_RETRIES = 2
 DEFAULT_TIMEOUT = 60.0
 DEFAULT_MAX_RETRY_AFTER = 60.0
+#: Most seconds one request spends waiting between its retries (backoff and Retry-After together).
+DEFAULT_MAX_RETRY_WAIT = 20.0
 
 #: Writes that get an automatic Idempotency-Key (when auto_idempotency is on). Mirrors finn-sdk-ts.
 AUTO_IDEMPOTENCY_ROUTES = frozenset(
@@ -57,6 +59,10 @@ IDEMPOTENT_WRITE_ROUTES: Tuple[str, ...] = (
     "post /sales/plays/{slug}/run",
     "post /sales/drafts/{id}/skip",
     "post /webhook_endpoints",
+    "post /dialer/follow-ups/{call_id}/done",
+    "post /dialer/calls/{call_id}/notes",
+    "patch /chat/agents/{agent_id}",
+    "post /chat/agents/{agent_id}/test_turn",
 )
 
 
@@ -163,6 +169,7 @@ class BaseCore:
         auto_idempotency: bool = True,
         max_retry_after: float = DEFAULT_MAX_RETRY_AFTER,
         default_headers: Optional[Mapping[str, str]] = None,
+        max_retry_wait: float = DEFAULT_MAX_RETRY_WAIT,
     ) -> None:
         key = api_key if api_key is not None else os.environ.get("FINN_API_KEY")
         if not key:
@@ -178,6 +185,7 @@ class BaseCore:
         self.timeout = timeout
         self.auto_idempotency = auto_idempotency
         self.max_retry_after = max_retry_after
+        self.max_retry_wait = max_retry_wait
         self._default_headers = dict(default_headers or {})
 
     def __repr__(self) -> str:
@@ -295,14 +303,19 @@ class BaseCore:
             )
         return FinnError.from_response(response.status_code, response.headers, parsed, response.reason_phrase)
 
-    def _retry_wait(self, error: FinnError, attempt: int) -> Optional[float]:
-        """Seconds to wait before retrying, or None to raise now."""
+    def _retry_wait(self, error: FinnError, attempt: int, waited: float = 0.0) -> Optional[float]:
+        """Seconds to wait before retrying, or None to raise now (also when it would pass max_retry_wait)."""
         if not _is_retryable(error):
             return None
         wait = float(error.retry_after) if error.retry_after is not None else _backoff(attempt)
-        if wait > self.max_retry_after:
+        if wait > self.max_retry_after or waited + wait > self.max_retry_wait:
             return None
         return wait
+
+    def _transport_retry_wait(self, attempt: int, waited: float) -> Optional[float]:
+        """Backoff before retrying a network error, or None when it would pass max_retry_wait."""
+        wait = _backoff(attempt)
+        return None if waited + wait > self.max_retry_wait else wait
 
 
 def _json_default(v: Any) -> Any:
@@ -345,6 +358,7 @@ class SyncCore(BaseCore):
         """
         p = self._prepare(method, path, **kwargs)
         attempt = 0
+        waited = 0.0
         while True:
             try:
                 response = self._client.request(
@@ -353,17 +367,20 @@ class SyncCore(BaseCore):
                 )
             except httpx.TransportError as err:
                 wrapped = self._wrap_transport_error(err, p.timeout)
-                if attempt < p.max_retries:
-                    self._sleep(_backoff(attempt))
+                twait = self._transport_retry_wait(attempt, waited) if attempt < p.max_retries else None
+                if twait is not None:
+                    waited += twait
+                    self._sleep(twait)
                     attempt += 1
                     continue
                 raise wrapped from err
             result = self._finish(response)
             if isinstance(result, FinnResponse):
                 return result
-            wait = self._retry_wait(result, attempt) if attempt < p.max_retries else None
+            wait = self._retry_wait(result, attempt, waited) if attempt < p.max_retries else None
             if wait is None:
                 raise result
+            waited += wait
             self._sleep(wait)
             attempt += 1
 
@@ -403,6 +420,7 @@ class AsyncCore(BaseCore):
         """Async request_with_response(); see SyncCore.request_with_response."""
         p = self._prepare(method, path, **kwargs)
         attempt = 0
+        waited = 0.0
         while True:
             try:
                 response = await self._client.request(
@@ -411,17 +429,20 @@ class AsyncCore(BaseCore):
                 )
             except httpx.TransportError as err:
                 wrapped = self._wrap_transport_error(err, p.timeout)
-                if attempt < p.max_retries:
-                    await self._sleep(_backoff(attempt))
+                twait = self._transport_retry_wait(attempt, waited) if attempt < p.max_retries else None
+                if twait is not None:
+                    waited += twait
+                    await self._sleep(twait)
                     attempt += 1
                     continue
                 raise wrapped from err
             result = self._finish(response)
             if isinstance(result, FinnResponse):
                 return result
-            wait = self._retry_wait(result, attempt) if attempt < p.max_retries else None
+            wait = self._retry_wait(result, attempt, waited) if attempt < p.max_retries else None
             if wait is None:
                 raise result
+            waited += wait
             await self._sleep(wait)
             attempt += 1
 
