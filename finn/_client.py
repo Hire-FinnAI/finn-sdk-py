@@ -18,23 +18,33 @@ from ._generated.resources import (
     AsyncCases,
     AsyncChat,
     AsyncContacts,
+    AsyncCrm,
     AsyncDeployments,
+    AsyncDialer,
     AsyncDoNotCall,
     AsyncFinns,
+    AsyncOrganization,
     AsyncPhoneNumbers,
+    AsyncSales,
     AsyncVoices,
     AsyncWallet,
+    AsyncWebhooks,
     Audiences,
     Calls,
     Cases,
     Chat,
     Contacts,
+    Crm,
     Deployments,
+    Dialer,
     DoNotCall,
     Finns,
+    Organization,
     PhoneNumbers,
+    Sales,
     Voices,
     Wallet,
+    Webhooks,
 )
 
 
@@ -98,6 +108,16 @@ class Finn(TypedRequest, SyncCore):
         self.approvals = Approvals(self)
         self.agents = Agents(self)
         self.chat = Chat(self)
+        #: CRM: records, stages, forms, documents, follow-ups, views and imports (/crm).
+        self.crm = Crm(self)
+        self.dialer = Dialer(self)
+        #: Webhook endpoints, their deliveries, and the event types.
+        self.webhooks = Webhooks(self)
+        #: The organization, its members, integrations and API keys.
+        self.organization = Organization(self)
+        #: Experimental: the Sales API is switched off for every organization; calls answer an error until it is on
+        #: for yours.
+        self.sales = Sales(self)
 
     def __enter__(self) -> "Finn":
         return self
@@ -148,6 +168,16 @@ class AsyncFinn(AsyncTypedRequest, AsyncCore):
         self.approvals = AsyncApprovals(self)
         self.agents = AsyncAgents(self)
         self.chat = AsyncChat(self)
+        #: CRM: records, stages, forms, documents, follow-ups, views and imports (/crm).
+        self.crm = AsyncCrm(self)
+        self.dialer = AsyncDialer(self)
+        #: Webhook endpoints, their deliveries, and the event types.
+        self.webhooks = AsyncWebhooks(self)
+        #: The organization, its members, integrations and API keys.
+        self.organization = AsyncOrganization(self)
+        #: Experimental: the Sales API is switched off for every organization; calls answer an error until it is on
+        #: for yours.
+        self.sales = AsyncSales(self)
 
     async def __aenter__(self) -> "AsyncFinn":
         return self

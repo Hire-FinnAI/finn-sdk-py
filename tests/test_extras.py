@@ -85,7 +85,8 @@ def test_generated_code_matches_the_vendored_spec():
     gen_mod.SCHEMA_NAMES.update(gen.aliases)
     out = ROOT / "finn" / "_generated"
     assert (out / "schemas.py").read_text("utf-8") == gen.render(), "run python scripts/generate.py"
-    assert (out / "resources.py").read_text("utf-8") == gen_mod.render_resources(gen, ops)
+    resources = gen_mod.build_resources(spec)
+    assert (out / "resources.py").read_text("utf-8") == gen_mod.render_resources(gen, ops, resources)
     assert (out / "request.py").read_text("utf-8") == gen_mod.render_request(ops)
 
 
@@ -100,7 +101,7 @@ def test_every_spec_operation_has_a_resource_method():
             walk(c)
         mapped.update(m["op"] for m in res["methods"])
 
-    for r in gen_mod.RESOURCES:
+    for r in gen_mod.build_resources(spec):
         walk(r)
     assert set(ops) - mapped == set()
     assert mapped - set(ops) == set()

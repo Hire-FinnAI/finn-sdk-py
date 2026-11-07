@@ -11,8 +11,8 @@ Writes:
   finn/_generated/request.py    typed overloads of client.request(method, path, ...) for every operation
 
 RESOURCES groups operations the way the TypeScript SDK (finn-sdk-ts/src/resources.ts) does, with Python names.
-The script fails if an entry names an operation the spec does not have, and lists spec operations no entry covers
-(those stay reachable through client.request()).
+Every operation in the spec must have an entry: the script fails if one has none, or if an entry names an operation
+the spec does not have. Resources marked "experimental" get a note in their docstrings.
 """
 from __future__ import annotations
 
@@ -176,7 +176,127 @@ RESOURCES: List[Dict[str, Any]] = [
     ]},
 ]
 
+# Every other operation gets a generated method on the resource for its tag (its first tag in the spec). Names mirror
+# finn-sdk-ts (scripts/generate.mjs TAGS): the operationId without the area's noun, in snake_case (getFinnFlow ->
+# finns.get_flow, searchCrmRecords -> crm.search_records). A tag with no entry here fails the run, so a new API area
+# gets a deliberate name before it ships. "cls" names an existing RESOURCES class or a new one.
+SALES_NOTE = ("Experimental: the Sales API is switched off for every organization, so these calls answer an error "
+              "until it is switched on for yours. Names and shapes may change without a major version.")
+TAGS: Dict[str, Dict[str, Any]] = {
+    "Calls": {"cls": "Calls", "strip": ["Call"]},
+    "Finns": {"cls": "Finns", "strip": ["Finn"]},
+    "Voices": {"cls": "Voices", "strip": ["Voice"]},
+    "Phone numbers": {"cls": "PhoneNumbers", "strip": ["PhoneNumber"]},
+    "Audiences": {"cls": "Audiences", "strip": ["Audience"]},
+    "Deployments": {"cls": "Deployments", "strip": ["Deployment"]},
+    "Wallet": {"cls": "Wallet", "strip": ["Wallet"]},
+    "Do not call": {"cls": "DoNotCall", "strip": ["DoNotCall"]},
+    "Records": {"cls": "Contacts", "strip": ["Record"]},
+    "Cases": {"cls": "Cases", "strip": ["Case"]},
+    "Approvals": {"cls": "Approvals", "strip": ["Approval"]},
+    "Agents": {"cls": "Agents", "strip": ["Agent"]},
+    "Chat": {"cls": "Chat", "strip": ["Chat"]},
+    "CRM": {"cls": "Crm", "attr": "crm", "strip": ["Crm"],
+            "doc": "CRM: records, stages, forms, documents, follow-ups, views and imports (/crm)."},
+    "Dialer": {"cls": "Dialer", "attr": "dialer", "strip": ["Dialer"],
+               "doc": "Dialer sessions, analytics, follow-ups and lead briefs (/dialer)."},
+    "Webhooks": {"cls": "Webhooks", "attr": "webhooks", "strip": ["Webhook"],
+                 "doc": "Webhook endpoints, their deliveries, and the event types (/webhook_endpoints, /events)."},
+    "Admin": {"cls": "Organization", "attr": "organization", "strip": ["Organization"],
+              "doc": "The organization, its members, integrations and API keys (read only)."},
+    "Sales": {"cls": "Sales", "attr": "sales", "strip": ["Sales"], "experimental": SALES_NOTE,
+              "doc": "Sales plays, prospects, drafts and threads (/sales)."},
+}
+
+
+def strip_noun(op_id: str, nouns: List[str]) -> str:
+    """`getFinnFlow` minus `Finn` -> `getFlow`; `askCrm` minus `Crm` -> `ask`. Only whole camel-case words go."""
+    for noun in nouns:
+        inner = re.compile(f"(?<=[a-z0-9]){noun}(?=[A-Z0-9]|$)")
+        if inner.search(op_id):
+            return inner.sub("", op_id, count=1)
+        lead = re.compile(f"^{noun[:1].lower() + noun[1:]}(?=[A-Z])")
+        if lead.search(op_id):
+            rest = lead.sub("", op_id, count=1)
+            return rest[:1].lower() + rest[1:]
+    return op_id
+
+
+def _method_names(res: Dict[str, Any]) -> set:
+    return {mm["name"] for mm in res["methods"]}
+
+
+def _covered(entries: List[Dict[str, Any]]) -> set:
+    out: set = set()
+    for e in entries:
+        out.update(mm["op"] for mm in e["methods"])
+        out |= _covered(e.get("children", []))
+    return out
+
+
+def build_resources(spec: Dict[str, Any]) -> List[Dict[str, Any]]:
+    """RESOURCES plus a generated method for every spec operation RESOURCES does not name, in spec order."""
+    import copy
+
+    def deref(node: Any) -> Any:
+        while isinstance(node, dict) and "$ref" in node:
+            target: Any = spec
+            for part in node["$ref"].lstrip("#/").split("/"):
+                target = target[part]
+            node = target
+        return node
+
+    out = copy.deepcopy(RESOURCES)
+    by_cls = {r["cls"]: r for r in out}
+    hand = _covered(out)
+    errors: List[str] = []
+    for path, item in spec.get("paths", {}).items():
+        for method in METHODS:
+            op = item.get(method) if isinstance(item, dict) else None
+            if not op:
+                continue
+            op_id = op.get("operationId") or snake(f"{method}_{path}")
+            if op_id in hand:
+                continue
+            tag = (op.get("tags") or ["(none)"])[0]
+            cfg = TAGS.get(tag)
+            if cfg is None:
+                errors.append(f"{method.upper()} {path} ({op_id}): tag {tag!r} has no entry in TAGS")
+                continue
+            res = by_cls.get(cfg["cls"])
+            if res is None:
+                res = {"cls": cfg["cls"], "attr": cfg["attr"], "doc": cfg["doc"], "methods": [], "generated": True}
+                if cfg.get("experimental"):
+                    res["experimental"] = cfg["experimental"]
+                by_cls[cfg["cls"]] = res
+                out.append(res)
+            names = _method_names(res)
+            name = snake(strip_noun(op_id, cfg["strip"]))
+            if not name or name in names:
+                name = snake(op_id)
+            if name in names:
+                errors.append(f"{op_id}: method name {cfg['cls']}.{name} is already taken")
+                continue
+            res["methods"].append(m(name, op_id, generated=True))
+            # Cursor lists answering {data, next_cursor} also get an every-item paginator.
+            query = [p.get("name") for p in item.get("parameters", []) + op.get("parameters", []) if isinstance(p, dict)]
+            ok = deref((op.get("responses") or {}).get("200") or {})
+            schema = deref(((ok.get("content") or {}).get("application/json") or {}).get("schema") or {})
+            props = schema.get("properties") or {}
+            if method == "get" and "cursor" in query and "data" in props and "next_cursor" in props:
+                pname = "list_all" + name[4:] if name.startswith("list") else name + "_all"
+                if pname not in names | {name}:
+                    res["methods"].append(pager(pname, op_id, "cursor", "", "data", generated=True))
+    if errors:
+        raise SystemExit("Cannot generate resource methods:\n  " + "\n  ".join(errors))
+    # New resources in TAGS order, after the hand-written ones (as finn-sdk-ts lists them).
+    order = [cfg["cls"] for cfg in TAGS.values()]
+    hand_cls = [r for r in out if not r.get("generated")]
+    return hand_cls + sorted((r for r in out if r.get("generated")), key=lambda r: order.index(r["cls"]))
+
+
 METHODS = ("get", "post", "put", "patch", "delete")
+OPTION_HEADERS = {"idempotency-key", "finn-org", "finn-version"}
 
 
 # ---------------------------------------------------------------- naming
@@ -450,7 +570,8 @@ class Op:
             deps: set = set()
             self.query.append((p["name"], gen.expr(p.get("schema", {}), base + pascal(p["name"]), deps),
                                bool(p.get("required"))))
-        self.headers = [p for p in params if p["in"] == "header" and p["name"].lower() != "idempotency-key"]
+        # Idempotency-Key, Finn-Org and Finn-Version are set by the idempotency_key, org and version options.
+        self.headers = [p for p in params if p["in"] == "header" and p["name"].lower() not in OPTION_HEADERS]
         rb = op.get("requestBody")
         if rb and "$ref" in rb:
             rb = gen.resolve(rb)
@@ -467,12 +588,27 @@ class Op:
                 self.body_type = "Dict[str, Any]"
             self.body_required = bool(rb.get("required")) and not self.multipart
         resp_types: List[str] = []
-        ok = sorted(k for k in op.get("responses", {}) if str(k).startswith("2"))
-        for code in ok:
+        held = False
+        kept: List[Tuple[str, Optional[Dict[str, Any]], bool]] = []  # (code, schema, has content)
+        for code in sorted(k for k in op.get("responses", {}) if str(k).startswith("2")):
             r = op["responses"][code]
-            if "$ref" in r:
-                r = gen.resolve(r)
+            if r.get("$ref", "").endswith("/responses/PendingApproval") or \
+                    (gen.resolve(r).get("description") or "").startswith("Held for a person to approve"):
+                held = True  # The client turns a held 202 into a PendingApproval.
+                continue
+            r = gen.resolve(r)
             schema = r.get("content", {}).get("application/json", {}).get("schema")
+            if isinstance(schema, dict):
+                for key in ("oneOf", "anyOf"):
+                    alts = schema.get(key) or []
+                    rest = [a for a in alts if a.get("$ref") != "#/components/schemas/PendingApproval"]
+                    if len(rest) < len(alts):
+                        held = True
+                        schema = rest[0] if len(rest) == 1 else {**schema, key: rest}
+            kept.append((code, schema, "content" in r))
+        ok = [c for c, _, _ in kept]
+        self.ok_schema = kept[0][1] if kept else None
+        for code, schema, _ in kept:
             if schema is None:
                 resp_types.append("None" if str(code) == "204" else "Any")
                 continue
@@ -480,12 +616,24 @@ class Op:
             resp_types.append(gen.expr(schema, hint, set()))
         self.response = TypeGen.union(resp_types) if resp_types else "Dict[str, Any]"
         self.route = f"{method} {path}"
-        self.holdable = self.route in HOLDABLE
+        self.holdable = self.route in HOLDABLE or held
         self.auto_key = self.route in AUTO_IDEMPOTENCY_NOTE
+
+    def list_item(self, gen: "TypeGen", key: str) -> str:
+        """The item type of the `key` array in this list operation's response (for paginators)."""
+        schema = gen.resolve(self.ok_schema or {})
+        for part in [schema] + [gen.resolve(x) for x in schema.get("allOf", [])]:
+            prop = (part.get("properties") or {}).get(key)
+            if prop is not None:
+                items = gen.resolve(prop).get("items", {})
+                if "$ref" in items and items["$ref"].startswith("#/components/schemas/"):
+                    return items["$ref"].split("/")[-1]
+        return "Dict[str, Any]"
 
     @property
     def result(self) -> str:
-        return f"Union[{self.response}, PendingApproval]" if self.holdable else self.response
+        """The return type, with schema names qualified (`t.`). PendingApproval is the SDK class, not the schema."""
+        return f"Union[{q(self.response)}, PendingApproval]" if self.holdable else q(self.response)
 
 
 def load_ops(gen: TypeGen) -> Dict[str, Op]:
@@ -553,7 +701,7 @@ def method_doc(op: Op, extra: Optional[str]) -> List[str]:
     return lines
 
 
-def render_resources(gen: TypeGen, ops: Dict[str, Op]) -> str:
+def render_resources(gen: TypeGen, ops: Dict[str, Op], resources: List[Dict[str, Any]]) -> str:
     used_types: set = set()
     out_sync: List[str] = []
     out_async: List[str] = []
@@ -567,7 +715,15 @@ def render_resources(gen: TypeGen, ops: Dict[str, Op]) -> str:
         out.append("")
         out.append("")
         out.append(f"class {prefix}{res['cls']}({', '.join(bases)}):")
-        out.append(f'    """{res["doc"]}"""')
+        if res.get("experimental"):
+            out.append(f'    """{res["doc"]}')
+            out.append("")
+            out.append(f"    {res['experimental']}")
+            out.append('    """')
+            out.append("")
+            out.append("    experimental = True")
+        else:
+            out.append(f'    """{res["doc"]}"""')
         out.append("")
         children = res.get("children", [])
         if children:
@@ -591,14 +747,16 @@ def render_resources(gen: TypeGen, ops: Dict[str, Op]) -> str:
             hdrs = ", ".join(f"{h['name']!r}: {snake(h['name'])}" for h in op.headers)
             if is_pager:
                 strategy, item, sargs = spec["pager"]
-                used_types.add(item)
+                item = item or op.list_item(gen, sargs[0])
                 ret = f"{'Async' if is_async else 'Sync'}Paginator[{q(item)}]"
                 out.append(f"    def {spec['name']}({', '.join(args)}) -> {ret}:")
                 doc = [f"Every item of {op.op_id}, fetching pages as you iterate ({strategy} pagination)."]
             else:
-                ret = q(spec.get("returns") or op.result)
+                ret = q(spec["returns"]) if spec.get("returns") else op.result
                 out.append(f"    {'async ' if is_async else ''}def {spec['name']}({', '.join(args)}) -> {ret}:")
                 doc = method_doc(op, spec.get("doc"))
+            if res.get("experimental"):
+                doc += [res["experimental"]]
             out.append('        """' + doc[0])
             for line in doc[1:]:
                 out.append(f"        {line}" if line else "")
@@ -627,9 +785,9 @@ def render_resources(gen: TypeGen, ops: Dict[str, Op]) -> str:
                 out.append("        )")
             out.append("")
 
-    for res in RESOURCES:
+    for res in resources:
         emit(res, False, out_sync)
-    for res in RESOURCES:
+    for res in resources:
         emit(res, True, out_async)
 
     header = [
@@ -655,12 +813,12 @@ def render_resources(gen: TypeGen, ops: Dict[str, Op]) -> str:
         "from .._types import ApprovalHold",
         "from . import schemas as t",
         "",
-        "__all__ = [" + ", ".join(repr(n) for n in all_classes()) + "]",
+        "__all__ = [" + ", ".join(repr(n) for n in all_classes(resources)) + "]",
     ]
     return "\n".join(header + out_sync + out_async) + "\n"
 
 
-def all_classes() -> List[str]:
+def all_classes(resources: List[Dict[str, Any]]) -> List[str]:
     names: List[str] = []
 
     def walk(res: Dict[str, Any]) -> None:
@@ -668,7 +826,7 @@ def all_classes() -> List[str]:
             walk(c)
         names.append(res["cls"])
 
-    for r in RESOURCES:
+    for r in resources:
         walk(r)
     return names + ["Async" + n for n in names]
 
@@ -688,7 +846,7 @@ def render_request(ops: Dict[str, Op]) -> str:
             parts = [f"method: Literal[{op.method!r}]", f"path: Literal[{op.path!r}]", "*", pp, body,
                      "query: Optional[Mapping[str, Any]] = None", "**options: Any"]
             out.append("    @overload")
-            out.append(f"    {'async ' if is_async else ''}def request(self, {', '.join(parts)}) -> {q(op.result)}: ...")
+            out.append(f"    {'async ' if is_async else ''}def request(self, {', '.join(parts)}) -> {op.result}: ...")
     impl = (
         "    def request(self, method: str, path: str, **kwargs: Any) -> Any:\n"
         '        """Calls any operation in the spec, typed by (method, path). For paths newer than this SDK, use\n'
@@ -727,6 +885,60 @@ def render_request(ops: Dict[str, Op]) -> str:
     return "\n".join(head + out_s + [impl] + mid + out_a + [impl_a])
 
 
+def operation_manifest(resources: List[Dict[str, Any]], ops: Dict[str, Op]) -> Dict[str, Tuple[str, str, str, bool]]:
+    out: Dict[str, Tuple[str, str, str, bool]] = {}
+
+    def walk(res: Dict[str, Any], trail: Tuple[str, ...], experimental: bool) -> None:
+        here = trail + (res["attr"],)
+        exp = experimental or bool(res.get("experimental"))
+        for c in res.get("children", []):
+            walk(c, here, exp)
+        for mm in res["methods"]:
+            if "pager" in mm or mm["op"] in out:
+                continue
+            op = ops[mm["op"]]
+            out[mm["op"]] = (op.method, op.path, ".".join(here + (mm["name"],)), exp)
+
+    for r in resources:
+        walk(r, (), False)
+    return dict(sorted(out.items(), key=lambda kv: list(ops).index(kv[0])))
+
+
+README = ROOT / "README.md"
+COVERAGE_START = "<!-- generated:coverage:start (scripts/generate.py; do not edit by hand) -->"
+COVERAGE_END = "<!-- generated:coverage:end -->"
+
+
+def write_readme_coverage(resources: List[Dict[str, Any]], ops: Dict[str, Op], spec: Dict[str, Any]) -> None:
+    """Rewrites the coverage table between the README markers (if the README has them)."""
+    if not README.exists():
+        return
+    text = README.read_text("utf-8")
+    if COVERAGE_START not in text or COVERAGE_END not in text:
+        return
+    generated = sum(1 for r in resources for mm in r["methods"] if mm.get("generated") and "pager" not in mm)
+    lines = [
+        COVERAGE_START,
+        f"The SDK covers **{len(ops)} of {len(ops)}** operations in the spec "
+        f"({spec.get('info', {}).get('title', 'Finn API')} {spec.get('info', {}).get('version', '')}):".replace(" )", ")"),
+        f"{len(ops) - generated} through the hand-written methods above and {generated} through generated ones, "
+        "listed here.",
+        "",
+        "| Property | Generated methods |",
+        "|---|---|",
+    ]
+    for r in resources:
+        names = [mm["name"] for mm in r["methods"] if mm.get("generated")]
+        if names:
+            label = f"`finn.{r['attr']}`" + (" (experimental)" if r.get("experimental") else "")
+            lines.append(f"| {label} | {', '.join(f'`{n}`' for n in names)} |")
+    lines.append(COVERAGE_END)
+    a, b = text.index(COVERAGE_START), text.index(COVERAGE_END) + len(COVERAGE_END)
+    new = text[:a] + "\n".join(lines) + text[b:]
+    if new != text:
+        README.write_text(new, "utf-8")
+
+
 def main() -> None:
     source = sys.argv[1] if len(sys.argv) > 1 else str(VENDORED)
     if re.match(r"^https?://", source):
@@ -757,28 +969,36 @@ def main() -> None:
                 missing.append(f"{res['cls']}.{spec_m['name']} -> {spec_m['op']}")
             mapped.add(spec_m["op"])
 
-    for r in RESOURCES:
+    all_resources = build_resources(spec)
+    for r in all_resources:
         check(r)
     if missing:
         sys.exit("RESOURCES names operations the spec does not have:\n  " + "\n  ".join(missing))
     unmapped = [f"{o.method.upper()} {o.path} ({o.op_id})" for o in ops.values() if o.op_id not in mapped]
 
-    resources = render_resources(gen, ops)
+    resources = render_resources(gen, ops, all_resources)
     request = render_request(ops)
     OUT.mkdir(parents=True, exist_ok=True)
     (OUT / "schemas.py").write_text(gen.render(), "utf-8")
     (OUT / "resources.py").write_text(resources, "utf-8")
     (OUT / "request.py").write_text(request, "utf-8")
+    manifest = operation_manifest(all_resources, ops)
     (OUT / "__init__.py").write_text(
         '"""Generated code. Do not edit by hand: run `python scripts/generate.py`."""\n'
         f"SPEC_TITLE = {spec.get('info', {}).get('title')!r}\n"
         f"SPEC_VERSION = {spec.get('info', {}).get('version')!r}\n"
-        f"OPERATION_COUNT = {len(ops)}\n",
+        f"OPERATION_COUNT = {len(ops)}\n"
+        "\n#: operationId -> (method, path, SDK method on the client, experimental). Mirrors finn-sdk-ts operations.\n"
+        "OPERATIONS = {\n"
+        + "".join(f"    {k!r}: {v!r},\n" for k, v in manifest.items())
+        + "}\n",
         "utf-8",
     )
+    write_readme_coverage(all_resources, ops, spec)
     print(f"Wrote {OUT}: {len(gen.classes)} TypedDicts, {len(gen.aliases)} aliases, {len(ops)} operations")
     if unmapped:
-        print("Not in RESOURCES (use client.request()):\n  " + "\n  ".join(unmapped))
+        # Every operation in the spec gets a resource method: add new ones to RESOURCES.
+        sys.exit("Spec operations with no RESOURCES entry:\n  " + "\n  ".join(unmapped))
 
 
 if __name__ == "__main__":

@@ -499,10 +499,16 @@ class WalletTransaction(TypedDict):
     created_at: str
 
 
-class CallCompletedEvent(TypedDict):
+class _CallCompletedEventRequired(TypedDict):
     event: Literal['call.completed']
     created_at: str
     data: CallResult
+
+
+class CallCompletedEvent(_CallCompletedEventRequired, total=False):
+    event_id: str
+    occurred_at: str
+    org_id: str
 
 
 class _CallSummaryRequired(TypedDict):
@@ -1049,12 +1055,16 @@ class V1ErrorErrorFieldsItem(TypedDict):
     message: str
 
 
-class V1ErrorError(TypedDict):
+class _V1ErrorErrorRequired(TypedDict):
     code: str
     message: str
     fields: List[V1ErrorErrorFieldsItem]
     request_id: Optional[str]
     doc_url: str
+
+
+class V1ErrorError(_V1ErrorErrorRequired, total=False):
+    required_scope: str
 
 
 class V1Error(TypedDict):
@@ -1108,6 +1118,466 @@ class ChatList(TypedDict):
     data: List[Dict[str, Any]]
     next_cursor: Optional[str]
     has_more: bool
+
+
+class WebhookEndpoint(TypedDict):
+    "Where Finn sends the events it lists. The signing secret is never returned here: only `POST /webhook_endpoints` returns it, once."
+    id: str
+    object: Literal['webhook_endpoint']
+    url: str
+    events: List[Literal['call.completed', 'contact.created', 'contact.assigned', 'contact.stage_changed', 'contact.substatus_changed', 'contact.section_row_added', 'contact.link_changed', 'lead.created', 'lead.status_changed', 'document.status_changed', 'contact.updated', 'case.created', 'case.completed', 'approval.requested']]
+    enabled: bool
+    created_at: str
+    updated_at: str
+    last_success_at: Optional[str]
+    last_failure_at: Optional[str]
+    failure_count: int
+
+
+class WebhookEndpointWithSecret(WebhookEndpoint):
+    secret: str
+
+
+class WebhookEndpointList(TypedDict):
+    data: List[WebhookEndpoint]
+    next_cursor: Optional[str]
+    has_more: bool
+
+
+class _CreateWebhookEndpointRequestRequired(TypedDict):
+    url: str
+
+
+class CreateWebhookEndpointRequest(_CreateWebhookEndpointRequestRequired, total=False):
+    events: List[Literal['call.completed', 'contact.created', 'contact.assigned', 'contact.stage_changed', 'contact.substatus_changed', 'contact.section_row_added', 'contact.link_changed', 'lead.created', 'lead.status_changed', 'document.status_changed', 'contact.updated', 'case.created', 'case.completed', 'approval.requested']]
+    enabled: bool
+
+
+class UpdateWebhookEndpointRequest(TypedDict, total=False):
+    "Send only what changes. `events` replaces the list."
+    url: str
+    events: List[Literal['call.completed', 'contact.created', 'contact.assigned', 'contact.stage_changed', 'contact.substatus_changed', 'contact.section_row_added', 'contact.link_changed', 'lead.created', 'lead.status_changed', 'document.status_changed', 'contact.updated', 'case.created', 'case.completed', 'approval.requested']]
+    enabled: bool
+
+
+class DeletedWebhookEndpoint(TypedDict):
+    id: str
+    object: Literal['webhook_endpoint']
+    deleted: Literal[True]
+
+
+class WebhookDelivery(TypedDict):
+    "One event for one endpoint."
+    id: str
+    object: Literal['webhook_delivery']
+    endpoint_id: str
+    event: Literal['call.completed', 'contact.created', 'contact.assigned', 'contact.stage_changed', 'contact.substatus_changed', 'contact.section_row_added', 'contact.link_changed', 'lead.created', 'lead.status_changed', 'document.status_changed', 'contact.updated', 'case.created', 'case.completed', 'approval.requested']
+    event_id: Optional[str]
+    call_uuid: Optional[str]
+    status: Literal['pending', 'delivered', 'failed']
+    attempts: int
+    response_status: Optional[int]
+    error: Optional[str]
+    created_at: str
+    delivered_at: Optional[str]
+    next_attempt_at: Optional[str]
+
+
+class WebhookDeliveryList(TypedDict):
+    data: List[WebhookDelivery]
+    next_cursor: Optional[str]
+    has_more: bool
+
+
+class EventType(TypedDict):
+    object: Literal['event_type']
+    name: Literal['call.completed', 'contact.created', 'contact.assigned', 'contact.stage_changed', 'contact.substatus_changed', 'contact.section_row_added', 'contact.link_changed', 'lead.created', 'lead.status_changed', 'document.status_changed', 'contact.updated', 'case.created', 'case.completed', 'approval.requested']
+    group: Literal['calls', 'crm', 'operator']
+    description: str
+
+
+class EventTypeList(TypedDict):
+    data: List[EventType]
+    next_cursor: Any
+    has_more: Literal[False]
+
+
+class WebhookChangeUser(TypedDict, total=False):
+    id: str
+    name: Optional[str]
+
+
+WebhookChange = TypedDict('WebhookChange', {'from': 'Any', 'to': 'Any', 'by': "Literal['person', 'auto']", 'user': 'Optional[WebhookChangeUser]'}, total=False)
+
+
+class ContactCreatedEventData(TypedDict):
+    contact: WebhookContact
+
+
+class ContactCreatedEvent(TypedDict):
+    event: Literal['contact.created']
+    event_id: str
+    created_at: str
+    occurred_at: str
+    org_id: str
+    data: ContactCreatedEventData
+
+
+class ContactAssignedEventData(TypedDict):
+    contact: WebhookContact
+    change: WebhookChange
+
+
+class ContactAssignedEvent(TypedDict):
+    event: Literal['contact.assigned']
+    event_id: str
+    created_at: str
+    occurred_at: str
+    org_id: str
+    data: ContactAssignedEventData
+
+
+ContactStageChangedEventDataSubstatus = TypedDict('ContactStageChangedEventDataSubstatus', {'from': 'Optional[str]', 'to': 'Optional[str]'}, total=False)
+
+
+class _ContactStageChangedEventDataRequired(TypedDict):
+    contact: WebhookContact
+    change: WebhookChange
+
+
+class ContactStageChangedEventData(_ContactStageChangedEventDataRequired, total=False):
+    substatus: ContactStageChangedEventDataSubstatus
+
+
+class ContactStageChangedEvent(TypedDict):
+    event: Literal['contact.stage_changed']
+    event_id: str
+    created_at: str
+    occurred_at: str
+    org_id: str
+    data: ContactStageChangedEventData
+
+
+ContactSubstatusChangedEventDataSubstatus = TypedDict('ContactSubstatusChangedEventDataSubstatus', {'stage': 'Optional[str]', 'from': 'Optional[str]', 'to': 'Optional[str]', 'by': 'Optional[str]', 'via': 'Optional[str]'}, total=False)
+
+
+class ContactSubstatusChangedEventData(TypedDict):
+    contact: WebhookContact
+    substatus: ContactSubstatusChangedEventDataSubstatus
+
+
+class ContactSubstatusChangedEvent(TypedDict):
+    event: Literal['contact.substatus_changed']
+    event_id: str
+    created_at: str
+    occurred_at: str
+    org_id: str
+    data: ContactSubstatusChangedEventData
+
+
+class _ContactSectionRowAddedEventDataSectionRowRequired(TypedDict):
+    field_key: str
+    row_id: str
+    data: Dict[str, Any]
+
+
+class ContactSectionRowAddedEventDataSectionRow(_ContactSectionRowAddedEventDataSectionRowRequired, total=False):
+    supersedes_id: Optional[str]
+    meta: Optional[Dict[str, Any]]
+
+
+class ContactSectionRowAddedEventData(TypedDict):
+    contact: WebhookContact
+    section_row: ContactSectionRowAddedEventDataSectionRow
+
+
+class ContactSectionRowAddedEvent(TypedDict):
+    event: Literal['contact.section_row_added']
+    event_id: str
+    created_at: str
+    occurred_at: str
+    org_id: str
+    data: ContactSectionRowAddedEventData
+
+
+class ContactLinkChangedEventDataLink(TypedDict):
+    field_key: str
+    from_contact_id: str
+    old_to: Optional[str]
+    new_to: Optional[str]
+
+
+class ContactLinkChangedEventData(TypedDict):
+    contact: WebhookContact
+    link: ContactLinkChangedEventDataLink
+
+
+class ContactLinkChangedEvent(TypedDict):
+    event: Literal['contact.link_changed']
+    event_id: str
+    created_at: str
+    occurred_at: str
+    org_id: str
+    data: ContactLinkChangedEventData
+
+
+class LeadCreatedEventDataLead(TypedDict):
+    via: Optional[str]
+    source: Optional[str]
+
+
+class LeadCreatedEventData(TypedDict):
+    contact: WebhookContact
+    lead: LeadCreatedEventDataLead
+
+
+class LeadCreatedEvent(TypedDict):
+    event: Literal['lead.created']
+    event_id: str
+    created_at: str
+    occurred_at: str
+    org_id: str
+    data: LeadCreatedEventData
+
+
+class LeadStatusChangedEventData(TypedDict):
+    contact: WebhookContact
+    change: WebhookChange
+
+
+class LeadStatusChangedEvent(TypedDict):
+    event: Literal['lead.status_changed']
+    event_id: str
+    created_at: str
+    occurred_at: str
+    org_id: str
+    data: LeadStatusChangedEventData
+
+
+class DocumentStatusChangedEventDataDocumentType(TypedDict, total=False):
+    id: str
+    key: str
+    name: str
+
+
+DocumentStatusChangedEventDataDocument = TypedDict('DocumentStatusChangedEventDataDocument', {'type': 'DocumentStatusChangedEventDataDocumentType', 'from': "Optional[Literal['missing', 'received', 'verified', 'rejected']]", 'to': "Literal['missing', 'received', 'verified', 'rejected']", 'via': 'Optional[str]', 'requested_count': 'int', 'reason': 'str', 'file_id': 'str', 'version': 'int'}, total=False)
+
+
+class DocumentStatusChangedEventData(TypedDict):
+    contact: WebhookContact
+    document: DocumentStatusChangedEventDataDocument
+
+
+class DocumentStatusChangedEvent(TypedDict):
+    event: Literal['document.status_changed']
+    event_id: str
+    created_at: str
+    occurred_at: str
+    org_id: str
+    data: DocumentStatusChangedEventData
+
+
+class Organization(TypedDict):
+    id: str
+    name: Optional[str]
+    plan: Optional[str]
+    created_at: Optional[str]
+    updated_at: Optional[str]
+
+
+class OrganizationResponse(TypedDict):
+    data: Organization
+
+
+class OrganizationMember(TypedDict):
+    user_id: str
+    name: Optional[str]
+    email: Optional[str]
+    role: Optional[str]
+
+
+class OrganizationMemberList(TypedDict):
+    data: List[OrganizationMember]
+    next_cursor: Optional[str]
+    has_more: bool
+
+
+class IntegrationConnection(TypedDict):
+    id: str
+    provider: str
+    provider_name: str
+    category: Optional[str]
+    label: Optional[str]
+    status: Literal['pending', 'connected', 'expired', 'error']
+    last_error: Optional[str]
+    last_tested_at: Optional[str]
+    last_activity_at: Optional[str]
+    webhook_configured: bool
+    created_at: str
+
+
+class IntegrationConnectionList(TypedDict):
+    data: List[IntegrationConnection]
+    next_cursor: Optional[str]
+    has_more: bool
+
+
+class ApiKeyInfo(TypedDict):
+    "An API key's metadata. Never the key or its hash."
+    id: str
+    name: Optional[str]
+    prefix: str
+    scopes: Optional[List[str]]
+    product_scopes: List[str]
+    created_by: Optional[str]
+    created_at: str
+    last_used_at: Optional[str]
+    revoked_at: Optional[str]
+    expires_at: Optional[str]
+
+
+class ApiKeyInfoList(TypedDict):
+    data: List[ApiKeyInfo]
+    next_cursor: Optional[str]
+    has_more: bool
+
+
+class FinnSummary(TypedDict, total=False):
+    id: str
+    name: Optional[str]
+    status: Optional[str]
+
+
+class FinnFlowSummaryNodesItem(TypedDict, total=False):
+    id: str
+    type: Optional[str]
+    label: Optional[str]
+
+
+FinnFlowSummaryEdgesItem = TypedDict('FinnFlowSummaryEdgesItem', {'from': 'str', 'to': 'str', 'label': 'Optional[str]'}, total=False)
+
+
+class FinnFlowSummary(TypedDict, total=False):
+    "The call flow canvas, summarized. It runs instead of the prompt only when `enabled` is true."
+    enabled: bool
+    nodes: List[FinnFlowSummaryNodesItem]
+    edges: List[FinnFlowSummaryEdgesItem]
+    updated_at: Optional[str]
+
+
+class FinnFlow(TypedDict, total=False):
+    finn: FinnSummary
+    flow: FinnFlowSummary
+
+
+class FinnHandbookPersonality(TypedDict, total=False):
+    defaultToneEnabled: bool
+    defaultTone: Literal['professional', 'professional_conversational']
+    naturalFillerWords: bool
+    highEmpathy: bool
+
+
+class FinnHandbookAccuracy(TypedDict, total=False):
+    echoVerification: bool
+    natoPhonetic: bool
+    speechNormalization: bool
+    smartMatching: bool
+
+
+class FinnHandbookTrustSafety(TypedDict, total=False):
+    aiDisclosure: bool
+    scopeBoundaries: bool
+
+
+class FinnHandbook(TypedDict, total=False):
+    "Agent handbook switches. The prompt text each one adds is Finn's own."
+    personality: FinnHandbookPersonality
+    accuracy: FinnHandbookAccuracy
+    trustSafety: FinnHandbookTrustSafety
+
+
+class FinnSettingsKnowledgeItem(TypedDict, total=False):
+    name: str
+    type: Optional[str]
+    added: Optional[str]
+
+
+class FinnSettings(TypedDict, total=False):
+    finn: FinnSummary
+    handbook: FinnHandbook
+    handbook_saved: bool
+    speech_settings: Optional[Dict[str, Any]]
+    flow: FinnFlowSummary
+    task_settings: Dict[str, Any]
+    knowledge: List[FinnSettingsKnowledgeItem]
+
+
+class FinnVariableUse(TypedDict, total=False):
+    name: str
+    found_in: List[str]
+
+
+class FinnVariablesVariablesPostCallFieldsItem(TypedDict, total=False):
+    name: str
+    type: Optional[str]
+    description: Optional[str]
+    choices: List[str]
+
+
+class FinnVariablesVariables(TypedDict, total=False):
+    placeholders: List[FinnVariableUse]
+    dynamic_variables: List[FinnVariableUse]
+    mapping: Dict[str, str]
+    mapping_enabled: bool
+    post_call_fields: List[FinnVariablesVariablesPostCallFieldsItem]
+
+
+class FinnVariables(TypedDict, total=False):
+    finn: FinnSummary
+    variables: FinnVariablesVariables
+
+
+class _UpdateFinnVariablesRequestPostCallFieldsItemRequired(TypedDict):
+    name: str
+    type: Literal['Text', 'Selector', 'Yes/No', 'Number']
+
+
+class UpdateFinnVariablesRequestPostCallFieldsItem(_UpdateFinnVariablesRequestPostCallFieldsItemRequired, total=False):
+    description: str
+    choices: List[str]
+
+
+class UpdateFinnVariablesRequest(TypedDict, total=False):
+    set_mapping: Dict[str, str]
+    remove_mapping: List[str]
+    mapping_enabled: bool
+    post_call_fields: List[UpdateFinnVariablesRequestPostCallFieldsItem]
+
+
+class FinnShareLink(TypedDict, total=False):
+    url: str
+    enabled: bool
+    expires_at: Optional[str]
+    created: bool
+
+
+class PendingApproval(TypedDict):
+    "The answer to a write held for a person to approve (`202`)."
+    status: Literal['pending_approval']
+    approval_id: str
+    approve_url: str
+    expires_at: str
+    action: Literal['call.create', 'phone_number.rent', 'deployment.create', 'chat.start', 'chat.send', 'case.start']
+    summary: Optional[str]
+
+
+class ApiHoldResult(TypedDict, total=False):
+    "The approved run's own answer (`status` is its HTTP status), once it finished."
+    status: int
+    body: Any
+
+
+ApiHold = TypedDict('ApiHold', {'id': 'str', 'object': "Literal['approval']", 'source': "Literal['api_hold']", 'status': "Literal['pending', 'running', 'succeeded', 'failed', 'declined', 'expired']", 'action': "Literal['call.create', 'phone_number.rent', 'deployment.create', 'chat.start', 'chat.send', 'case.start']", 'class': "Literal['outward', 'money']", 'summary': 'Optional[str]', 'approve_url': 'Optional[str]', 'expires_at': 'str', 'created_at': 'str', 'decided_at': 'Optional[str]', 'finished_at': 'Optional[str]', 'outcome_unknown': 'bool', 'result': 'Optional[ApiHoldResult]'}, total=False)
 
 
 class ListCallsResponse(TypedDict):
@@ -1410,7 +1880,7 @@ class ListCaseEventsResponse(TypedDict):
 
 
 class ListApprovalsResponse(TypedDict):
-    approvals: List[Approval]
+    approvals: List[Union[Approval, ApiHold]]
     next_cursor: Optional[str]
 
 
@@ -1437,6 +1907,7 @@ class _CreateAgentBodyRequired(TypedDict):
 class CreateAgentBody(_CreateAgentBodyRequired, total=False):
     draft: Dict[str, Any]
     settings: Dict[str, Any]
+    graph: Dict[str, Any]
 
 
 class _DraftAgentBodyRequired(TypedDict):
@@ -1470,6 +1941,340 @@ class GetChatConversationResponse(TypedDict):
     messages_next_cursor: Optional[str]
 
 
+class SendChatMessageResponse(TypedDict, total=False):
+    message: Dict[str, Any]
+    ai_paused: bool
+    notice: str
+
+
 class ListChatContactsResponse(ChatList, total=False):
     total: Optional[int]
+
+
+class _GenerateFinnBodyRequired(TypedDict):
+    brief: str
+
+
+class GenerateFinnBody(_GenerateFinnBodyRequired, total=False):
+    voice: str
+    language: str
+
+
+class GenerateFinnResponse(TypedDict):
+    success: Literal[True]
+    data: Finn
+
+
+class GetFinnFlowResponse(TypedDict):
+    success: Literal[True]
+    data: FinnFlow
+
+
+class EnableFinnFlowResponse(TypedDict):
+    success: Literal[True]
+    data: FinnFlow
+
+
+class DisableFinnFlowResponse(TypedDict):
+    success: Literal[True]
+    data: FinnFlow
+
+
+class GetFinnSettingsResponse(TypedDict):
+    success: Literal[True]
+    data: FinnSettings
+
+
+class GetFinnVariablesResponse(TypedDict):
+    success: Literal[True]
+    data: FinnVariables
+
+
+class UpdateFinnVariablesResponse(TypedDict):
+    success: Literal[True]
+    data: FinnVariables
+
+
+class UpdateFinnHandbookBody(TypedDict):
+    handbook: Dict[str, Any]
+
+
+class UpdateFinnHandbookResponseData(TypedDict, total=False):
+    finn: FinnSummary
+    handbook: FinnHandbook
+    schema_version: int
+
+
+class UpdateFinnHandbookResponse(TypedDict):
+    success: Literal[True]
+    data: UpdateFinnHandbookResponseData
+
+
+class UpdateFinnSpeechSettingsBody(TypedDict):
+    speech_settings: Dict[str, Any]
+
+
+class UpdateFinnSpeechSettingsResponseData(TypedDict, total=False):
+    finn: FinnSummary
+    speech_settings: Optional[Dict[str, Any]]
+
+
+class UpdateFinnSpeechSettingsResponse(TypedDict):
+    success: Literal[True]
+    data: UpdateFinnSpeechSettingsResponseData
+
+
+class UpdateFinnDraftResponse(TypedDict):
+    success: Literal[True]
+    data: Finn
+
+
+class DuplicateFinnBody(TypedDict, total=False):
+    name: str
+
+
+class DuplicateFinnResponse(TypedDict):
+    success: Literal[True]
+    data: Finn
+
+
+class GetFinnShareLinkResponse(TypedDict):
+    success: Literal[True]
+    data: Any
+
+
+class CreateFinnShareLinkResponse200(TypedDict):
+    success: Literal[True]
+    data: FinnShareLink
+
+
+class CreateFinnShareLinkResponse201(TypedDict):
+    success: Literal[True]
+    data: FinnShareLink
+
+
+class GetFinnStatsResponse(TypedDict):
+    success: Literal[True]
+    data: Dict[str, Any]
+
+
+class GetFinnOutcomesResponse(TypedDict):
+    success: Literal[True]
+    data: Dict[str, Any]
+
+
+class ListSalesProspectsResponse(ChatList, total=False):
+    total: Optional[int]
+
+
+class ListSalesDraftsResponse(ChatList, total=False):
+    total: Optional[int]
+
+
+class UpdateSalesDraftBody(TypedDict):
+    subject: str
+    body: str
+
+
+class SkipSalesDraftBody(TypedDict, total=False):
+    reason: str
+
+
+class ListSalesThreadsResponse(ChatList, total=False):
+    total: Optional[int]
+
+
+class _SearchCrmRecordsBodyRequired(TypedDict):
+    q: str
+
+
+class SearchCrmRecordsBody(_SearchCrmRecordsBodyRequired, total=False):
+    limit: int
+
+
+class QueryCrmRecordsBody(TypedDict, total=False):
+    spec: Dict[str, Any]
+    sort: Dict[str, Any]
+    dir: str
+
+
+class _QueryCrmRecordsResponseRequired(TypedDict):
+    data: List[Dict[str, Any]]
+    next_cursor: Optional[str]
+    has_more: bool
+
+
+class QueryCrmRecordsResponse(_QueryCrmRecordsResponseRequired, total=False):
+    total_count: int
+
+
+class CountCrmRecordsBody(TypedDict, total=False):
+    spec: Dict[str, Any]
+
+
+class CountCrmRecordsByStageBody(TypedDict, total=False):
+    spec: Dict[str, Any]
+
+
+class UpdateCrmRecordBody(TypedDict, total=False):
+    name: str
+    customFields: Dict[str, Any]
+    clearFields: List[str]
+    tags: List[str]
+    links: List[Dict[str, Any]]
+    expectCustomFields: Dict[str, Any]
+
+
+class _AttachCrmFileBodyRequired(TypedDict):
+    file: List[str]
+
+
+class AttachCrmFileBody(_AttachCrmFileBodyRequired, total=False):
+    doc_type: str
+
+
+class _ListCrmFollowUpsResponseRequired(TypedDict):
+    data: List[Dict[str, Any]]
+    next_cursor: Optional[str]
+    has_more: bool
+
+
+class ListCrmFollowUpsResponse(_ListCrmFollowUpsResponseRequired, total=False):
+    total_count: int
+
+
+class _SaveCrmViewBodyRequired(TypedDict):
+    name: str
+
+
+class SaveCrmViewBody(_SaveCrmViewBodyRequired, total=False):
+    filters: Dict[str, Any]
+    columns: List[str]
+    display: Dict[str, Any]
+
+
+class AskCrmBody(TypedDict):
+    text: str
+
+
+class _AddCrmNoteBodyRequired(TypedDict):
+    text: str
+
+
+class AddCrmNoteBody(_AddCrmNoteBodyRequired, total=False):
+    type: Literal['comment']
+    mentions: List[str]
+    clientId: str
+
+
+class _CreateCrmFollowUpBodyRequired(TypedDict):
+    title: str
+
+
+class CreateCrmFollowUpBody(_CreateCrmFollowUpBodyRequired, total=False):
+    dueAt: str
+    note: str
+    priority: str
+    assigneeId: str
+
+
+class UpdateCrmFollowUpBody(TypedDict, total=False):
+    status: str
+    snoozedUntil: str
+    dueAt: str
+    assigneeId: str
+    priority: str
+    title: str
+    note: str
+    expectDueAt: str
+
+
+class _CreateCrmRecordBodyRequired(TypedDict):
+    phone: str
+
+
+class CreateCrmRecordBody(_CreateCrmRecordBodyRequired, total=False):
+    name: str
+    customFields: Dict[str, Any]
+    kind: str
+    links: List[Dict[str, Any]]
+
+
+class SetCrmStageCheckBody(TypedDict):
+    state: Optional[Literal['done']]
+
+
+class _SetCrmDocumentStatusBodyRequired(TypedDict):
+    to: str
+
+
+class SetCrmDocumentStatusBody(_SetCrmDocumentStatusBodyRequired, total=False):
+    reason: str
+    note: str
+    file_id: str
+
+
+class _SaveCrmFormDraftBodyRequired(TypedDict):
+    answers: Dict[str, Any]
+
+
+class SaveCrmFormDraftBody(_SaveCrmFormDraftBodyRequired, total=False):
+    version: int
+
+
+class DraftCrmDocumentBody(TypedDict):
+    template_id: str
+
+
+class _MoveCrmRecordStageBodyRequired(TypedDict):
+    stage: str
+
+
+class MoveCrmRecordStageBody(_MoveCrmRecordStageBodyRequired, total=False):
+    closeReason: str
+    substatus: str
+
+
+class _SubmitCrmFormBodyRequired(TypedDict):
+    answers: Dict[str, Any]
+
+
+class SubmitCrmFormBody(_SubmitCrmFormBodyRequired, total=False):
+    links: List[Dict[str, Any]]
+
+
+class _CreateCrmFormLinkBodyRequired(TypedDict):
+    expires_in_days: int
+
+
+class CreateCrmFormLinkBody(_CreateCrmFormLinkBodyRequired, total=False):
+    recipient_label: str
+    recipient_phone: str
+
+
+class _CreateCrmUploadLinkBodyRequired(TypedDict):
+    expires_in_days: int
+
+
+class CreateCrmUploadLinkBody(_CreateCrmUploadLinkBodyRequired, total=False):
+    recipient_label: str
+    recipient_phone: str
+
+
+class _GuessCrmImportColumnsBodyRequired(TypedDict):
+    headers: List[str]
+
+
+class GuessCrmImportColumnsBody(_GuessCrmImportColumnsBodyRequired, total=False):
+    kind: str
+
+
+class _ImportCrmRecordsBodyRequired(TypedDict):
+    rows: List[Dict[str, Any]]
+    mapping: Dict[str, Any]
+
+
+class ImportCrmRecordsBody(_ImportCrmRecordsBodyRequired, total=False):
+    dry_run: bool
+    first_row: int
 

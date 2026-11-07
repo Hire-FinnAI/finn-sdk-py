@@ -13,7 +13,11 @@ from finn.types import (
     CaseStarted,
     CreateCallResponse,
     ListCallsResponse,
+    OrganizationMember,
     RetrieveCallResponse,
+    SearchCrmRecordsBody,
+    SendChatMessageResponse,
+    WebhookEndpoint,
 )
 
 
@@ -32,9 +36,17 @@ def sync_checks(finn: Finn) -> None:
 
     # Chat start/send and case start can be held for approval too.
     sent = finn.chat.conversations.send("c1", {"content": "hi"})
-    assert_type(sent, Union[Dict[str, Any], PendingApproval])
+    assert_type(sent, Union[SendChatMessageResponse, PendingApproval])
     assert_type(finn.chat.conversations.start({}), Union[Dict[str, Any], PendingApproval])
     assert_type(finn.cases.start("a1"), Union[CaseStarted, PendingApproval])
+
+    # Generated from the rest of the spec (G4): CRM, webhooks, organization, sales.
+    assert_type(finn.webhooks.list_all_endpoints(), SyncPaginator[WebhookEndpoint])
+    assert_type(finn.organization.list_all_members(), SyncPaginator[OrganizationMember])
+    query: SearchCrmRecordsBody = {"q": "asha"}
+    assert_type(finn.crm.search_records(query), Dict[str, Any])
+    assert_type(finn.crm.move_record_stage("r1", {"stage": "won"}), Union[Dict[str, Any], PendingApproval])
+    assert finn.sales.experimental is True
 
     assert_type(verify_webhook("{}", "t=1,v1=00", "whsec_x"), WebhookEvent)
 
