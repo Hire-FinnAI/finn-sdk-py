@@ -82,6 +82,7 @@ Use the client as a context manager (`with Finn() as finn:`) or call `finn.close
 | `timeout` | `60` | Seconds per attempt |
 | `auto_idempotency` | `True` | Generate `Idempotency-Key` on spending/outward writes |
 | `max_retry_after` | `60` | Longest `Retry-After` (seconds) to wait out; longer raises |
+| `max_retry_wait` | `20` | Most seconds one request waits between its retries, `Retry-After` included |
 | `default_headers` | none | Sent on every request |
 | `http_client` | new `httpx.Client` | Bring your own (proxies, custom transport); the SDK does not close it |
 
@@ -110,16 +111,18 @@ replace `Authorization`.
 ### Coverage
 
 <!-- generated:coverage:start (scripts/generate.py; do not edit by hand) -->
-The SDK covers **154 of 154** operations in the spec (Finn API v1):
-72 through the hand-written methods above and 82 through generated ones, listed here.
+The SDK covers **165 of 165** operations in the spec (Finn API v1):
+72 through the hand-written methods above and 93 through generated ones, listed here.
 
 | Property | Generated methods |
 |---|---|
 | `finn.finns` | `generate`, `get_flow`, `enable_flow`, `disable_flow`, `get_settings`, `get_variables`, `update_variables`, `update_handbook`, `update_speech_settings`, `update_draft`, `duplicate`, `get_share_link`, `create_share_link`, `get_stats`, `get_outcomes` |
+| `finn.agents` | `archive` |
+| `finn.chat` | `get_agent`, `update_agent`, `test_agent` |
 | `finn.crm` | `get_setup`, `get_filter_schema`, `search_records`, `query_records`, `count_records`, `count_records_by_stage`, `get_record`, `update_record`, `get_record_timeline`, `get_stage_gate`, `list_record_documents`, `list_record_files`, `attach_file`, `get_forms_checklist`, `list_form_submissions`, `list_form_drafts`, `list_forms`, `list_follow_ups`, `list_all_follow_ups`, `get_follow_up_stats`, `get_my_work`, `list_views`, `save_view`, `get_summary`, `get_stage_counts`, `get_speed`, `list_duplicates`, `ask`, `add_note`, `create_follow_up`, `update_follow_up`, `create_record`, `set_stage_check`, `assign_reference_no`, `set_document_status`, `save_form_draft`, `draft_document`, `move_record_stage`, `submit_form`, `create_form_link`, `create_upload_link`, `guess_import_columns`, `import_records` |
-| `finn.dialer` | `list_sessions`, `list_all_sessions`, `get_session`, `get_analytics`, `list_follow_ups`, `get_lead_brief` |
-| `finn.webhooks` | `list_endpoints`, `list_all_endpoints`, `create_endpoint`, `get_endpoint`, `update_endpoint`, `delete_endpoint`, `list_deliveries`, `list_all_deliveries`, `list_event_types` |
-| `finn.organization` | `get`, `list_members`, `list_all_members`, `list_integrations`, `list_all_integrations`, `list_api_keys`, `list_all_api_keys` |
+| `finn.dialer` | `list_sessions`, `list_all_sessions`, `get_session`, `get_analytics`, `list_follow_ups`, `get_lead_brief`, `mark_follow_up_done`, `set_call_disposition`, `add_call_note` |
+| `finn.webhooks` | `list_endpoints`, `list_all_endpoints`, `create_endpoint`, `get_endpoint`, `update_endpoint`, `delete_endpoint`, `list_deliveries`, `list_all_deliveries`, `test_endpoint`, `redeliver_delivery`, `rotate_endpoint_secret`, `list_event_types` |
+| `finn.organization` | `get`, `list_members`, `list_all_members`, `list_integrations`, `list_all_integrations`, `list_api_keys`, `list_all_api_keys`, `get_usage` |
 | `finn.sales` (experimental) | `list_plays`, `list_play_runs`, `list_prospects`, `run_play`, `list_drafts`, `update_draft`, `skip_draft`, `list_threads`, `get_thread` |
 <!-- generated:coverage:end -->
 
@@ -151,11 +154,13 @@ print(res.status, res.request_id, res.idempotent_replayed, res.data)
 Failed attempts are retried up to `max_retries` times on network errors, 408, 429, 502, 503, 504 and
 `409 idempotency_in_progress`, waiting `Retry-After` when the API sends it and otherwise backing off exponentially
 (0.5 s, 1 s, 2 s ... up to 8 s, with jitter). A `Retry-After` longer than `max_retry_after` raises at once. A `500`
-is not retried.
+is not retried. The waits of one request add up to at most `max_retry_wait` (default 20 s): a retry that would go past
+it is not made, and the last error is raised.
 
 Only requests that are safe to repeat are retried: `GET`, `PUT`, `DELETE`, and `POST`/`PATCH` writes that carry an
 `Idempotency-Key` **on a route that dedupes by it** (`finn.IDEMPOTENT_WRITE_ROUTES`: calls, phone numbers,
-deployments, chat start/send, agents, case start, `/crm/*` writes, sales play runs and draft skips, webhook endpoint create). Other writes,
+deployments, chat start/send, agents, case start, `/crm/*` writes, sales play runs and draft skips, webhook endpoint create,
+and the rolling-out dialer follow-up done / call notes and chat agent update / test turn). Other writes,
 such as `finns.create` or `contacts.create`, are sent once even with a key, because the API ignores the key there and
 a retry after a lost response could create a duplicate. Check with `finn.honours_idempotency_key(method, path)`.
 
@@ -198,6 +203,10 @@ def finn_webhook():
 ```
 
 Options: `tolerance=` (seconds, default 300), and `secret=` can be a list while you rotate secrets.
+
+When you rotate an endpoint's secret (`webhooks.rotate_endpoint_secret`), Finn signs with both the new and the old
+secret for 24 hours: `t=<unix>,v1=<new>,v1=<old>`. `verify_webhook` accepts a delivery when **any** `v1` signature
+matches **any** secret you pass, so `secret=[new_secret, old_secret]` keeps working through the switch.
 
 ## Errors
 
