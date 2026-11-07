@@ -55,6 +55,7 @@ IDEMPOTENT_WRITE_ROUTES: Tuple[str, ...] = (
     "patch /crm/*",
     "post /sales/plays/{slug}/run",
     "post /sales/drafts/{id}/skip",
+    "post /webhook_endpoints",
 )
 
 

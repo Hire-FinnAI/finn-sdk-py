@@ -238,6 +238,16 @@ class TestRetries:
         assert len(calls) == 2
         assert calls[1].headers["idempotency-key"] == "k1"
 
+    def test_retries_a_keyed_webhook_endpoint_create(self):
+        # The API replays the first endpoint (and its secret) for the same key (v1_webhooks_require_idem, on by default).
+        finn, calls, _ = client([json_(503, {"error": "unavailable"}), json_(201, {})])
+        finn.webhooks.create_endpoint({"url": "https://example.com/h", "events": ["call.completed"]}, idempotency_key="w1")
+        assert len(calls) == 2
+        assert calls[1].headers["idempotency-key"] == "w1"
+        assert honours_idempotency_key("post", "/webhook_endpoints")
+        assert not honours_idempotency_key("patch", "/webhook_endpoints/e1")
+        assert not honours_idempotency_key("post", "/webhook_endpoints/e1/rotate_secret")
+
     def test_does_not_retry_a_keyed_post_on_a_route_that_ignores_the_key(self):
         finn, calls, _ = client([json_(503, {"error": "unavailable"}), json_(201, {})])
         with pytest.raises(FinnError):

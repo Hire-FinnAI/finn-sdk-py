@@ -155,7 +155,7 @@ is not retried.
 
 Only requests that are safe to repeat are retried: `GET`, `PUT`, `DELETE`, and `POST`/`PATCH` writes that carry an
 `Idempotency-Key` **on a route that dedupes by it** (`finn.IDEMPOTENT_WRITE_ROUTES`: calls, phone numbers,
-deployments, chat start/send, agents, case start, `/crm/*` writes, sales play runs and draft skips). Other writes,
+deployments, chat start/send, agents, case start, `/crm/*` writes, sales play runs and draft skips, webhook endpoint create). Other writes,
 such as `finns.create` or `contacts.create`, are sent once even with a key, because the API ignores the key there and
 a retry after a lost response could create a duplicate. Check with `finn.honours_idempotency_key(method, path)`.
 
