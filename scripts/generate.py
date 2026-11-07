@@ -38,6 +38,7 @@ HOLDABLE = {
 AUTO_IDEMPOTENCY_NOTE = {
     "post /calls", "post /phone_numbers", "post /deployments", "post /deployments/inbound",
     "post /chat/conversations", "post /chat/conversations/{id}/messages", "post /agents", "post /agents/{id}/cases",
+    "post /webhook_endpoints",
 }
 
 
@@ -770,7 +771,7 @@ def render_resources(gen: TypeGen, ops: Dict[str, Op], resources: List[Dict[str,
                 out.append("        )")
             else:
                 aw = "await " if is_async else ""
-                out.append(f"        return {aw}self._do(  # type: ignore[no-any-return]")
+                out.append(f"        return {aw}self._do(")
                 out.append(f"            {op.method!r}, {op.path!r},")
                 out.append(f"            path_params={{{path_args}}}, query={{{query}}},")
                 if op.body_type:

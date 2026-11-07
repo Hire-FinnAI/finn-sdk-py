@@ -33,7 +33,7 @@ class Calls(Resource):
         Gets an automatic Idempotency-Key, so it is safe to retry.
         May answer a PendingApproval (HTTP 202) instead of doing the work; see is_pending_approval().
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'post', '/calls',
             path_params={}, query={},
             body=body,
@@ -45,7 +45,7 @@ class Calls(Resource):
 
         ``GET /calls`` (listCalls).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/calls',
             path_params={}, query={'deployment_id': deployment_id, 'finn_id': finn_id, 'status': status, 'direction': direction, 'from': from_, 'to': to, 'limit': limit, 'offset': offset},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -65,7 +65,7 @@ class Calls(Resource):
 
         ``GET /calls/{call_uuid}`` (retrieveCall).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/calls/{call_uuid}',
             path_params={'call_uuid': call_uuid}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -81,7 +81,7 @@ class Finns(Resource):
 
         ``GET /finns`` (listFinns).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/finns',
             path_params={}, query={'limit': limit, 'offset': offset, 'scope': scope},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -101,7 +101,7 @@ class Finns(Resource):
 
         ``POST /finns`` (createFinn).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'post', '/finns',
             path_params={}, query={},
             body=body,
@@ -113,7 +113,7 @@ class Finns(Resource):
 
         ``GET /finns/{finn_id}`` (retrieveFinn).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/finns/{finn_id}',
             path_params={'finn_id': finn_id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -124,7 +124,7 @@ class Finns(Resource):
 
         ``PATCH /finns/{finn_id}`` (updateFinn).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'patch', '/finns/{finn_id}',
             path_params={'finn_id': finn_id}, query={},
             body=body,
@@ -136,7 +136,7 @@ class Finns(Resource):
 
         ``DELETE /finns/{finn_id}`` (deleteFinn).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'delete', '/finns/{finn_id}',
             path_params={'finn_id': finn_id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -147,7 +147,7 @@ class Finns(Resource):
 
         ``GET /finns/{finn_id}/knowledge_base`` (listKnowledgeBase).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/finns/{finn_id}/knowledge_base',
             path_params={'finn_id': finn_id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -158,7 +158,7 @@ class Finns(Resource):
 
         ``POST /finns/{finn_id}/knowledge_base`` (addKnowledgeBaseDocument).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'post', '/finns/{finn_id}/knowledge_base',
             path_params={'finn_id': finn_id}, query={},
             body=body,
@@ -171,7 +171,7 @@ class Finns(Resource):
 
         ``GET /finns/{finn_id}/post_call_analysis`` (getFinnPostCallAnalysis).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/finns/{finn_id}/post_call_analysis',
             path_params={'finn_id': finn_id}, query={'from': from_, 'to': to},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -182,7 +182,7 @@ class Finns(Resource):
 
         ``POST /finns/generate`` (generateFinn).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'post', '/finns/generate',
             path_params={}, query={},
             body=body,
@@ -194,7 +194,7 @@ class Finns(Resource):
 
         ``GET /finns/{finn_id}/flow`` (getFinnFlow).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/finns/{finn_id}/flow',
             path_params={'finn_id': finn_id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -205,7 +205,7 @@ class Finns(Resource):
 
         ``POST /finns/{finn_id}/flow/enable`` (enableFinnFlow).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'post', '/finns/{finn_id}/flow/enable',
             path_params={'finn_id': finn_id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -216,7 +216,7 @@ class Finns(Resource):
 
         ``POST /finns/{finn_id}/flow/disable`` (disableFinnFlow).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'post', '/finns/{finn_id}/flow/disable',
             path_params={'finn_id': finn_id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -227,7 +227,7 @@ class Finns(Resource):
 
         ``GET /finns/{finn_id}/settings`` (getFinnSettings).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/finns/{finn_id}/settings',
             path_params={'finn_id': finn_id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -238,7 +238,7 @@ class Finns(Resource):
 
         ``GET /finns/{finn_id}/variables`` (getFinnVariables).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/finns/{finn_id}/variables',
             path_params={'finn_id': finn_id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -249,7 +249,7 @@ class Finns(Resource):
 
         ``PATCH /finns/{finn_id}/variables`` (updateFinnVariables).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'patch', '/finns/{finn_id}/variables',
             path_params={'finn_id': finn_id}, query={},
             body=body,
@@ -261,7 +261,7 @@ class Finns(Resource):
 
         ``PATCH /finns/{finn_id}/handbook`` (updateFinnHandbook).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'patch', '/finns/{finn_id}/handbook',
             path_params={'finn_id': finn_id}, query={},
             body=body,
@@ -273,7 +273,7 @@ class Finns(Resource):
 
         ``PATCH /finns/{finn_id}/speech_settings`` (updateFinnSpeechSettings).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'patch', '/finns/{finn_id}/speech_settings',
             path_params={'finn_id': finn_id}, query={},
             body=body,
@@ -285,7 +285,7 @@ class Finns(Resource):
 
         ``PATCH /finns/{finn_id}/draft`` (updateFinnDraft).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'patch', '/finns/{finn_id}/draft',
             path_params={'finn_id': finn_id}, query={},
             body=body,
@@ -297,7 +297,7 @@ class Finns(Resource):
 
         ``POST /finns/{finn_id}/duplicate`` (duplicateFinn).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'post', '/finns/{finn_id}/duplicate',
             path_params={'finn_id': finn_id}, query={},
             body=body,
@@ -309,7 +309,7 @@ class Finns(Resource):
 
         ``GET /finns/{finn_id}/share_link`` (getFinnShareLink).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/finns/{finn_id}/share_link',
             path_params={'finn_id': finn_id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -320,7 +320,7 @@ class Finns(Resource):
 
         ``POST /finns/{finn_id}/share_link`` (createFinnShareLink).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'post', '/finns/{finn_id}/share_link',
             path_params={'finn_id': finn_id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -331,7 +331,7 @@ class Finns(Resource):
 
         ``GET /finns/{finn_id}/stats`` (getFinnStats).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/finns/{finn_id}/stats',
             path_params={'finn_id': finn_id}, query={'from': from_, 'to': to},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -342,7 +342,7 @@ class Finns(Resource):
 
         ``GET /finns/{finn_id}/outcomes`` (getFinnOutcomes).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/finns/{finn_id}/outcomes',
             path_params={'finn_id': finn_id}, query={'from': from_, 'to': to},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -358,7 +358,7 @@ class Voices(Resource):
 
         ``GET /voices`` (listVoices).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/voices',
             path_params={}, query={'language': language, 'search': search, 'limit': limit, 'offset': offset},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -378,7 +378,7 @@ class Voices(Resource):
 
         ``GET /voices/{voice_id}`` (retrieveVoice).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/voices/{voice_id}',
             path_params={'voice_id': voice_id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -394,7 +394,7 @@ class PhoneNumbers(Resource):
 
         ``GET /phone_numbers`` (listPhoneNumbers).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/phone_numbers',
             path_params={}, query={'limit': limit, 'offset': offset},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -414,7 +414,7 @@ class PhoneNumbers(Resource):
 
         ``GET /phone_numbers/available`` (searchAvailablePhoneNumbers).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/phone_numbers/available',
             path_params={}, query={'country': country, 'search': search, 'provider': provider},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -427,7 +427,7 @@ class PhoneNumbers(Resource):
         Gets an automatic Idempotency-Key, so it is safe to retry.
         May answer a PendingApproval (HTTP 202) instead of doing the work; see is_pending_approval().
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'post', '/phone_numbers',
             path_params={}, query={},
             body=body,
@@ -439,7 +439,7 @@ class PhoneNumbers(Resource):
 
         ``GET /phone_numbers/{id}`` (retrievePhoneNumber).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/phone_numbers/{id}',
             path_params={'id': id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -450,7 +450,7 @@ class PhoneNumbers(Resource):
 
         ``DELETE /phone_numbers/{id}`` (releasePhoneNumber).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'delete', '/phone_numbers/{id}',
             path_params={'id': id}, query={'force': force},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -466,7 +466,7 @@ class Audiences(Resource):
 
         ``GET /audiences`` (listAudiences).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/audiences',
             path_params={}, query={'limit': limit, 'offset': offset},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -486,7 +486,7 @@ class Audiences(Resource):
 
         ``POST /audiences`` (createAudience).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'post', '/audiences',
             path_params={}, query={},
             body=body,
@@ -498,7 +498,7 @@ class Audiences(Resource):
 
         ``GET /audiences/{audience_id}`` (retrieveAudience).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/audiences/{audience_id}',
             path_params={'audience_id': audience_id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -509,7 +509,7 @@ class Audiences(Resource):
 
         ``DELETE /audiences/{audience_id}`` (archiveAudience).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'delete', '/audiences/{audience_id}',
             path_params={'audience_id': audience_id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -520,7 +520,7 @@ class Audiences(Resource):
 
         ``GET /audiences/{audience_id}/contacts`` (listAudienceContacts).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/audiences/{audience_id}/contacts',
             path_params={'audience_id': audience_id}, query={'limit': limit, 'offset': offset},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -540,7 +540,7 @@ class Audiences(Resource):
 
         ``POST /audiences/{audience_id}/contacts`` (addAudienceContacts).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'post', '/audiences/{audience_id}/contacts',
             path_params={'audience_id': audience_id}, query={},
             body=body,
@@ -552,7 +552,7 @@ class Audiences(Resource):
 
         ``DELETE /audiences/{audience_id}/contacts/{phone}`` (removeAudienceContact).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'delete', '/audiences/{audience_id}/contacts/{phone}',
             path_params={'audience_id': audience_id, 'phone': phone}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -568,7 +568,7 @@ class Deployments(Resource):
 
         ``GET /deployments`` (listDeployments).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/deployments',
             path_params={}, query={'status': status, 'call_type': call_type, 'limit': limit, 'offset': offset},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -590,7 +590,7 @@ class Deployments(Resource):
         Gets an automatic Idempotency-Key, so it is safe to retry.
         May answer a PendingApproval (HTTP 202) instead of doing the work; see is_pending_approval().
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'post', '/deployments',
             path_params={}, query={},
             body=body,
@@ -603,7 +603,7 @@ class Deployments(Resource):
         ``POST /deployments/inbound`` (createInboundDeployment).
         Gets an automatic Idempotency-Key, so it is safe to retry.
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'post', '/deployments/inbound',
             path_params={}, query={},
             body=body,
@@ -615,7 +615,7 @@ class Deployments(Resource):
 
         ``GET /deployments/{id}`` (retrieveDeployment).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/deployments/{id}',
             path_params={'id': id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -626,7 +626,7 @@ class Deployments(Resource):
 
         ``POST /deployments/{id}/stop`` (stopDeployment).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'post', '/deployments/{id}/stop',
             path_params={'id': id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -637,7 +637,7 @@ class Deployments(Resource):
 
         ``POST /deployments/inbound/{finn_id}/stop`` (stopInboundDeployment).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'post', '/deployments/inbound/{finn_id}/stop',
             path_params={'finn_id': finn_id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -648,7 +648,7 @@ class Deployments(Resource):
 
         ``GET /deployments/{id}/analytics`` (getDeploymentAnalytics).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/deployments/{id}/analytics',
             path_params={'id': id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -664,7 +664,7 @@ class Wallet(Resource):
 
         ``GET /wallet`` (retrieveWallet).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/wallet',
             path_params={}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -675,7 +675,7 @@ class Wallet(Resource):
 
         ``GET /wallet/transactions`` (listWalletTransactions).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/wallet/transactions',
             path_params={}, query={'types': types, 'limit': limit, 'offset': offset},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -700,7 +700,7 @@ class DoNotCall(Resource):
 
         ``GET /do_not_call`` (listDoNotCall).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/do_not_call',
             path_params={}, query={'limit': limit, 'offset': offset},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -720,7 +720,7 @@ class DoNotCall(Resource):
 
         ``POST /do_not_call`` (addDoNotCall).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'post', '/do_not_call',
             path_params={}, query={},
             body=body,
@@ -733,7 +733,7 @@ class DoNotCall(Resource):
         ``DELETE /do_not_call/{phone}`` (removeDoNotCall).
         Needs the `voice:dnc:write` scope.
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'delete', '/do_not_call/{phone}',
             path_params={'phone': phone}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -749,7 +749,7 @@ class Contacts(Resource):
 
         ``GET /contacts`` (listRecords).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/contacts',
             path_params={}, query={'q': q, 'stage': stage, 'tag': tag, 'kind': kind, 'page': page, 'page_size': page_size},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -769,7 +769,7 @@ class Contacts(Resource):
 
         ``POST /contacts`` (createRecord).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'post', '/contacts',
             path_params={}, query={},
             body=body,
@@ -781,7 +781,7 @@ class Contacts(Resource):
 
         ``GET /contacts/{id}`` (retrieveRecord).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/contacts/{id}',
             path_params={'id': id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -792,7 +792,7 @@ class Contacts(Resource):
 
         ``PATCH /contacts/{id}`` (updateRecord).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'patch', '/contacts/{id}',
             path_params={'id': id}, query={},
             body=body,
@@ -804,7 +804,7 @@ class Contacts(Resource):
 
         ``GET /contacts/{id}/timeline`` (listRecordTimeline).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/contacts/{id}/timeline',
             path_params={'id': id}, query={'before': before, 'limit': limit, 'kind': kind, 'channel': channel},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -824,7 +824,7 @@ class Contacts(Resource):
 
         ``POST /contacts/{id}/notes`` (addRecordNote).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'post', '/contacts/{id}/notes',
             path_params={'id': id}, query={},
             body=body,
@@ -837,7 +837,7 @@ class Contacts(Resource):
         ``GET /record_kinds`` (listRecordKinds).
         Record kinds (contact, company, ...).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/record_kinds',
             path_params={}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -848,7 +848,7 @@ class Contacts(Resource):
 
         ``GET /fields`` (listFields).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/fields',
             path_params={}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -864,7 +864,7 @@ class Cases(Resource):
 
         ``GET /cases`` (listCases).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/cases',
             path_params={}, query={'status': status, 'agent_id': agent_id, 'contact_id': contact_id, 'owner_id': owner_id, 'outcome_key': outcome_key, 'q': q, 'before': before, 'limit': limit},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -884,7 +884,7 @@ class Cases(Resource):
 
         ``GET /cases/{id}`` (retrieveCase).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/cases/{id}',
             path_params={'id': id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -895,7 +895,7 @@ class Cases(Resource):
 
         ``GET /cases/{id}/events`` (listCaseEvents).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/cases/{id}/events',
             path_params={'id': id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -908,7 +908,7 @@ class Cases(Resource):
         Gets an automatic Idempotency-Key, so it is safe to retry.
         May answer a PendingApproval (HTTP 202) instead of doing the work; see is_pending_approval().
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'post', '/agents/{id}/cases',
             path_params={'id': agent_id}, query={},
             body=body,
@@ -925,7 +925,7 @@ class Approvals(ApprovalWait, Resource):
 
         ``GET /approvals`` (listApprovals).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/approvals',
             path_params={}, query={'status': status, 'scope': scope, 'contact_id': contact_id, 'cursor': cursor, 'limit': limit},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -946,7 +946,7 @@ class Approvals(ApprovalWait, Resource):
         ``GET /approvals/{id}`` (retrieveApproval).
         An Operator approval, or a held API request (`source: 'api_hold'`) made by this caller.
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/approvals/{id}',
             path_params={'id': id}, query={},
             unwrap=True,
@@ -958,7 +958,7 @@ class Approvals(ApprovalWait, Resource):
 
         ``POST /approvals/{id}/decide`` (decideApproval).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'post', '/approvals/{id}/decide',
             path_params={'id': id}, query={},
             body=body,
@@ -970,7 +970,7 @@ class Approvals(ApprovalWait, Resource):
 
         ``POST /approvals/{id}/approve`` (approveApproval).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'post', '/approvals/{id}/approve',
             path_params={'id': id}, query={},
             body=body,
@@ -982,7 +982,7 @@ class Approvals(ApprovalWait, Resource):
 
         ``POST /approvals/{id}/reject`` (rejectApproval).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'post', '/approvals/{id}/reject',
             path_params={'id': id}, query={},
             body=body,
@@ -999,7 +999,7 @@ class Agents(Resource):
 
         ``GET /agents`` (listAgents).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/agents',
             path_params={}, query={'status': status, 'limit': limit, 'cursor': cursor},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -1020,7 +1020,7 @@ class Agents(Resource):
         ``POST /agents`` (createAgent).
         Gets an automatic Idempotency-Key, so it is safe to retry.
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'post', '/agents',
             path_params={}, query={},
             body=body,
@@ -1032,7 +1032,7 @@ class Agents(Resource):
 
         ``POST /agents/draft`` (draftAgent).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'post', '/agents/draft',
             path_params={}, query={},
             body=body,
@@ -1044,7 +1044,7 @@ class Agents(Resource):
 
         ``GET /agents/{id}`` (getAgent).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/agents/{id}',
             path_params={'id': id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -1055,7 +1055,7 @@ class Agents(Resource):
 
         ``PUT /agents/{id}/draft`` (saveAgentDraft).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'put', '/agents/{id}/draft',
             path_params={'id': id}, query={},
             body=body,
@@ -1068,7 +1068,7 @@ class Agents(Resource):
 
         ``POST /agents/{id}/validate`` (validateAgent).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'post', '/agents/{id}/validate',
             path_params={'id': id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -1079,7 +1079,7 @@ class Agents(Resource):
 
         ``POST /agents/{id}/test`` (testAgent).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'post', '/agents/{id}/test',
             path_params={'id': id}, query={},
             body=body,
@@ -1091,7 +1091,7 @@ class Agents(Resource):
 
         ``POST /agents/{id}/publish`` (publishAgent).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'post', '/agents/{id}/publish',
             path_params={'id': id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -1102,7 +1102,7 @@ class Agents(Resource):
 
         ``POST /cases/{id}/test/{action}`` (driveAgentTest).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'post', '/cases/{id}/test/{action}',
             path_params={'id': case_id, 'action': action}, query={},
             body=body,
@@ -1119,7 +1119,7 @@ class ChatConversations(Resource):
 
         ``GET /chat/conversations`` (listChatConversations).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/chat/conversations',
             path_params={}, query={'status': status, 'channel': channel, 'agent_id': agent_id, 'label': label, 'q': q, 'from': from_, 'to': to, 'limit': limit, 'cursor': cursor},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -1141,7 +1141,7 @@ class ChatConversations(Resource):
         Gets an automatic Idempotency-Key, so it is safe to retry.
         May answer a PendingApproval (HTTP 202) instead of doing the work; see is_pending_approval().
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'post', '/chat/conversations',
             path_params={}, query={},
             body=body,
@@ -1153,7 +1153,7 @@ class ChatConversations(Resource):
 
         ``GET /chat/conversations/{id}`` (getChatConversation).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/chat/conversations/{id}',
             path_params={'id': id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -1164,7 +1164,7 @@ class ChatConversations(Resource):
 
         ``GET /chat/conversations/{id}/messages`` (listChatMessages).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/chat/conversations/{id}/messages',
             path_params={'id': id}, query={'limit': limit, 'cursor': cursor},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -1186,7 +1186,7 @@ class ChatConversations(Resource):
         Gets an automatic Idempotency-Key, so it is safe to retry.
         May answer a PendingApproval (HTTP 202) instead of doing the work; see is_pending_approval().
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'post', '/chat/conversations/{id}/messages',
             path_params={'id': id}, query={},
             body=body,
@@ -1203,7 +1203,7 @@ class ChatContacts(Resource):
 
         ``GET /chat/contacts`` (listChatContacts).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/chat/contacts',
             path_params={}, query={'q': q, 'label': label, 'type': type, 'channel': channel, 'limit': limit, 'cursor': cursor},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -1223,7 +1223,7 @@ class ChatContacts(Resource):
 
         ``GET /chat/contacts/{id}`` (getChatContact).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/chat/contacts/{id}',
             path_params={'id': id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -1234,7 +1234,7 @@ class ChatContacts(Resource):
 
         ``PATCH /chat/contacts/{id}`` (updateChatContact).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'patch', '/chat/contacts/{id}',
             path_params={'id': id}, query={},
             body=body,
@@ -1256,7 +1256,7 @@ class Chat(Resource):
 
         ``GET /chat/channels`` (listChatChannels).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/chat/channels',
             path_params={}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -1272,7 +1272,7 @@ class Crm(Resource):
 
         ``GET /crm/setup`` (getCrmSetup).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/crm/setup',
             path_params={}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -1283,7 +1283,7 @@ class Crm(Resource):
 
         ``GET /crm/filter_schema`` (getCrmFilterSchema).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/crm/filter_schema',
             path_params={}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -1294,7 +1294,7 @@ class Crm(Resource):
 
         ``POST /crm/records/search`` (searchCrmRecords).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'post', '/crm/records/search',
             path_params={}, query={},
             body=body,
@@ -1306,7 +1306,7 @@ class Crm(Resource):
 
         ``POST /crm/records/query`` (queryCrmRecords).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'post', '/crm/records/query',
             path_params={}, query={'limit': limit, 'cursor': cursor},
             body=body,
@@ -1318,7 +1318,7 @@ class Crm(Resource):
 
         ``POST /crm/records/query/count`` (countCrmRecords).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'post', '/crm/records/query/count',
             path_params={}, query={},
             body=body,
@@ -1330,7 +1330,7 @@ class Crm(Resource):
 
         ``POST /crm/records/query/stage_counts`` (countCrmRecordsByStage).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'post', '/crm/records/query/stage_counts',
             path_params={}, query={},
             body=body,
@@ -1342,7 +1342,7 @@ class Crm(Resource):
 
         ``GET /crm/records/{id}`` (getCrmRecord).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/crm/records/{id}',
             path_params={'id': id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -1353,7 +1353,7 @@ class Crm(Resource):
 
         ``PATCH /crm/records/{id}`` (updateCrmRecord).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'patch', '/crm/records/{id}',
             path_params={'id': id}, query={},
             body=body,
@@ -1365,7 +1365,7 @@ class Crm(Resource):
 
         ``GET /crm/records/{id}/timeline`` (getCrmRecordTimeline).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/crm/records/{id}/timeline',
             path_params={'id': id}, query={'before': before, 'limit': limit, 'kind': kind, 'channel': channel, 'include': include},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -1376,7 +1376,7 @@ class Crm(Resource):
 
         ``GET /crm/records/{id}/stage_gate`` (getCrmStageGate).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/crm/records/{id}/stage_gate',
             path_params={'id': id}, query={'to': to},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -1387,7 +1387,7 @@ class Crm(Resource):
 
         ``GET /crm/records/{id}/documents`` (listCrmRecordDocuments).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/crm/records/{id}/documents',
             path_params={'id': id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -1398,7 +1398,7 @@ class Crm(Resource):
 
         ``GET /crm/records/{id}/files`` (listCrmRecordFiles).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/crm/records/{id}/files',
             path_params={'id': id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -1409,7 +1409,7 @@ class Crm(Resource):
 
         ``POST /crm/records/{id}/files`` (attachCrmFile).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'post', '/crm/records/{id}/files',
             path_params={'id': id}, query={},
             body=body,
@@ -1422,7 +1422,7 @@ class Crm(Resource):
 
         ``GET /crm/records/{id}/forms_checklist`` (getCrmFormsChecklist).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/crm/records/{id}/forms_checklist',
             path_params={'id': id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -1433,7 +1433,7 @@ class Crm(Resource):
 
         ``GET /crm/records/{id}/submissions`` (listCrmFormSubmissions).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/crm/records/{id}/submissions',
             path_params={'id': id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -1444,7 +1444,7 @@ class Crm(Resource):
 
         ``GET /crm/records/{id}/form_drafts`` (listCrmFormDrafts).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/crm/records/{id}/form_drafts',
             path_params={'id': id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -1455,7 +1455,7 @@ class Crm(Resource):
 
         ``GET /crm/forms`` (listCrmForms).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/crm/forms',
             path_params={}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -1466,7 +1466,7 @@ class Crm(Resource):
 
         ``GET /crm/follow_ups`` (listCrmFollowUps).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/crm/follow_ups',
             path_params={}, query={'view': view, 'status': status, 'due': due, 'assignee': assignee, 'contact': contact, 'tz': tz, 'limit': limit, 'cursor': cursor},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -1486,7 +1486,7 @@ class Crm(Resource):
 
         ``GET /crm/follow_ups/stats`` (getCrmFollowUpStats).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/crm/follow_ups/stats',
             path_params={}, query={'tz': tz},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -1497,7 +1497,7 @@ class Crm(Resource):
 
         ``GET /crm/my_work`` (getCrmMyWork).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/crm/my_work',
             path_params={}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -1508,7 +1508,7 @@ class Crm(Resource):
 
         ``GET /crm/views`` (listCrmViews).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/crm/views',
             path_params={}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -1519,7 +1519,7 @@ class Crm(Resource):
 
         ``POST /crm/views`` (saveCrmView).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'post', '/crm/views',
             path_params={}, query={},
             body=body,
@@ -1531,7 +1531,7 @@ class Crm(Resource):
 
         ``GET /crm/summary`` (getCrmSummary).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/crm/summary',
             path_params={}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -1542,7 +1542,7 @@ class Crm(Resource):
 
         ``GET /crm/stage_counts`` (getCrmStageCounts).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/crm/stage_counts',
             path_params={}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -1553,7 +1553,7 @@ class Crm(Resource):
 
         ``GET /crm/speed`` (getCrmSpeed).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/crm/speed',
             path_params={}, query={'period': period},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -1564,7 +1564,7 @@ class Crm(Resource):
 
         ``GET /crm/duplicates`` (listCrmDuplicates).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/crm/duplicates',
             path_params={}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -1575,7 +1575,7 @@ class Crm(Resource):
 
         ``POST /crm/ask`` (askCrm).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'post', '/crm/ask',
             path_params={}, query={},
             body=body,
@@ -1587,7 +1587,7 @@ class Crm(Resource):
 
         ``POST /crm/records/{id}/notes`` (addCrmNote).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'post', '/crm/records/{id}/notes',
             path_params={'id': id}, query={},
             body=body,
@@ -1599,7 +1599,7 @@ class Crm(Resource):
 
         ``POST /crm/records/{id}/follow_ups`` (createCrmFollowUp).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'post', '/crm/records/{id}/follow_ups',
             path_params={'id': id}, query={},
             body=body,
@@ -1611,7 +1611,7 @@ class Crm(Resource):
 
         ``PATCH /crm/follow_ups/{id}`` (updateCrmFollowUp).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'patch', '/crm/follow_ups/{id}',
             path_params={'id': id}, query={},
             body=body,
@@ -1623,7 +1623,7 @@ class Crm(Resource):
 
         ``POST /crm/records`` (createCrmRecord).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'post', '/crm/records',
             path_params={}, query={},
             body=body,
@@ -1635,7 +1635,7 @@ class Crm(Resource):
 
         ``PUT /crm/records/{id}/stage_checks/{stage}/{check}`` (setCrmStageCheck).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'put', '/crm/records/{id}/stage_checks/{stage}/{check}',
             path_params={'id': id, 'stage': stage, 'check': check}, query={},
             body=body,
@@ -1647,7 +1647,7 @@ class Crm(Resource):
 
         ``POST /crm/records/{id}/ref_no`` (assignCrmReferenceNo).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'post', '/crm/records/{id}/ref_no',
             path_params={'id': id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -1658,7 +1658,7 @@ class Crm(Resource):
 
         ``POST /crm/records/{id}/documents/{type}/status`` (setCrmDocumentStatus).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'post', '/crm/records/{id}/documents/{type}/status',
             path_params={'id': id, 'type': type}, query={},
             body=body,
@@ -1670,7 +1670,7 @@ class Crm(Resource):
 
         ``PUT /crm/records/{id}/forms/{form_id}/draft`` (saveCrmFormDraft).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'put', '/crm/records/{id}/forms/{form_id}/draft',
             path_params={'id': id, 'form_id': form_id}, query={},
             body=body,
@@ -1682,7 +1682,7 @@ class Crm(Resource):
 
         ``POST /crm/records/{id}/doc_drafts`` (draftCrmDocument).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'post', '/crm/records/{id}/doc_drafts',
             path_params={'id': id}, query={},
             body=body,
@@ -1695,7 +1695,7 @@ class Crm(Resource):
         ``POST /crm/records/{id}/stage_moves`` (moveCrmRecordStage).
         May answer a PendingApproval (HTTP 202) instead of doing the work; see is_pending_approval().
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'post', '/crm/records/{id}/stage_moves',
             path_params={'id': id}, query={},
             body=body,
@@ -1708,7 +1708,7 @@ class Crm(Resource):
         ``POST /crm/records/{id}/forms/{form_id}/submissions`` (submitCrmForm).
         May answer a PendingApproval (HTTP 202) instead of doing the work; see is_pending_approval().
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'post', '/crm/records/{id}/forms/{form_id}/submissions',
             path_params={'id': id, 'form_id': form_id}, query={},
             body=body,
@@ -1721,7 +1721,7 @@ class Crm(Resource):
         ``POST /crm/records/{id}/forms/{form_id}/links`` (createCrmFormLink).
         May answer a PendingApproval (HTTP 202) instead of doing the work; see is_pending_approval().
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'post', '/crm/records/{id}/forms/{form_id}/links',
             path_params={'id': id, 'form_id': form_id}, query={},
             body=body,
@@ -1734,7 +1734,7 @@ class Crm(Resource):
         ``POST /crm/records/{id}/upload_links`` (createCrmUploadLink).
         May answer a PendingApproval (HTTP 202) instead of doing the work; see is_pending_approval().
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'post', '/crm/records/{id}/upload_links',
             path_params={'id': id}, query={},
             body=body,
@@ -1746,7 +1746,7 @@ class Crm(Resource):
 
         ``POST /crm/imports/columns`` (guessCrmImportColumns).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'post', '/crm/imports/columns',
             path_params={}, query={},
             body=body,
@@ -1759,7 +1759,7 @@ class Crm(Resource):
         ``POST /crm/imports`` (importCrmRecords).
         May answer a PendingApproval (HTTP 202) instead of doing the work; see is_pending_approval().
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'post', '/crm/imports',
             path_params={}, query={},
             body=body,
@@ -1776,7 +1776,7 @@ class Dialer(Resource):
 
         ``GET /dialer/sessions`` (listDialerSessions).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/dialer/sessions',
             path_params={}, query={'status': status, 'limit': limit, 'cursor': cursor},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -1796,7 +1796,7 @@ class Dialer(Resource):
 
         ``GET /dialer/sessions/{id}`` (getDialerSession).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/dialer/sessions/{id}',
             path_params={'id': id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -1807,7 +1807,7 @@ class Dialer(Resource):
 
         ``GET /dialer/analytics`` (getDialerAnalytics).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/dialer/analytics',
             path_params={}, query={'from': from_, 'to': to},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -1818,7 +1818,7 @@ class Dialer(Resource):
 
         ``GET /dialer/follow-ups`` (listDialerFollowUps).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/dialer/follow-ups',
             path_params={}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -1829,7 +1829,7 @@ class Dialer(Resource):
 
         ``GET /dialer/leads/{id}/brief`` (getDialerLeadBrief).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/dialer/leads/{id}/brief',
             path_params={'id': id}, query={'product_key': product_key},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -1845,7 +1845,7 @@ class Webhooks(Resource):
 
         ``GET /webhook_endpoints`` (listWebhookEndpoints).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/webhook_endpoints',
             path_params={}, query={'limit': limit, 'cursor': cursor},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -1864,8 +1864,9 @@ class Webhooks(Resource):
         """Create a webhook endpoint.
 
         ``POST /webhook_endpoints`` (createWebhookEndpoint).
+        Gets an automatic Idempotency-Key, so it is safe to retry.
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'post', '/webhook_endpoints',
             path_params={}, query={},
             body=body,
@@ -1877,7 +1878,7 @@ class Webhooks(Resource):
 
         ``GET /webhook_endpoints/{id}`` (getWebhookEndpoint).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/webhook_endpoints/{id}',
             path_params={'id': id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -1888,7 +1889,7 @@ class Webhooks(Resource):
 
         ``PATCH /webhook_endpoints/{id}`` (updateWebhookEndpoint).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'patch', '/webhook_endpoints/{id}',
             path_params={'id': id}, query={},
             body=body,
@@ -1900,7 +1901,7 @@ class Webhooks(Resource):
 
         ``DELETE /webhook_endpoints/{id}`` (deleteWebhookEndpoint).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'delete', '/webhook_endpoints/{id}',
             path_params={'id': id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -1911,7 +1912,7 @@ class Webhooks(Resource):
 
         ``GET /webhook_endpoints/{id}/deliveries`` (listWebhookDeliveries).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/webhook_endpoints/{id}/deliveries',
             path_params={'id': id}, query={'status': status, 'limit': limit, 'cursor': cursor},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -1931,7 +1932,7 @@ class Webhooks(Resource):
 
         ``GET /events`` (listEventTypes).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/events',
             path_params={}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -1947,7 +1948,7 @@ class Organization(Resource):
 
         ``GET /organization`` (getOrganization).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/organization',
             path_params={}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -1958,7 +1959,7 @@ class Organization(Resource):
 
         ``GET /organization/members`` (listOrganizationMembers).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/organization/members',
             path_params={}, query={'limit': limit, 'cursor': cursor},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -1978,7 +1979,7 @@ class Organization(Resource):
 
         ``GET /organization/integrations`` (listOrganizationIntegrations).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/organization/integrations',
             path_params={}, query={'limit': limit, 'cursor': cursor},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -1998,7 +1999,7 @@ class Organization(Resource):
 
         ``GET /organization/api_keys`` (listOrganizationApiKeys).
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/organization/api_keys',
             path_params={}, query={'limit': limit, 'cursor': cursor},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -2029,7 +2030,7 @@ class Sales(Resource):
         ``GET /sales/plays`` (listSalesPlays).
         Experimental: the Sales API is switched off for every organization, so these calls answer an error until it is switched on for yours. Names and shapes may change without a major version.
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/sales/plays',
             path_params={}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -2041,7 +2042,7 @@ class Sales(Resource):
         ``GET /sales/plays/{slug}/runs`` (listSalesPlayRuns).
         Experimental: the Sales API is switched off for every organization, so these calls answer an error until it is switched on for yours. Names and shapes may change without a major version.
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/sales/plays/{slug}/runs',
             path_params={'slug': slug}, query={'limit': limit},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -2053,7 +2054,7 @@ class Sales(Resource):
         ``GET /sales/plays/{slug}/prospects`` (listSalesProspects).
         Experimental: the Sales API is switched off for every organization, so these calls answer an error until it is switched on for yours. Names and shapes may change without a major version.
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/sales/plays/{slug}/prospects',
             path_params={'slug': slug}, query={'country': country, 'email_status': email_status, 'limit': limit, 'cursor': cursor},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -2065,7 +2066,7 @@ class Sales(Resource):
         ``POST /sales/plays/{slug}/run`` (runSalesPlay).
         Experimental: the Sales API is switched off for every organization, so these calls answer an error until it is switched on for yours. Names and shapes may change without a major version.
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'post', '/sales/plays/{slug}/run',
             path_params={'slug': slug}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -2077,7 +2078,7 @@ class Sales(Resource):
         ``GET /sales/drafts`` (listSalesDrafts).
         Experimental: the Sales API is switched off for every organization, so these calls answer an error until it is switched on for yours. Names and shapes may change without a major version.
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/sales/drafts',
             path_params={}, query={'status': status, 'kind': kind, 'play': play, 'limit': limit, 'cursor': cursor},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -2089,7 +2090,7 @@ class Sales(Resource):
         ``PATCH /sales/drafts/{id}`` (updateSalesDraft).
         Experimental: the Sales API is switched off for every organization, so these calls answer an error until it is switched on for yours. Names and shapes may change without a major version.
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'patch', '/sales/drafts/{id}',
             path_params={'id': id}, query={},
             body=body,
@@ -2102,7 +2103,7 @@ class Sales(Resource):
         ``POST /sales/drafts/{id}/skip`` (skipSalesDraft).
         Experimental: the Sales API is switched off for every organization, so these calls answer an error until it is switched on for yours. Names and shapes may change without a major version.
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'post', '/sales/drafts/{id}/skip',
             path_params={'id': id}, query={},
             body=body,
@@ -2115,7 +2116,7 @@ class Sales(Resource):
         ``GET /sales/threads`` (listSalesThreads).
         Experimental: the Sales API is switched off for every organization, so these calls answer an error until it is switched on for yours. Names and shapes may change without a major version.
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/sales/threads',
             path_params={}, query={'label': label, 'play': play, 'limit': limit, 'cursor': cursor},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -2127,7 +2128,7 @@ class Sales(Resource):
         ``GET /sales/threads/{id}`` (getSalesThread).
         Experimental: the Sales API is switched off for every organization, so these calls answer an error until it is switched on for yours. Names and shapes may change without a major version.
         """
-        return self._do(  # type: ignore[no-any-return]
+        return self._do(
             'get', '/sales/threads/{id}',
             path_params={'id': id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -2145,7 +2146,7 @@ class AsyncCalls(AsyncResource):
         Gets an automatic Idempotency-Key, so it is safe to retry.
         May answer a PendingApproval (HTTP 202) instead of doing the work; see is_pending_approval().
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'post', '/calls',
             path_params={}, query={},
             body=body,
@@ -2157,7 +2158,7 @@ class AsyncCalls(AsyncResource):
 
         ``GET /calls`` (listCalls).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/calls',
             path_params={}, query={'deployment_id': deployment_id, 'finn_id': finn_id, 'status': status, 'direction': direction, 'from': from_, 'to': to, 'limit': limit, 'offset': offset},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -2177,7 +2178,7 @@ class AsyncCalls(AsyncResource):
 
         ``GET /calls/{call_uuid}`` (retrieveCall).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/calls/{call_uuid}',
             path_params={'call_uuid': call_uuid}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -2193,7 +2194,7 @@ class AsyncFinns(AsyncResource):
 
         ``GET /finns`` (listFinns).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/finns',
             path_params={}, query={'limit': limit, 'offset': offset, 'scope': scope},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -2213,7 +2214,7 @@ class AsyncFinns(AsyncResource):
 
         ``POST /finns`` (createFinn).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'post', '/finns',
             path_params={}, query={},
             body=body,
@@ -2225,7 +2226,7 @@ class AsyncFinns(AsyncResource):
 
         ``GET /finns/{finn_id}`` (retrieveFinn).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/finns/{finn_id}',
             path_params={'finn_id': finn_id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -2236,7 +2237,7 @@ class AsyncFinns(AsyncResource):
 
         ``PATCH /finns/{finn_id}`` (updateFinn).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'patch', '/finns/{finn_id}',
             path_params={'finn_id': finn_id}, query={},
             body=body,
@@ -2248,7 +2249,7 @@ class AsyncFinns(AsyncResource):
 
         ``DELETE /finns/{finn_id}`` (deleteFinn).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'delete', '/finns/{finn_id}',
             path_params={'finn_id': finn_id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -2259,7 +2260,7 @@ class AsyncFinns(AsyncResource):
 
         ``GET /finns/{finn_id}/knowledge_base`` (listKnowledgeBase).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/finns/{finn_id}/knowledge_base',
             path_params={'finn_id': finn_id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -2270,7 +2271,7 @@ class AsyncFinns(AsyncResource):
 
         ``POST /finns/{finn_id}/knowledge_base`` (addKnowledgeBaseDocument).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'post', '/finns/{finn_id}/knowledge_base',
             path_params={'finn_id': finn_id}, query={},
             body=body,
@@ -2283,7 +2284,7 @@ class AsyncFinns(AsyncResource):
 
         ``GET /finns/{finn_id}/post_call_analysis`` (getFinnPostCallAnalysis).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/finns/{finn_id}/post_call_analysis',
             path_params={'finn_id': finn_id}, query={'from': from_, 'to': to},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -2294,7 +2295,7 @@ class AsyncFinns(AsyncResource):
 
         ``POST /finns/generate`` (generateFinn).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'post', '/finns/generate',
             path_params={}, query={},
             body=body,
@@ -2306,7 +2307,7 @@ class AsyncFinns(AsyncResource):
 
         ``GET /finns/{finn_id}/flow`` (getFinnFlow).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/finns/{finn_id}/flow',
             path_params={'finn_id': finn_id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -2317,7 +2318,7 @@ class AsyncFinns(AsyncResource):
 
         ``POST /finns/{finn_id}/flow/enable`` (enableFinnFlow).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'post', '/finns/{finn_id}/flow/enable',
             path_params={'finn_id': finn_id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -2328,7 +2329,7 @@ class AsyncFinns(AsyncResource):
 
         ``POST /finns/{finn_id}/flow/disable`` (disableFinnFlow).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'post', '/finns/{finn_id}/flow/disable',
             path_params={'finn_id': finn_id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -2339,7 +2340,7 @@ class AsyncFinns(AsyncResource):
 
         ``GET /finns/{finn_id}/settings`` (getFinnSettings).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/finns/{finn_id}/settings',
             path_params={'finn_id': finn_id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -2350,7 +2351,7 @@ class AsyncFinns(AsyncResource):
 
         ``GET /finns/{finn_id}/variables`` (getFinnVariables).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/finns/{finn_id}/variables',
             path_params={'finn_id': finn_id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -2361,7 +2362,7 @@ class AsyncFinns(AsyncResource):
 
         ``PATCH /finns/{finn_id}/variables`` (updateFinnVariables).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'patch', '/finns/{finn_id}/variables',
             path_params={'finn_id': finn_id}, query={},
             body=body,
@@ -2373,7 +2374,7 @@ class AsyncFinns(AsyncResource):
 
         ``PATCH /finns/{finn_id}/handbook`` (updateFinnHandbook).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'patch', '/finns/{finn_id}/handbook',
             path_params={'finn_id': finn_id}, query={},
             body=body,
@@ -2385,7 +2386,7 @@ class AsyncFinns(AsyncResource):
 
         ``PATCH /finns/{finn_id}/speech_settings`` (updateFinnSpeechSettings).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'patch', '/finns/{finn_id}/speech_settings',
             path_params={'finn_id': finn_id}, query={},
             body=body,
@@ -2397,7 +2398,7 @@ class AsyncFinns(AsyncResource):
 
         ``PATCH /finns/{finn_id}/draft`` (updateFinnDraft).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'patch', '/finns/{finn_id}/draft',
             path_params={'finn_id': finn_id}, query={},
             body=body,
@@ -2409,7 +2410,7 @@ class AsyncFinns(AsyncResource):
 
         ``POST /finns/{finn_id}/duplicate`` (duplicateFinn).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'post', '/finns/{finn_id}/duplicate',
             path_params={'finn_id': finn_id}, query={},
             body=body,
@@ -2421,7 +2422,7 @@ class AsyncFinns(AsyncResource):
 
         ``GET /finns/{finn_id}/share_link`` (getFinnShareLink).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/finns/{finn_id}/share_link',
             path_params={'finn_id': finn_id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -2432,7 +2433,7 @@ class AsyncFinns(AsyncResource):
 
         ``POST /finns/{finn_id}/share_link`` (createFinnShareLink).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'post', '/finns/{finn_id}/share_link',
             path_params={'finn_id': finn_id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -2443,7 +2444,7 @@ class AsyncFinns(AsyncResource):
 
         ``GET /finns/{finn_id}/stats`` (getFinnStats).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/finns/{finn_id}/stats',
             path_params={'finn_id': finn_id}, query={'from': from_, 'to': to},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -2454,7 +2455,7 @@ class AsyncFinns(AsyncResource):
 
         ``GET /finns/{finn_id}/outcomes`` (getFinnOutcomes).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/finns/{finn_id}/outcomes',
             path_params={'finn_id': finn_id}, query={'from': from_, 'to': to},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -2470,7 +2471,7 @@ class AsyncVoices(AsyncResource):
 
         ``GET /voices`` (listVoices).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/voices',
             path_params={}, query={'language': language, 'search': search, 'limit': limit, 'offset': offset},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -2490,7 +2491,7 @@ class AsyncVoices(AsyncResource):
 
         ``GET /voices/{voice_id}`` (retrieveVoice).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/voices/{voice_id}',
             path_params={'voice_id': voice_id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -2506,7 +2507,7 @@ class AsyncPhoneNumbers(AsyncResource):
 
         ``GET /phone_numbers`` (listPhoneNumbers).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/phone_numbers',
             path_params={}, query={'limit': limit, 'offset': offset},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -2526,7 +2527,7 @@ class AsyncPhoneNumbers(AsyncResource):
 
         ``GET /phone_numbers/available`` (searchAvailablePhoneNumbers).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/phone_numbers/available',
             path_params={}, query={'country': country, 'search': search, 'provider': provider},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -2539,7 +2540,7 @@ class AsyncPhoneNumbers(AsyncResource):
         Gets an automatic Idempotency-Key, so it is safe to retry.
         May answer a PendingApproval (HTTP 202) instead of doing the work; see is_pending_approval().
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'post', '/phone_numbers',
             path_params={}, query={},
             body=body,
@@ -2551,7 +2552,7 @@ class AsyncPhoneNumbers(AsyncResource):
 
         ``GET /phone_numbers/{id}`` (retrievePhoneNumber).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/phone_numbers/{id}',
             path_params={'id': id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -2562,7 +2563,7 @@ class AsyncPhoneNumbers(AsyncResource):
 
         ``DELETE /phone_numbers/{id}`` (releasePhoneNumber).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'delete', '/phone_numbers/{id}',
             path_params={'id': id}, query={'force': force},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -2578,7 +2579,7 @@ class AsyncAudiences(AsyncResource):
 
         ``GET /audiences`` (listAudiences).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/audiences',
             path_params={}, query={'limit': limit, 'offset': offset},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -2598,7 +2599,7 @@ class AsyncAudiences(AsyncResource):
 
         ``POST /audiences`` (createAudience).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'post', '/audiences',
             path_params={}, query={},
             body=body,
@@ -2610,7 +2611,7 @@ class AsyncAudiences(AsyncResource):
 
         ``GET /audiences/{audience_id}`` (retrieveAudience).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/audiences/{audience_id}',
             path_params={'audience_id': audience_id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -2621,7 +2622,7 @@ class AsyncAudiences(AsyncResource):
 
         ``DELETE /audiences/{audience_id}`` (archiveAudience).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'delete', '/audiences/{audience_id}',
             path_params={'audience_id': audience_id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -2632,7 +2633,7 @@ class AsyncAudiences(AsyncResource):
 
         ``GET /audiences/{audience_id}/contacts`` (listAudienceContacts).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/audiences/{audience_id}/contacts',
             path_params={'audience_id': audience_id}, query={'limit': limit, 'offset': offset},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -2652,7 +2653,7 @@ class AsyncAudiences(AsyncResource):
 
         ``POST /audiences/{audience_id}/contacts`` (addAudienceContacts).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'post', '/audiences/{audience_id}/contacts',
             path_params={'audience_id': audience_id}, query={},
             body=body,
@@ -2664,7 +2665,7 @@ class AsyncAudiences(AsyncResource):
 
         ``DELETE /audiences/{audience_id}/contacts/{phone}`` (removeAudienceContact).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'delete', '/audiences/{audience_id}/contacts/{phone}',
             path_params={'audience_id': audience_id, 'phone': phone}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -2680,7 +2681,7 @@ class AsyncDeployments(AsyncResource):
 
         ``GET /deployments`` (listDeployments).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/deployments',
             path_params={}, query={'status': status, 'call_type': call_type, 'limit': limit, 'offset': offset},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -2702,7 +2703,7 @@ class AsyncDeployments(AsyncResource):
         Gets an automatic Idempotency-Key, so it is safe to retry.
         May answer a PendingApproval (HTTP 202) instead of doing the work; see is_pending_approval().
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'post', '/deployments',
             path_params={}, query={},
             body=body,
@@ -2715,7 +2716,7 @@ class AsyncDeployments(AsyncResource):
         ``POST /deployments/inbound`` (createInboundDeployment).
         Gets an automatic Idempotency-Key, so it is safe to retry.
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'post', '/deployments/inbound',
             path_params={}, query={},
             body=body,
@@ -2727,7 +2728,7 @@ class AsyncDeployments(AsyncResource):
 
         ``GET /deployments/{id}`` (retrieveDeployment).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/deployments/{id}',
             path_params={'id': id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -2738,7 +2739,7 @@ class AsyncDeployments(AsyncResource):
 
         ``POST /deployments/{id}/stop`` (stopDeployment).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'post', '/deployments/{id}/stop',
             path_params={'id': id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -2749,7 +2750,7 @@ class AsyncDeployments(AsyncResource):
 
         ``POST /deployments/inbound/{finn_id}/stop`` (stopInboundDeployment).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'post', '/deployments/inbound/{finn_id}/stop',
             path_params={'finn_id': finn_id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -2760,7 +2761,7 @@ class AsyncDeployments(AsyncResource):
 
         ``GET /deployments/{id}/analytics`` (getDeploymentAnalytics).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/deployments/{id}/analytics',
             path_params={'id': id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -2776,7 +2777,7 @@ class AsyncWallet(AsyncResource):
 
         ``GET /wallet`` (retrieveWallet).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/wallet',
             path_params={}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -2787,7 +2788,7 @@ class AsyncWallet(AsyncResource):
 
         ``GET /wallet/transactions`` (listWalletTransactions).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/wallet/transactions',
             path_params={}, query={'types': types, 'limit': limit, 'offset': offset},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -2812,7 +2813,7 @@ class AsyncDoNotCall(AsyncResource):
 
         ``GET /do_not_call`` (listDoNotCall).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/do_not_call',
             path_params={}, query={'limit': limit, 'offset': offset},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -2832,7 +2833,7 @@ class AsyncDoNotCall(AsyncResource):
 
         ``POST /do_not_call`` (addDoNotCall).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'post', '/do_not_call',
             path_params={}, query={},
             body=body,
@@ -2845,7 +2846,7 @@ class AsyncDoNotCall(AsyncResource):
         ``DELETE /do_not_call/{phone}`` (removeDoNotCall).
         Needs the `voice:dnc:write` scope.
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'delete', '/do_not_call/{phone}',
             path_params={'phone': phone}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -2861,7 +2862,7 @@ class AsyncContacts(AsyncResource):
 
         ``GET /contacts`` (listRecords).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/contacts',
             path_params={}, query={'q': q, 'stage': stage, 'tag': tag, 'kind': kind, 'page': page, 'page_size': page_size},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -2881,7 +2882,7 @@ class AsyncContacts(AsyncResource):
 
         ``POST /contacts`` (createRecord).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'post', '/contacts',
             path_params={}, query={},
             body=body,
@@ -2893,7 +2894,7 @@ class AsyncContacts(AsyncResource):
 
         ``GET /contacts/{id}`` (retrieveRecord).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/contacts/{id}',
             path_params={'id': id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -2904,7 +2905,7 @@ class AsyncContacts(AsyncResource):
 
         ``PATCH /contacts/{id}`` (updateRecord).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'patch', '/contacts/{id}',
             path_params={'id': id}, query={},
             body=body,
@@ -2916,7 +2917,7 @@ class AsyncContacts(AsyncResource):
 
         ``GET /contacts/{id}/timeline`` (listRecordTimeline).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/contacts/{id}/timeline',
             path_params={'id': id}, query={'before': before, 'limit': limit, 'kind': kind, 'channel': channel},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -2936,7 +2937,7 @@ class AsyncContacts(AsyncResource):
 
         ``POST /contacts/{id}/notes`` (addRecordNote).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'post', '/contacts/{id}/notes',
             path_params={'id': id}, query={},
             body=body,
@@ -2949,7 +2950,7 @@ class AsyncContacts(AsyncResource):
         ``GET /record_kinds`` (listRecordKinds).
         Record kinds (contact, company, ...).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/record_kinds',
             path_params={}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -2960,7 +2961,7 @@ class AsyncContacts(AsyncResource):
 
         ``GET /fields`` (listFields).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/fields',
             path_params={}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -2976,7 +2977,7 @@ class AsyncCases(AsyncResource):
 
         ``GET /cases`` (listCases).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/cases',
             path_params={}, query={'status': status, 'agent_id': agent_id, 'contact_id': contact_id, 'owner_id': owner_id, 'outcome_key': outcome_key, 'q': q, 'before': before, 'limit': limit},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -2996,7 +2997,7 @@ class AsyncCases(AsyncResource):
 
         ``GET /cases/{id}`` (retrieveCase).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/cases/{id}',
             path_params={'id': id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -3007,7 +3008,7 @@ class AsyncCases(AsyncResource):
 
         ``GET /cases/{id}/events`` (listCaseEvents).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/cases/{id}/events',
             path_params={'id': id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -3020,7 +3021,7 @@ class AsyncCases(AsyncResource):
         Gets an automatic Idempotency-Key, so it is safe to retry.
         May answer a PendingApproval (HTTP 202) instead of doing the work; see is_pending_approval().
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'post', '/agents/{id}/cases',
             path_params={'id': agent_id}, query={},
             body=body,
@@ -3037,7 +3038,7 @@ class AsyncApprovals(AsyncApprovalWait, AsyncResource):
 
         ``GET /approvals`` (listApprovals).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/approvals',
             path_params={}, query={'status': status, 'scope': scope, 'contact_id': contact_id, 'cursor': cursor, 'limit': limit},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -3058,7 +3059,7 @@ class AsyncApprovals(AsyncApprovalWait, AsyncResource):
         ``GET /approvals/{id}`` (retrieveApproval).
         An Operator approval, or a held API request (`source: 'api_hold'`) made by this caller.
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/approvals/{id}',
             path_params={'id': id}, query={},
             unwrap=True,
@@ -3070,7 +3071,7 @@ class AsyncApprovals(AsyncApprovalWait, AsyncResource):
 
         ``POST /approvals/{id}/decide`` (decideApproval).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'post', '/approvals/{id}/decide',
             path_params={'id': id}, query={},
             body=body,
@@ -3082,7 +3083,7 @@ class AsyncApprovals(AsyncApprovalWait, AsyncResource):
 
         ``POST /approvals/{id}/approve`` (approveApproval).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'post', '/approvals/{id}/approve',
             path_params={'id': id}, query={},
             body=body,
@@ -3094,7 +3095,7 @@ class AsyncApprovals(AsyncApprovalWait, AsyncResource):
 
         ``POST /approvals/{id}/reject`` (rejectApproval).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'post', '/approvals/{id}/reject',
             path_params={'id': id}, query={},
             body=body,
@@ -3111,7 +3112,7 @@ class AsyncAgents(AsyncResource):
 
         ``GET /agents`` (listAgents).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/agents',
             path_params={}, query={'status': status, 'limit': limit, 'cursor': cursor},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -3132,7 +3133,7 @@ class AsyncAgents(AsyncResource):
         ``POST /agents`` (createAgent).
         Gets an automatic Idempotency-Key, so it is safe to retry.
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'post', '/agents',
             path_params={}, query={},
             body=body,
@@ -3144,7 +3145,7 @@ class AsyncAgents(AsyncResource):
 
         ``POST /agents/draft`` (draftAgent).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'post', '/agents/draft',
             path_params={}, query={},
             body=body,
@@ -3156,7 +3157,7 @@ class AsyncAgents(AsyncResource):
 
         ``GET /agents/{id}`` (getAgent).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/agents/{id}',
             path_params={'id': id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -3167,7 +3168,7 @@ class AsyncAgents(AsyncResource):
 
         ``PUT /agents/{id}/draft`` (saveAgentDraft).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'put', '/agents/{id}/draft',
             path_params={'id': id}, query={},
             body=body,
@@ -3180,7 +3181,7 @@ class AsyncAgents(AsyncResource):
 
         ``POST /agents/{id}/validate`` (validateAgent).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'post', '/agents/{id}/validate',
             path_params={'id': id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -3191,7 +3192,7 @@ class AsyncAgents(AsyncResource):
 
         ``POST /agents/{id}/test`` (testAgent).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'post', '/agents/{id}/test',
             path_params={'id': id}, query={},
             body=body,
@@ -3203,7 +3204,7 @@ class AsyncAgents(AsyncResource):
 
         ``POST /agents/{id}/publish`` (publishAgent).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'post', '/agents/{id}/publish',
             path_params={'id': id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -3214,7 +3215,7 @@ class AsyncAgents(AsyncResource):
 
         ``POST /cases/{id}/test/{action}`` (driveAgentTest).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'post', '/cases/{id}/test/{action}',
             path_params={'id': case_id, 'action': action}, query={},
             body=body,
@@ -3231,7 +3232,7 @@ class AsyncChatConversations(AsyncResource):
 
         ``GET /chat/conversations`` (listChatConversations).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/chat/conversations',
             path_params={}, query={'status': status, 'channel': channel, 'agent_id': agent_id, 'label': label, 'q': q, 'from': from_, 'to': to, 'limit': limit, 'cursor': cursor},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -3253,7 +3254,7 @@ class AsyncChatConversations(AsyncResource):
         Gets an automatic Idempotency-Key, so it is safe to retry.
         May answer a PendingApproval (HTTP 202) instead of doing the work; see is_pending_approval().
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'post', '/chat/conversations',
             path_params={}, query={},
             body=body,
@@ -3265,7 +3266,7 @@ class AsyncChatConversations(AsyncResource):
 
         ``GET /chat/conversations/{id}`` (getChatConversation).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/chat/conversations/{id}',
             path_params={'id': id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -3276,7 +3277,7 @@ class AsyncChatConversations(AsyncResource):
 
         ``GET /chat/conversations/{id}/messages`` (listChatMessages).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/chat/conversations/{id}/messages',
             path_params={'id': id}, query={'limit': limit, 'cursor': cursor},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -3298,7 +3299,7 @@ class AsyncChatConversations(AsyncResource):
         Gets an automatic Idempotency-Key, so it is safe to retry.
         May answer a PendingApproval (HTTP 202) instead of doing the work; see is_pending_approval().
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'post', '/chat/conversations/{id}/messages',
             path_params={'id': id}, query={},
             body=body,
@@ -3315,7 +3316,7 @@ class AsyncChatContacts(AsyncResource):
 
         ``GET /chat/contacts`` (listChatContacts).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/chat/contacts',
             path_params={}, query={'q': q, 'label': label, 'type': type, 'channel': channel, 'limit': limit, 'cursor': cursor},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -3335,7 +3336,7 @@ class AsyncChatContacts(AsyncResource):
 
         ``GET /chat/contacts/{id}`` (getChatContact).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/chat/contacts/{id}',
             path_params={'id': id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -3346,7 +3347,7 @@ class AsyncChatContacts(AsyncResource):
 
         ``PATCH /chat/contacts/{id}`` (updateChatContact).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'patch', '/chat/contacts/{id}',
             path_params={'id': id}, query={},
             body=body,
@@ -3368,7 +3369,7 @@ class AsyncChat(AsyncResource):
 
         ``GET /chat/channels`` (listChatChannels).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/chat/channels',
             path_params={}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -3384,7 +3385,7 @@ class AsyncCrm(AsyncResource):
 
         ``GET /crm/setup`` (getCrmSetup).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/crm/setup',
             path_params={}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -3395,7 +3396,7 @@ class AsyncCrm(AsyncResource):
 
         ``GET /crm/filter_schema`` (getCrmFilterSchema).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/crm/filter_schema',
             path_params={}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -3406,7 +3407,7 @@ class AsyncCrm(AsyncResource):
 
         ``POST /crm/records/search`` (searchCrmRecords).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'post', '/crm/records/search',
             path_params={}, query={},
             body=body,
@@ -3418,7 +3419,7 @@ class AsyncCrm(AsyncResource):
 
         ``POST /crm/records/query`` (queryCrmRecords).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'post', '/crm/records/query',
             path_params={}, query={'limit': limit, 'cursor': cursor},
             body=body,
@@ -3430,7 +3431,7 @@ class AsyncCrm(AsyncResource):
 
         ``POST /crm/records/query/count`` (countCrmRecords).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'post', '/crm/records/query/count',
             path_params={}, query={},
             body=body,
@@ -3442,7 +3443,7 @@ class AsyncCrm(AsyncResource):
 
         ``POST /crm/records/query/stage_counts`` (countCrmRecordsByStage).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'post', '/crm/records/query/stage_counts',
             path_params={}, query={},
             body=body,
@@ -3454,7 +3455,7 @@ class AsyncCrm(AsyncResource):
 
         ``GET /crm/records/{id}`` (getCrmRecord).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/crm/records/{id}',
             path_params={'id': id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -3465,7 +3466,7 @@ class AsyncCrm(AsyncResource):
 
         ``PATCH /crm/records/{id}`` (updateCrmRecord).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'patch', '/crm/records/{id}',
             path_params={'id': id}, query={},
             body=body,
@@ -3477,7 +3478,7 @@ class AsyncCrm(AsyncResource):
 
         ``GET /crm/records/{id}/timeline`` (getCrmRecordTimeline).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/crm/records/{id}/timeline',
             path_params={'id': id}, query={'before': before, 'limit': limit, 'kind': kind, 'channel': channel, 'include': include},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -3488,7 +3489,7 @@ class AsyncCrm(AsyncResource):
 
         ``GET /crm/records/{id}/stage_gate`` (getCrmStageGate).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/crm/records/{id}/stage_gate',
             path_params={'id': id}, query={'to': to},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -3499,7 +3500,7 @@ class AsyncCrm(AsyncResource):
 
         ``GET /crm/records/{id}/documents`` (listCrmRecordDocuments).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/crm/records/{id}/documents',
             path_params={'id': id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -3510,7 +3511,7 @@ class AsyncCrm(AsyncResource):
 
         ``GET /crm/records/{id}/files`` (listCrmRecordFiles).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/crm/records/{id}/files',
             path_params={'id': id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -3521,7 +3522,7 @@ class AsyncCrm(AsyncResource):
 
         ``POST /crm/records/{id}/files`` (attachCrmFile).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'post', '/crm/records/{id}/files',
             path_params={'id': id}, query={},
             body=body,
@@ -3534,7 +3535,7 @@ class AsyncCrm(AsyncResource):
 
         ``GET /crm/records/{id}/forms_checklist`` (getCrmFormsChecklist).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/crm/records/{id}/forms_checklist',
             path_params={'id': id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -3545,7 +3546,7 @@ class AsyncCrm(AsyncResource):
 
         ``GET /crm/records/{id}/submissions`` (listCrmFormSubmissions).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/crm/records/{id}/submissions',
             path_params={'id': id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -3556,7 +3557,7 @@ class AsyncCrm(AsyncResource):
 
         ``GET /crm/records/{id}/form_drafts`` (listCrmFormDrafts).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/crm/records/{id}/form_drafts',
             path_params={'id': id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -3567,7 +3568,7 @@ class AsyncCrm(AsyncResource):
 
         ``GET /crm/forms`` (listCrmForms).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/crm/forms',
             path_params={}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -3578,7 +3579,7 @@ class AsyncCrm(AsyncResource):
 
         ``GET /crm/follow_ups`` (listCrmFollowUps).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/crm/follow_ups',
             path_params={}, query={'view': view, 'status': status, 'due': due, 'assignee': assignee, 'contact': contact, 'tz': tz, 'limit': limit, 'cursor': cursor},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -3598,7 +3599,7 @@ class AsyncCrm(AsyncResource):
 
         ``GET /crm/follow_ups/stats`` (getCrmFollowUpStats).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/crm/follow_ups/stats',
             path_params={}, query={'tz': tz},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -3609,7 +3610,7 @@ class AsyncCrm(AsyncResource):
 
         ``GET /crm/my_work`` (getCrmMyWork).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/crm/my_work',
             path_params={}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -3620,7 +3621,7 @@ class AsyncCrm(AsyncResource):
 
         ``GET /crm/views`` (listCrmViews).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/crm/views',
             path_params={}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -3631,7 +3632,7 @@ class AsyncCrm(AsyncResource):
 
         ``POST /crm/views`` (saveCrmView).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'post', '/crm/views',
             path_params={}, query={},
             body=body,
@@ -3643,7 +3644,7 @@ class AsyncCrm(AsyncResource):
 
         ``GET /crm/summary`` (getCrmSummary).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/crm/summary',
             path_params={}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -3654,7 +3655,7 @@ class AsyncCrm(AsyncResource):
 
         ``GET /crm/stage_counts`` (getCrmStageCounts).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/crm/stage_counts',
             path_params={}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -3665,7 +3666,7 @@ class AsyncCrm(AsyncResource):
 
         ``GET /crm/speed`` (getCrmSpeed).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/crm/speed',
             path_params={}, query={'period': period},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -3676,7 +3677,7 @@ class AsyncCrm(AsyncResource):
 
         ``GET /crm/duplicates`` (listCrmDuplicates).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/crm/duplicates',
             path_params={}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -3687,7 +3688,7 @@ class AsyncCrm(AsyncResource):
 
         ``POST /crm/ask`` (askCrm).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'post', '/crm/ask',
             path_params={}, query={},
             body=body,
@@ -3699,7 +3700,7 @@ class AsyncCrm(AsyncResource):
 
         ``POST /crm/records/{id}/notes`` (addCrmNote).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'post', '/crm/records/{id}/notes',
             path_params={'id': id}, query={},
             body=body,
@@ -3711,7 +3712,7 @@ class AsyncCrm(AsyncResource):
 
         ``POST /crm/records/{id}/follow_ups`` (createCrmFollowUp).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'post', '/crm/records/{id}/follow_ups',
             path_params={'id': id}, query={},
             body=body,
@@ -3723,7 +3724,7 @@ class AsyncCrm(AsyncResource):
 
         ``PATCH /crm/follow_ups/{id}`` (updateCrmFollowUp).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'patch', '/crm/follow_ups/{id}',
             path_params={'id': id}, query={},
             body=body,
@@ -3735,7 +3736,7 @@ class AsyncCrm(AsyncResource):
 
         ``POST /crm/records`` (createCrmRecord).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'post', '/crm/records',
             path_params={}, query={},
             body=body,
@@ -3747,7 +3748,7 @@ class AsyncCrm(AsyncResource):
 
         ``PUT /crm/records/{id}/stage_checks/{stage}/{check}`` (setCrmStageCheck).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'put', '/crm/records/{id}/stage_checks/{stage}/{check}',
             path_params={'id': id, 'stage': stage, 'check': check}, query={},
             body=body,
@@ -3759,7 +3760,7 @@ class AsyncCrm(AsyncResource):
 
         ``POST /crm/records/{id}/ref_no`` (assignCrmReferenceNo).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'post', '/crm/records/{id}/ref_no',
             path_params={'id': id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -3770,7 +3771,7 @@ class AsyncCrm(AsyncResource):
 
         ``POST /crm/records/{id}/documents/{type}/status`` (setCrmDocumentStatus).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'post', '/crm/records/{id}/documents/{type}/status',
             path_params={'id': id, 'type': type}, query={},
             body=body,
@@ -3782,7 +3783,7 @@ class AsyncCrm(AsyncResource):
 
         ``PUT /crm/records/{id}/forms/{form_id}/draft`` (saveCrmFormDraft).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'put', '/crm/records/{id}/forms/{form_id}/draft',
             path_params={'id': id, 'form_id': form_id}, query={},
             body=body,
@@ -3794,7 +3795,7 @@ class AsyncCrm(AsyncResource):
 
         ``POST /crm/records/{id}/doc_drafts`` (draftCrmDocument).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'post', '/crm/records/{id}/doc_drafts',
             path_params={'id': id}, query={},
             body=body,
@@ -3807,7 +3808,7 @@ class AsyncCrm(AsyncResource):
         ``POST /crm/records/{id}/stage_moves`` (moveCrmRecordStage).
         May answer a PendingApproval (HTTP 202) instead of doing the work; see is_pending_approval().
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'post', '/crm/records/{id}/stage_moves',
             path_params={'id': id}, query={},
             body=body,
@@ -3820,7 +3821,7 @@ class AsyncCrm(AsyncResource):
         ``POST /crm/records/{id}/forms/{form_id}/submissions`` (submitCrmForm).
         May answer a PendingApproval (HTTP 202) instead of doing the work; see is_pending_approval().
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'post', '/crm/records/{id}/forms/{form_id}/submissions',
             path_params={'id': id, 'form_id': form_id}, query={},
             body=body,
@@ -3833,7 +3834,7 @@ class AsyncCrm(AsyncResource):
         ``POST /crm/records/{id}/forms/{form_id}/links`` (createCrmFormLink).
         May answer a PendingApproval (HTTP 202) instead of doing the work; see is_pending_approval().
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'post', '/crm/records/{id}/forms/{form_id}/links',
             path_params={'id': id, 'form_id': form_id}, query={},
             body=body,
@@ -3846,7 +3847,7 @@ class AsyncCrm(AsyncResource):
         ``POST /crm/records/{id}/upload_links`` (createCrmUploadLink).
         May answer a PendingApproval (HTTP 202) instead of doing the work; see is_pending_approval().
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'post', '/crm/records/{id}/upload_links',
             path_params={'id': id}, query={},
             body=body,
@@ -3858,7 +3859,7 @@ class AsyncCrm(AsyncResource):
 
         ``POST /crm/imports/columns`` (guessCrmImportColumns).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'post', '/crm/imports/columns',
             path_params={}, query={},
             body=body,
@@ -3871,7 +3872,7 @@ class AsyncCrm(AsyncResource):
         ``POST /crm/imports`` (importCrmRecords).
         May answer a PendingApproval (HTTP 202) instead of doing the work; see is_pending_approval().
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'post', '/crm/imports',
             path_params={}, query={},
             body=body,
@@ -3888,7 +3889,7 @@ class AsyncDialer(AsyncResource):
 
         ``GET /dialer/sessions`` (listDialerSessions).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/dialer/sessions',
             path_params={}, query={'status': status, 'limit': limit, 'cursor': cursor},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -3908,7 +3909,7 @@ class AsyncDialer(AsyncResource):
 
         ``GET /dialer/sessions/{id}`` (getDialerSession).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/dialer/sessions/{id}',
             path_params={'id': id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -3919,7 +3920,7 @@ class AsyncDialer(AsyncResource):
 
         ``GET /dialer/analytics`` (getDialerAnalytics).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/dialer/analytics',
             path_params={}, query={'from': from_, 'to': to},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -3930,7 +3931,7 @@ class AsyncDialer(AsyncResource):
 
         ``GET /dialer/follow-ups`` (listDialerFollowUps).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/dialer/follow-ups',
             path_params={}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -3941,7 +3942,7 @@ class AsyncDialer(AsyncResource):
 
         ``GET /dialer/leads/{id}/brief`` (getDialerLeadBrief).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/dialer/leads/{id}/brief',
             path_params={'id': id}, query={'product_key': product_key},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -3957,7 +3958,7 @@ class AsyncWebhooks(AsyncResource):
 
         ``GET /webhook_endpoints`` (listWebhookEndpoints).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/webhook_endpoints',
             path_params={}, query={'limit': limit, 'cursor': cursor},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -3976,8 +3977,9 @@ class AsyncWebhooks(AsyncResource):
         """Create a webhook endpoint.
 
         ``POST /webhook_endpoints`` (createWebhookEndpoint).
+        Gets an automatic Idempotency-Key, so it is safe to retry.
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'post', '/webhook_endpoints',
             path_params={}, query={},
             body=body,
@@ -3989,7 +3991,7 @@ class AsyncWebhooks(AsyncResource):
 
         ``GET /webhook_endpoints/{id}`` (getWebhookEndpoint).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/webhook_endpoints/{id}',
             path_params={'id': id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -4000,7 +4002,7 @@ class AsyncWebhooks(AsyncResource):
 
         ``PATCH /webhook_endpoints/{id}`` (updateWebhookEndpoint).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'patch', '/webhook_endpoints/{id}',
             path_params={'id': id}, query={},
             body=body,
@@ -4012,7 +4014,7 @@ class AsyncWebhooks(AsyncResource):
 
         ``DELETE /webhook_endpoints/{id}`` (deleteWebhookEndpoint).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'delete', '/webhook_endpoints/{id}',
             path_params={'id': id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -4023,7 +4025,7 @@ class AsyncWebhooks(AsyncResource):
 
         ``GET /webhook_endpoints/{id}/deliveries`` (listWebhookDeliveries).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/webhook_endpoints/{id}/deliveries',
             path_params={'id': id}, query={'status': status, 'limit': limit, 'cursor': cursor},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -4043,7 +4045,7 @@ class AsyncWebhooks(AsyncResource):
 
         ``GET /events`` (listEventTypes).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/events',
             path_params={}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -4059,7 +4061,7 @@ class AsyncOrganization(AsyncResource):
 
         ``GET /organization`` (getOrganization).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/organization',
             path_params={}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -4070,7 +4072,7 @@ class AsyncOrganization(AsyncResource):
 
         ``GET /organization/members`` (listOrganizationMembers).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/organization/members',
             path_params={}, query={'limit': limit, 'cursor': cursor},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -4090,7 +4092,7 @@ class AsyncOrganization(AsyncResource):
 
         ``GET /organization/integrations`` (listOrganizationIntegrations).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/organization/integrations',
             path_params={}, query={'limit': limit, 'cursor': cursor},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -4110,7 +4112,7 @@ class AsyncOrganization(AsyncResource):
 
         ``GET /organization/api_keys`` (listOrganizationApiKeys).
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/organization/api_keys',
             path_params={}, query={'limit': limit, 'cursor': cursor},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -4141,7 +4143,7 @@ class AsyncSales(AsyncResource):
         ``GET /sales/plays`` (listSalesPlays).
         Experimental: the Sales API is switched off for every organization, so these calls answer an error until it is switched on for yours. Names and shapes may change without a major version.
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/sales/plays',
             path_params={}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -4153,7 +4155,7 @@ class AsyncSales(AsyncResource):
         ``GET /sales/plays/{slug}/runs`` (listSalesPlayRuns).
         Experimental: the Sales API is switched off for every organization, so these calls answer an error until it is switched on for yours. Names and shapes may change without a major version.
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/sales/plays/{slug}/runs',
             path_params={'slug': slug}, query={'limit': limit},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -4165,7 +4167,7 @@ class AsyncSales(AsyncResource):
         ``GET /sales/plays/{slug}/prospects`` (listSalesProspects).
         Experimental: the Sales API is switched off for every organization, so these calls answer an error until it is switched on for yours. Names and shapes may change without a major version.
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/sales/plays/{slug}/prospects',
             path_params={'slug': slug}, query={'country': country, 'email_status': email_status, 'limit': limit, 'cursor': cursor},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -4177,7 +4179,7 @@ class AsyncSales(AsyncResource):
         ``POST /sales/plays/{slug}/run`` (runSalesPlay).
         Experimental: the Sales API is switched off for every organization, so these calls answer an error until it is switched on for yours. Names and shapes may change without a major version.
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'post', '/sales/plays/{slug}/run',
             path_params={'slug': slug}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -4189,7 +4191,7 @@ class AsyncSales(AsyncResource):
         ``GET /sales/drafts`` (listSalesDrafts).
         Experimental: the Sales API is switched off for every organization, so these calls answer an error until it is switched on for yours. Names and shapes may change without a major version.
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/sales/drafts',
             path_params={}, query={'status': status, 'kind': kind, 'play': play, 'limit': limit, 'cursor': cursor},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -4201,7 +4203,7 @@ class AsyncSales(AsyncResource):
         ``PATCH /sales/drafts/{id}`` (updateSalesDraft).
         Experimental: the Sales API is switched off for every organization, so these calls answer an error until it is switched on for yours. Names and shapes may change without a major version.
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'patch', '/sales/drafts/{id}',
             path_params={'id': id}, query={},
             body=body,
@@ -4214,7 +4216,7 @@ class AsyncSales(AsyncResource):
         ``POST /sales/drafts/{id}/skip`` (skipSalesDraft).
         Experimental: the Sales API is switched off for every organization, so these calls answer an error until it is switched on for yours. Names and shapes may change without a major version.
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'post', '/sales/drafts/{id}/skip',
             path_params={'id': id}, query={},
             body=body,
@@ -4227,7 +4229,7 @@ class AsyncSales(AsyncResource):
         ``GET /sales/threads`` (listSalesThreads).
         Experimental: the Sales API is switched off for every organization, so these calls answer an error until it is switched on for yours. Names and shapes may change without a major version.
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/sales/threads',
             path_params={}, query={'label': label, 'play': play, 'limit': limit, 'cursor': cursor},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
@@ -4239,7 +4241,7 @@ class AsyncSales(AsyncResource):
         ``GET /sales/threads/{id}`` (getSalesThread).
         Experimental: the Sales API is switched off for every organization, so these calls answer an error until it is switched on for yours. Names and shapes may change without a major version.
         """
-        return await self._do(  # type: ignore[no-any-return]
+        return await self._do(
             'get', '/sales/threads/{id}',
             path_params={'id': id}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,

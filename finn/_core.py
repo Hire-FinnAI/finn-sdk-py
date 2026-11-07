@@ -36,6 +36,7 @@ AUTO_IDEMPOTENCY_ROUTES = frozenset(
         "post /chat/conversations/{id}/messages",
         "post /agents",
         "post /agents/{id}/cases",
+        "post /webhook_endpoints",
     }
 )
 

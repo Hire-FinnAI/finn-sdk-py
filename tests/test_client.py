@@ -12,6 +12,7 @@ from helpers import async_client, body_of, client, json_, text_
 
 from finn import (
     honours_idempotency_key,
+    AUTO_IDEMPOTENCY_ROUTES,
     BadRequestError,
     ConflictError,
     Finn,
@@ -247,6 +248,15 @@ class TestRetries:
         assert honours_idempotency_key("post", "/webhook_endpoints")
         assert not honours_idempotency_key("patch", "/webhook_endpoints/e1")
         assert not honours_idempotency_key("post", "/webhook_endpoints/e1/rotate_secret")
+
+    def test_gives_webhook_endpoint_create_an_automatic_key_reused_on_retry(self):
+        finn, calls, _ = client([json_(503, {"error": "unavailable"}), json_(201, {})])
+        finn.webhooks.create_endpoint({"url": "https://example.com/h", "events": ["call.completed"]})
+        assert len(calls) == 2
+        key = calls[0].headers.get("idempotency-key")
+        assert key
+        assert calls[1].headers["idempotency-key"] == key
+        assert "post /webhook_endpoints" in AUTO_IDEMPOTENCY_ROUTES
 
     def test_does_not_retry_a_keyed_post_on_a_route_that_ignores_the_key(self):
         finn, calls, _ = client([json_(503, {"error": "unavailable"}), json_(201, {})])

@@ -162,8 +162,8 @@ a retry after a lost response could create a duplicate. Check with `finn.honours
 ## Idempotency keys
 
 The SDK adds a random `Idempotency-Key` to `calls.create`, `phone_numbers.rent`, `deployments.create_outbound`,
-`deployments.create_inbound`, `chat.conversations.start`, `chat.conversations.send`, `agents.create` and
-`cases.start`, and keeps it across retries. Pass your own to make a retry from your side safe too, or `False` to
+`deployments.create_inbound`, `chat.conversations.start`, `chat.conversations.send`, `agents.create`,
+`cases.start` and `webhooks.create_endpoint`, and keeps it across retries. Pass your own to make a retry from your side safe too, or `False` to
 send none:
 
 ```python
