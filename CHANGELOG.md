@@ -19,6 +19,9 @@ First release on PyPI since 0.2.0 (0.3.0 was tagged in the repo but never upload
 
 - Spec refreshed: error responses use the nested `{"error": {"code", "message", ...}}` shape the API returns,
   `rotate_secret` takes an optional `Idempotency-Key`, case-event paging.
+- Pagination no longer stops on an empty page that still carries a cursor. The API filters some lists after paging
+  (cases a member token may not see, chat notes), so `cases` and chat message lists could end early. A cursor that
+  does not move, or an empty offset/page page, still ends the list.
 - Legacy error bodies that name fields as a string list (for example `unsupported_field`) now fill `FinnError.fields`.
 - Retries: the waits of one request (backoff and `Retry-After`) add up to at most `max_retry_wait`, default 20 s;
   a retry that would go past it throws the last error instead.

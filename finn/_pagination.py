@@ -59,7 +59,7 @@ def cursor_strategy(key: str = "data") -> PageStrategy:
     def next_query(res: Any, query: Query, count: int) -> Optional[Query]:
         r = _rec(res)
         cursor = r.get("next_cursor")
-        if r.get("has_more") is False or not isinstance(cursor, str) or cursor == "":
+        if r.get("has_more") is False or not isinstance(cursor, str) or cursor == "" or cursor == query.get("cursor"):
             return None
         return {**query, "cursor": cursor}
 
@@ -70,6 +70,8 @@ def offset_strategy(key: str = "data") -> PageStrategy:
     """``?limit=&offset=`` lists answering ``{data, limit, offset, total?}``."""
 
     def next_query(res: Any, query: Query, count: int) -> Optional[Query]:
+        if count == 0:
+            return None
         r = _rec(res)
         offset = _num(r.get("offset"))
         if offset is None:
@@ -92,6 +94,8 @@ def page_strategy(key: str) -> PageStrategy:
     """``?page=&page_size=`` lists answering ``{[key], page, totalPages}``."""
 
     def next_query(res: Any, query: Query, count: int) -> Optional[Query]:
+        if count == 0:
+            return None
         r = _rec(res)
         page = _num(r.get("page"))
         if page is None:
@@ -109,7 +113,7 @@ def before_strategy(key: str, next_key: str) -> PageStrategy:
 
     def next_query(res: Any, query: Query, count: int) -> Optional[Query]:
         nxt = _rec(res).get(next_key)
-        if nxt is None or nxt == "":
+        if nxt is None or nxt == "" or str(nxt) == str(query.get("before", "")):
             return None
         return {**query, "before": nxt}
 
@@ -145,8 +149,9 @@ class SyncPaginator(Generic[T]):
         while query is not None:
             res = self._fetch_page(query)
             yield res
-            count = len(self._strategy.items(res))
-            query = None if count == 0 else self._strategy.next_query(res, query, count)
+            # An empty page ends the list only when the strategy finds no next page: the API filters some lists
+            # after paging (hidden cases, chat notes), so a page can come back empty with a cursor that moves on.
+            query = self._strategy.next_query(res, query, len(self._strategy.items(res)))
 
     def __iter__(self) -> Iterator[T]:
         for page in self.pages():
@@ -178,8 +183,9 @@ class AsyncPaginator(Generic[T]):
         while query is not None:
             res = await self._fetch_page(query)
             yield res
-            count = len(self._strategy.items(res))
-            query = None if count == 0 else self._strategy.next_query(res, query, count)
+            # An empty page ends the list only when the strategy finds no next page: the API filters some lists
+            # after paging (hidden cases, chat notes), so a page can come back empty with a cursor that moves on.
+            query = self._strategy.next_query(res, query, len(self._strategy.items(res)))
 
     async def _items(self) -> AsyncIterator[T]:
         async for page in self.pages():

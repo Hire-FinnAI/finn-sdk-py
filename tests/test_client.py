@@ -462,10 +462,17 @@ class TestPagination:
                           json_(200, {"approvals": [{"id": "y"}], "next_cursor": None})])
         assert [x["id"] for x in a.approvals.list_all().to_list()] == ["x", "y"]
 
-        c, c_calls, _ = client([json_(200, {"cases": [{"id": "1"}], "next_before": "2026-11-01T00:00:00Z"}),
-                                json_(200, {"cases": [{"id": "2"}], "next_before": None})])
-        assert len(c.cases.list_all().to_list()) == 2
-        assert qparam(c_calls[1], "before") == "2026-11-01T00:00:00Z"
+        # The runtime sets next_before on every page with cases and drops hidden cases after paging, so a page can be
+        # empty with next_before set; only an empty page without it ends the list.
+        c, c_calls, _ = client([
+            json_(200, {"cases": [{"id": "1"}], "next_before": "2026-11-03T00:00:00Z"}),
+            json_(200, {"cases": [], "next_before": "2026-11-02T00:00:00Z"}),
+            json_(200, {"cases": [{"id": "2"}], "next_before": "2026-11-01T00:00:00Z"}),
+            json_(200, {"cases": [], "next_before": None}),
+        ])
+        assert [x["id"] for x in c.cases.list_all().to_list()] == ["1", "2"]
+        assert [qparam(x, "before") for x in c_calls[1:]] == [
+            "2026-11-03T00:00:00Z", "2026-11-02T00:00:00Z", "2026-11-01T00:00:00Z"]
 
         r, r_calls, _ = client([
             json_(200, {"contacts": [{"id": "r1"}], "page": 1, "pageSize": 1, "totalCount": 2, "totalPages": 2}),
@@ -486,10 +493,23 @@ class TestPagination:
             break
         assert pages[0]["next_cursor"] == "c"
 
-    def test_stops_on_an_empty_page(self):
+    def test_follows_a_cursor_past_an_empty_page(self):
+        # finn-chat drops notes after paging, so a page of notes comes back empty with a cursor.
+        finn, calls, _ = client([
+            json_(200, {"data": [], "next_cursor": "c1", "has_more": True}),
+            json_(200, {"data": [{"id": "m1"}], "next_cursor": None, "has_more": False}),
+        ])
+        assert [m["id"] for m in finn.chat.conversations.list_all_messages("conv_1").to_list()] == ["m1"]
+        assert len(calls) == 2
+
+    def test_stops_when_the_cursor_does_not_move_and_on_an_empty_offset_page(self):
         finn, calls, _ = client([json_(200, {"data": [], "next_cursor": "loop", "has_more": True})])
         assert finn.agents.list_all().to_list() == []
-        assert len(calls) == 1
+        assert len(calls) == 2
+
+        o, o_calls, _ = client([json_(200, {"success": True, "data": [], "limit": 20, "offset": 0})])
+        assert o.calls.list_all().to_list() == []
+        assert len(o_calls) == 1
 
 
 # ---------------------------------------------------------------- pending approval (202)
@@ -531,7 +551,14 @@ class TestPendingApproval:
         assert waits == [1, 1]
         assert all(str(c.url) == "https://api.hirefinn.ai/v1/approvals/hold_1" for c in calls)
 
-    def test_wait_for_approval_treats_an_operator_approval_leaving_open_as_final_and_unwraps_data(self):
+    def test_wait_for_approval_treats_an_operator_approval_leaving_open_as_final(self):
+        # Unwrapped, as the API answers GET /approvals/{id}.
+        finn, _, _ = client([json_(200, {"id": "a1", "status": "open"}),
+                             json_(200, {"id": "a1", "status": "decided"})])
+        out = finn.wait_for_approval("a1", sleep=lambda s: None)
+        assert out["status"] == "decided"
+
+    def test_wait_for_approval_also_unwraps_a_data_body(self):
         finn, _, _ = client([json_(200, {"data": {"id": "a1", "status": "open"}}),
                              json_(200, {"data": {"id": "a1", "status": "decided"}})])
         out = finn.wait_for_approval("a1", sleep=lambda s: None)
