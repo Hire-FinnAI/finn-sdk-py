@@ -10,7 +10,7 @@ chat.
 - Retries with backoff on network errors, 408, 429, 502, 503 and 504, honouring `Retry-After`; writes only when it is safe.
 - `verify_webhook()` for signed webhook deliveries.
 - Automatic `Idempotency-Key` on spending and outward writes, kept the same across retries.
-- One iterator over every list style (cursor, offset, page, before).
+- One iterator over every list style (cursor, offset, page, before, after).
 - Typed exceptions for the API's error shapes; held writes come back as `PendingApproval`.
 
 Python 3.9 or newer.
@@ -18,8 +18,7 @@ Python 3.9 or newer.
 ## Install
 
 ```sh
-pip install hirefinn           # not published yet; until then:
-pip install git+https://github.com/Hire-FinnAI/finn-sdk-py.git
+pip install hirefinn
 ```
 
 The distribution is called `hirefinn` (the name `finn` on PyPI belongs to another project); you import `finn`.
@@ -30,23 +29,27 @@ The distribution is called `hirefinn` (the name `finn` on PyPI belongs to anothe
 from finn import Finn, is_pending_approval
 
 finn = Finn()  # reads FINN_API_KEY; or Finn(api_key="finn_live_...")
+# Note: finn_test_... keys can read and build, but outward actions such as calls.create answer 403 `test_mode`.
 
 # Place a call
 call = finn.calls.create({"finn_id": "8f14e45f-...", "to_number": "4155550142", "country_code": "1"})
 if is_pending_approval(call):
     print("Waiting for a person to approve:", call.approve_url)
     outcome = finn.wait_for_approval(call.approval_id)
+    print(outcome["status"])  # succeeded | failed | declined | expired
 else:
     call_uuid = call["data"]["call_uuid"]
-    print(call_uuid)
-
-# Read one
-c = finn.calls.retrieve(call_uuid)
-print(c["data"]["status"])
+    # Read it back
+    c = finn.calls.retrieve(call_uuid)
+    print(c["data"]["status"])
 
 # Every completed call, page by page under the hood
 for summary in finn.calls.list_all(status="completed", limit=100):
     print(summary["call_uuid"])
+
+# A case's events, oldest first (pages follow next_after)
+for event in finn.cases.list_all_events("5c1e8f3a-9b2d-4a7e-8c6f-1d3b5a7e9f20"):
+    print(event["seq"], event["type"])
 
 # CRM
 rec = finn.contacts.create({"kind": "contact", "name": "Ada Lovelace", "phone": "+14155550142"})
@@ -77,7 +80,7 @@ Use the client as a context manager (`with Finn() as finn:`) or call `finn.close
 | `api_key` | env `FINN_API_KEY` | `finn_live_...` org key, `finn_test_...` test key, or OAuth `finn_oat_...` token |
 | `base_url` | `https://api.hirefinn.ai/v1` | |
 | `org` | none | `Finn-Org` header, for tokens that can use more than one org |
-| `version` | none | Pins the API version (`Finn-Version` header), e.g. `"2026-11-01"` |
+| `version` | `"2026-11-01"` | `Finn-Version` header (`DEFAULT_FINN_VERSION`, the version this SDK was built against); `None` sends none |
 | `max_retries` | `2` | Retries after the first attempt |
 | `timeout` | `60` | Seconds per attempt |
 | `auto_idempotency` | `True` | Generate `Idempotency-Key` on spending/outward writes |
@@ -103,7 +106,7 @@ replace `Authorization`.
 | `wallet` | `retrieve`, `list_transactions`, `list_all_transactions` |
 | `do_not_call` | `list`, `list_all`, `add`, `remove` |
 | `contacts` | `list`, `list_all`, `create`, `retrieve`, `update`, `timeline`, `timeline_all`, `add_note`, `list_kinds`, `list_fields` |
-| `cases` | `list`, `list_all`, `retrieve`, `list_events`, `start` |
+| `cases` | `list`, `list_all`, `retrieve`, `list_events`, `list_all_events`, `start` |
 | `approvals` | `list`, `list_all`, `retrieve`, `decide`, `approve`, `reject`, `wait` |
 | `agents` | `list`, `list_all`, `create`, `draft`, `retrieve`, `save_draft`, `validate`, `test`, `publish`, `drive_test` |
 | `chat` | `list_channels`; `chat.conversations`: `list`, `list_all`, `start`, `retrieve`, `list_messages`, `list_all_messages`, `send`; `chat.contacts`: `list`, `list_all`, `retrieve`, `update` |
@@ -121,7 +124,7 @@ The SDK covers **165 of 165** operations in the spec (Finn API v1):
 | `finn.chat` | `get_agent`, `update_agent`, `test_agent` |
 | `finn.crm` | `get_setup`, `get_filter_schema`, `search_records`, `query_records`, `count_records`, `count_records_by_stage`, `get_record`, `update_record`, `get_record_timeline`, `get_stage_gate`, `list_record_documents`, `list_record_files`, `attach_file`, `get_forms_checklist`, `list_form_submissions`, `list_form_drafts`, `list_forms`, `list_follow_ups`, `list_all_follow_ups`, `get_follow_up_stats`, `get_my_work`, `list_views`, `save_view`, `get_summary`, `get_stage_counts`, `get_speed`, `list_duplicates`, `ask`, `add_note`, `create_follow_up`, `update_follow_up`, `create_record`, `set_stage_check`, `assign_reference_no`, `set_document_status`, `save_form_draft`, `draft_document`, `move_record_stage`, `submit_form`, `create_form_link`, `create_upload_link`, `guess_import_columns`, `import_records` |
 | `finn.dialer` | `list_sessions`, `list_all_sessions`, `get_session`, `get_analytics`, `list_follow_ups`, `get_lead_brief`, `mark_follow_up_done`, `set_call_disposition`, `add_call_note` |
-| `finn.webhooks` | `list_endpoints`, `list_all_endpoints`, `create_endpoint`, `get_endpoint`, `update_endpoint`, `delete_endpoint`, `list_deliveries`, `list_all_deliveries`, `test_endpoint`, `redeliver_delivery`, `rotate_endpoint_secret`, `list_event_types` |
+| `finn.webhooks` | `list_endpoints`, `list_all_endpoints`, `create_endpoint`, `get_endpoint`, `update_endpoint`, `delete_endpoint`, `list_deliveries`, `list_all_deliveries`, `list_event_types`, `test_endpoint`, `redeliver_delivery`, `rotate_endpoint_secret` |
 | `finn.organization` | `get`, `list_members`, `list_all_members`, `list_integrations`, `list_all_integrations`, `list_api_keys`, `list_all_api_keys`, `get_usage` |
 | `finn.sales` (experimental) | `list_plays`, `list_play_runs`, `list_prospects`, `run_play`, `list_drafts`, `update_draft`, `skip_draft`, `list_threads`, `get_thread` |
 <!-- generated:coverage:end -->
@@ -237,7 +240,9 @@ No HTTP answer at all raises `FinnConnectionError` (`FinnTimeoutError` when an a
 Outward and spending writes from OAuth and MCP callers may be held for a person to approve. They answer HTTP 202,
 which the SDK returns as a `PendingApproval` (`approval_id`, `approve_url`, `expires_at`, `action`, `summary`).
 The methods that can be held are `calls.create`, `phone_numbers.rent`, `deployments.create_outbound`,
-`cases.start`, `chat.conversations.start` and `chat.conversations.send`; their return types include
+`deployments.create_inbound`, `cases.start`, `chat.conversations.start`, `chat.conversations.send`,
+`chat.contacts.update`, `chat.update_agent`, `sales.run_play`, and the CRM writes `crm.move_record_stage`,
+`crm.submit_form`, `crm.create_form_link`, `crm.create_upload_link` and `crm.import_records`; their return types include
 `PendingApproval`, so check `is_pending_approval(res)` before reading fields such as `res["id"]`.
 `finn.wait_for_approval(id)` polls until the approval is decided and returns it; for a held request, `status` ends
 as `succeeded`, `failed`, `declined` or `expired`, and `result` holds the held request's own answer.

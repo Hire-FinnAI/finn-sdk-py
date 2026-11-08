@@ -11,6 +11,7 @@ from .._core import AsyncCore, SyncCore
 from .._pagination import (
     AsyncPaginator,
     SyncPaginator,
+    after_strategy,
     before_strategy,
     cursor_strategy,
     offset_strategy,
@@ -891,14 +892,23 @@ class Cases(Resource):
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
         )
 
-    def list_events(self, id: str, *, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> t.ListCaseEventsResponse:
+    def list_events(self, id: str, *, after: Optional[int] = None, limit: Optional[int] = None, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> t.ListCaseEventsResponse:
         """List a case's events.
 
         ``GET /cases/{id}/events`` (listCaseEvents).
         """
         return self._do(
             'get', '/cases/{id}/events',
-            path_params={'id': id}, query={},
+            path_params={'id': id}, query={'after': after, 'limit': limit},
+            idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
+        )
+
+    def list_all_events(self, id: str, *, after: Optional[int] = None, limit: Optional[int] = None, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> SyncPaginator[t.CaseEvent]:
+        """Every item of listCaseEvents, fetching pages as you iterate (after pagination).
+        """
+        return self._pager(
+            '/cases/{id}/events', after_strategy('events', 'next_after'),
+            path_params={'id': id}, query={'after': after, 'limit': limit},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
         )
 
@@ -2011,6 +2021,17 @@ class Webhooks(Resource):
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
         )
 
+    def list_event_types(self, *, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> t.EventTypeList:
+        """List webhook event types.
+
+        ``GET /events`` (listEventTypes).
+        """
+        return self._do(
+            'get', '/events',
+            path_params={}, query={},
+            idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
+        )
+
     def test_endpoint(self, id: str, *, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> t.WebhookTestResult:
         """Send a test event.
 
@@ -2041,17 +2062,6 @@ class Webhooks(Resource):
         return self._do(
             'post', '/webhook_endpoints/{id}/rotate_secret',
             path_params={'id': id}, query={},
-            idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
-        )
-
-    def list_event_types(self, *, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> t.EventTypeList:
-        """List webhook event types.
-
-        ``GET /events`` (listEventTypes).
-        """
-        return self._do(
-            'get', '/events',
-            path_params={}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
         )
 
@@ -3133,14 +3143,23 @@ class AsyncCases(AsyncResource):
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
         )
 
-    async def list_events(self, id: str, *, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> t.ListCaseEventsResponse:
+    async def list_events(self, id: str, *, after: Optional[int] = None, limit: Optional[int] = None, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> t.ListCaseEventsResponse:
         """List a case's events.
 
         ``GET /cases/{id}/events`` (listCaseEvents).
         """
         return await self._do(
             'get', '/cases/{id}/events',
-            path_params={'id': id}, query={},
+            path_params={'id': id}, query={'after': after, 'limit': limit},
+            idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
+        )
+
+    def list_all_events(self, id: str, *, after: Optional[int] = None, limit: Optional[int] = None, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> AsyncPaginator[t.CaseEvent]:
+        """Every item of listCaseEvents, fetching pages as you iterate (after pagination).
+        """
+        return self._pager(
+            '/cases/{id}/events', after_strategy('events', 'next_after'),
+            path_params={'id': id}, query={'after': after, 'limit': limit},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
         )
 
@@ -4253,6 +4272,17 @@ class AsyncWebhooks(AsyncResource):
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
         )
 
+    async def list_event_types(self, *, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> t.EventTypeList:
+        """List webhook event types.
+
+        ``GET /events`` (listEventTypes).
+        """
+        return await self._do(
+            'get', '/events',
+            path_params={}, query={},
+            idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
+        )
+
     async def test_endpoint(self, id: str, *, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> t.WebhookTestResult:
         """Send a test event.
 
@@ -4283,17 +4313,6 @@ class AsyncWebhooks(AsyncResource):
         return await self._do(
             'post', '/webhook_endpoints/{id}/rotate_secret',
             path_params={'id': id}, query={},
-            idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
-        )
-
-    async def list_event_types(self, *, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> t.EventTypeList:
-        """List webhook event types.
-
-        ``GET /events`` (listEventTypes).
-        """
-        return await self._do(
-            'get', '/events',
-            path_params={}, query={},
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
         )
 

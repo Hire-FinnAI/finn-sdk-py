@@ -4,6 +4,7 @@
 - offset (older voice lists: calls, finns, audiences, ...): ``?limit=&offset=`` -> ``{data, limit, offset, total?}``
 - page (contacts): ``?page=&page_size=`` -> ``{contacts, page, totalPages}``
 - before (cases, timeline): ``?before=`` -> ``{cases, next_before}`` or ``{items, next}``
+- after (case events): ``?after=&limit=`` -> ``{events, next_after}``
 
     for call in finn.calls.list_all(status="completed"): ...
     for page in finn.calls.list_all().pages(): ...
@@ -111,6 +112,21 @@ def before_strategy(key: str, next_key: str) -> PageStrategy:
         if nxt is None or nxt == "":
             return None
         return {**query, "before": nxt}
+
+    return PageStrategy(lambda res: _arr(_rec(res).get(key)), next_query)
+
+
+def after_strategy(key: str, next_key: str) -> PageStrategy:
+    """``?after=`` lists answering ``{[key], [next_key]}``, where ``next_key`` is the last sequence number on the page."""
+
+    def next_query(res: Any, query: Query, count: int) -> Optional[Query]:
+        nxt = _num(_rec(res).get(next_key))
+        if nxt is None or nxt == query.get("after"):
+            return None
+        limit = query.get("limit")
+        if limit is not None and count < int(limit):
+            return None
+        return {**query, "after": nxt}
 
     return PageStrategy(lambda res: _arr(_rec(res).get(key)), next_query)
 

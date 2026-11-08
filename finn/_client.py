@@ -7,6 +7,7 @@ import httpx
 
 from ._approval import ApprovalResult
 from ._core import (
+    DEFAULT_FINN_VERSION,
     DEFAULT_MAX_RETRIES,
     DEFAULT_MAX_RETRY_AFTER,
     DEFAULT_MAX_RETRY_WAIT,
@@ -67,7 +68,8 @@ class Finn(TypedRequest, SyncCore):
             Defaults to env FINN_API_KEY.
         base_url: Defaults to ``https://api.hirefinn.ai/v1``.
         org: Org to act in (Finn-Org header). Needed only for tokens that can use more than one org.
-        version: Pins the API version (Finn-Version header), a date such as ``2026-11-01``.
+        version: Pins the API version (Finn-Version header), a date such as ``2026-11-01``. Defaults to
+            ``DEFAULT_FINN_VERSION``, the version this SDK was built against; ``None`` sends no header.
         max_retries: Retries after the first attempt, on network errors, 408, 429, 502, 503 and 504. POST/PATCH are
             retried only with an Idempotency-Key on IDEMPOTENT_WRITE_ROUTES. Default 2.
         timeout: Timeout per attempt in seconds. Default 60.
@@ -88,7 +90,7 @@ class Finn(TypedRequest, SyncCore):
         api_key: Optional[str] = None,
         base_url: Optional[str] = None,
         org: Optional[str] = None,
-        version: Optional[str] = None,
+        version: Optional[str] = DEFAULT_FINN_VERSION,
         max_retries: int = DEFAULT_MAX_RETRIES,
         timeout: float = DEFAULT_TIMEOUT,
         auto_idempotency: bool = True,
@@ -151,7 +153,7 @@ class AsyncFinn(AsyncTypedRequest, AsyncCore):
         api_key: Optional[str] = None,
         base_url: Optional[str] = None,
         org: Optional[str] = None,
-        version: Optional[str] = None,
+        version: Optional[str] = DEFAULT_FINN_VERSION,
         max_retries: int = DEFAULT_MAX_RETRIES,
         timeout: float = DEFAULT_TIMEOUT,
         auto_idempotency: bool = True,

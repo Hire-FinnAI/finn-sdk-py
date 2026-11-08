@@ -8,29 +8,35 @@ from typing import Any, Dict, List, Optional, Union
 from .._compat import Literal, TypedDict
 
 
-class ErrorDetailsItem(TypedDict):
-    index: int
+class _V1ErrorErrorFieldsItemRequired(TypedDict):
+    field: str
+    code: str
     message: str
 
 
-class _ErrorRequired(TypedDict):
-    error: str
+class V1ErrorErrorFieldsItem(_V1ErrorErrorFieldsItemRequired, total=False):
+    value: Any
 
 
-class Error(_ErrorRequired, total=False):
-    "Every error has a stable `error` code and, except for `internal_error`, a human-readable `message`. Check `error`, not `message`. Some errors add the optional fields below."
+class _V1ErrorErrorRequired(TypedDict):
+    code: str
     message: str
-    action_url: str
-    details: List[ErrorDetailsItem]
-    deployment_id: Optional[str]
-    errors: List[Any]
-    required_credits: float
-    available_credits: float
-    transaction_id: str
+    fields: List[V1ErrorErrorFieldsItem]
+    request_id: Optional[str]
+    doc_url: str
+
+
+class V1ErrorError(_V1ErrorErrorRequired, total=False):
     required_scope: str
-    contact_id: str
-    fields: List[str]
-    allowed_answers: List[str]
+
+
+class V1Error(TypedDict):
+    "The error body of every endpoint. Check `error.code`, not `message`. `fields` lists each invalid input plus context entries for extra facts; `request_id` matches the `X-Request-Id` header; `doc_url` links the code's documentation."
+    error: V1ErrorError
+
+
+class Error(V1Error, total=False):
+    "Deprecated alias of `V1Error`, kept so clients generated from older versions of this spec still compile. Every error has the `V1Error` shape."
 
 
 class CreateCallRequest(TypedDict):
@@ -609,14 +615,8 @@ class DoNotCallEntry(TypedDict):
     created_at: str
 
 
-class _OperatorErrorRequired(TypedDict):
-    code: str
-    message: str
-
-
-class OperatorError(_OperatorErrorRequired, total=False):
-    "Errors from Finn Operator (cases and approvals) are passed through as Operator returns them: `code` instead of `error`. Errors raised before the request reaches Operator (key, scope, rate limit, a path ID that isn't a UUID, a missing `answer`) use the usual `Error` shape. Read `error ?? code`."
-    details: Any
+class OperatorError(V1Error, total=False):
+    "Deprecated alias of `V1Error`. Errors from Finn Operator (cases and approvals) have the `V1Error` shape too; Operator's own `{ code, message, details }` is rewritten (its `details` become `fields` context entries)."
 
 
 class _RedactedValueRequired(TypedDict):
@@ -1047,33 +1047,6 @@ class ApprovalRequestedEvent(TypedDict):
     occurred_at: str
     org_id: str
     data: ApprovalRequestedEventData
-
-
-class _V1ErrorErrorFieldsItemRequired(TypedDict):
-    field: str
-    code: str
-    message: str
-
-
-class V1ErrorErrorFieldsItem(_V1ErrorErrorFieldsItemRequired, total=False):
-    value: Any
-
-
-class _V1ErrorErrorRequired(TypedDict):
-    code: str
-    message: str
-    fields: List[V1ErrorErrorFieldsItem]
-    request_id: Optional[str]
-    doc_url: str
-
-
-class V1ErrorError(_V1ErrorErrorRequired, total=False):
-    required_scope: str
-
-
-class V1Error(TypedDict):
-    "The unified error body used by newer endpoints (Agents, Chat). Check `error.code`, not `message`. `fields` lists each invalid input; `request_id` matches the `X-Request-Id` header."
-    error: V1ErrorError
 
 
 class _AgentSummaryRequired(TypedDict):
@@ -1586,22 +1559,6 @@ class ApiHoldResult(TypedDict, total=False):
 ApiHold = TypedDict('ApiHold', {'id': 'str', 'object': "Literal['approval']", 'source': "Literal['api_hold']", 'status': "Literal['pending', 'running', 'succeeded', 'failed', 'declined', 'expired']", 'action': "Literal['call.create', 'phone_number.rent', 'deployment.create', 'chat.start', 'chat.send', 'case.start']", 'class': "Literal['outward', 'money']", 'summary': 'Optional[str]', 'approve_url': 'Optional[str]', 'expires_at': 'str', 'created_at': 'str', 'decided_at': 'Optional[str]', 'finished_at': 'Optional[str]', 'outcome_unknown': 'bool', 'result': 'Optional[ApiHoldResult]'}, total=False)
 
 
-class WebhookTestResult(TypedDict):
-    "The outcome of one test send."
-    object: Literal['webhook_test']
-    endpoint_id: str
-    event: Literal['webhook.test']
-    delivered: bool
-    response_status: Optional[int]
-    error: Optional[str]
-    duration_ms: int
-
-
-class WebhookEndpointRotated(WebhookEndpoint):
-    secret: str
-    previous_secret_expires_at: str
-
-
 class UsageReportDataCredentialsItemTotalsCalls(TypedDict):
     read: int
     write: int
@@ -1682,6 +1639,22 @@ UsageReportData = TypedDict('UsageReportData', {'from': 'str', 'to': 'str', 'gro
 
 class UsageReport(TypedDict):
     data: UsageReportData
+
+
+class WebhookTestResult(TypedDict):
+    "The outcome of one test send."
+    object: Literal['webhook_test']
+    endpoint_id: str
+    event: Literal['webhook.test']
+    delivered: bool
+    response_status: Optional[int]
+    error: Optional[str]
+    duration_ms: int
+
+
+class WebhookEndpointRotated(WebhookEndpoint):
+    secret: Optional[str]
+    previous_secret_expires_at: str
 
 
 class ListCallsResponse(TypedDict):

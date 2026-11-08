@@ -20,6 +20,9 @@ from ._errors import FinnConnectionError, FinnError, FinnSdkError, FinnTimeoutEr
 from ._types import FinnResponse
 from ._version import __version__
 
+#: The API version this SDK was built against, sent as Finn-Version unless ``version`` says otherwise.
+DEFAULT_FINN_VERSION = "2026-11-01"
+
 DEFAULT_BASE_URL = "https://api.hirefinn.ai/v1"
 DEFAULT_MAX_RETRIES = 2
 DEFAULT_TIMEOUT = 60.0
@@ -163,7 +166,7 @@ class BaseCore:
         api_key: Optional[str] = None,
         base_url: Optional[str] = None,
         org: Optional[str] = None,
-        version: Optional[str] = None,
+        version: Optional[str] = DEFAULT_FINN_VERSION,
         max_retries: int = DEFAULT_MAX_RETRIES,
         timeout: float = DEFAULT_TIMEOUT,
         auto_idempotency: bool = True,
@@ -179,7 +182,7 @@ class BaseCore:
         self.base_url = (base_url or DEFAULT_BASE_URL).rstrip("/")
         #: Org to act in (Finn-Org header), for tokens that can use more than one org.
         self.org = org
-        #: Pinned API version (Finn-Version header), a date such as ``2026-11-01``.
+        #: Pinned API version (Finn-Version header), a date such as ``2026-11-01``; ``None`` sends no header.
         self.version = version
         self.max_retries = max_retries
         self.timeout = timeout

@@ -11,7 +11,9 @@ import pytest
 from helpers import async_client, body_of, client, json_, text_
 
 from finn import (
+    DEFAULT_FINN_VERSION,
     DEFAULT_MAX_RETRY_WAIT,
+    __version__,
     honours_idempotency_key,
     AUTO_IDEMPOTENCY_ROUTES,
     BadRequestError,
@@ -71,8 +73,14 @@ class TestConstructionAndHeaders:
         assert req.headers["authorization"] == "Bearer finn_live_test_key"
         assert req.headers["accept"] == "application/json"
         assert "finn-org" not in req.headers
-        assert "finn-version" not in req.headers
+        assert req.headers["finn-version"] == DEFAULT_FINN_VERSION
+        assert req.headers["user-agent"] == f"finn-python/{__version__}"
         assert "idempotency-key" not in req.headers
+
+    def test_sends_no_finn_version_when_version_is_none(self):
+        finn, calls, _ = client([json_(200, {"success": True, "data": {}})], version=None)
+        finn.wallet.retrieve()
+        assert "finn-version" not in calls[0].headers
 
     def test_sends_finn_org_and_finn_version_from_the_client_overridable_per_request(self):
         finn, calls, _ = client(
@@ -376,6 +384,14 @@ class TestErrors:
             402, "insufficient_credits", "Top up", "req_9", "https://app/wallet")
         assert e.details["required_credits"] == 50
 
+    def test_maps_a_legacy_string_list_of_fields_to_field_errors(self):
+        finn, _, _ = client([json_(400, {"error": "unsupported_field", "message": "Not editable with an API key: dob",
+                                         "fields": ["dob"]})])
+        with pytest.raises(BadRequestError) as ei:
+            finn.contacts.update("rec_1", {})
+        assert ei.value.code == "unsupported_field"
+        assert ei.value.fields == [{"field": "dob", "code": "unsupported_field", "message": "Not editable with an API key: dob"}]
+
     def test_reads_insufficient_scope_with_required_scope(self):
         finn, _, _ = client([json_(403, {"error": "insufficient_scope", "message": "Needs crm:write",
                                          "required_scope": "crm:write"})])
@@ -400,6 +416,23 @@ class TestErrors:
 
 
 class TestPagination:
+    def test_pages_case_events_with_after_and_next_after(self):
+        finn, calls, _ = client([
+            json_(200, {"events": [{"seq": 1}, {"seq": 2}], "next_after": 2}),
+            json_(200, {"events": [{"seq": 3}], "next_after": 3}),
+            json_(200, {"events": [], "next_after": 3}),
+        ])
+        assert [e["seq"] for e in finn.cases.list_all_events("case_1")] == [1, 2, 3]
+        assert [urlsplit(str(c.url)).path + search(c) for c in calls] == [
+            "/v1/cases/case_1/events", "/v1/cases/case_1/events?after=2", "/v1/cases/case_1/events?after=3"]
+
+    def test_stops_case_events_on_a_short_page_when_limit_is_set(self):
+        finn, calls, _ = client([json_(200, {"events": [{"seq": 4}], "next_after": 4})])
+        assert [e["seq"] for e in finn.cases.list_all_events("case_1", after=3, limit=50)] == [4]
+        assert len(calls) == 1
+        finn.cases.list_events("case_1", after=4, limit=10)
+        assert search(calls[1]) == "?after=4&limit=10"
+
     def test_walks_offset_lists_until_a_short_page(self):
         finn, calls, _ = client([
             json_(200, {"success": True, "data": [{"call_uuid": "1"}, {"call_uuid": "2"}], "total": 5, "limit": 2, "offset": 0}),
