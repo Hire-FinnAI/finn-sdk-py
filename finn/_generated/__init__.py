@@ -1,7 +1,7 @@
 """Generated code. Do not edit by hand: run `python scripts/generate.py`."""
 SPEC_TITLE = 'Finn API'
 SPEC_VERSION = 'v1'
-OPERATION_COUNT = 154
+OPERATION_COUNT = 165
 
 #: operationId -> (method, path, SDK method on the client, experimental). Mirrors finn-sdk-ts operations.
 OPERATIONS = {
@@ -66,6 +66,7 @@ OPERATIONS = {
     'saveAgentDraft': ('put', '/agents/{id}/draft', 'agents.save_draft', False),
     'validateAgent': ('post', '/agents/{id}/validate', 'agents.validate', False),
     'testAgent': ('post', '/agents/{id}/test', 'agents.test', False),
+    'archiveAgent': ('post', '/agents/{id}/archive', 'agents.archive', False),
     'publishAgent': ('post', '/agents/{id}/publish', 'agents.publish', False),
     'driveAgentTest': ('post', '/cases/{id}/test/{action}', 'agents.drive_test', False),
     'listChatChannels': ('get', '/chat/channels', 'chat.list_channels', False),
@@ -88,6 +89,7 @@ OPERATIONS = {
     'listOrganizationMembers': ('get', '/organization/members', 'organization.list_members', False),
     'listOrganizationIntegrations': ('get', '/organization/integrations', 'organization.list_integrations', False),
     'listOrganizationApiKeys': ('get', '/organization/api_keys', 'organization.list_api_keys', False),
+    'getUsage': ('get', '/usage', 'organization.get_usage', False),
     'generateFinn': ('post', '/finns/generate', 'finns.generate', False),
     'getFinnFlow': ('get', '/finns/{finn_id}/flow', 'finns.get_flow', False),
     'enableFinnFlow': ('post', '/finns/{finn_id}/flow/enable', 'finns.enable_flow', False),
@@ -159,4 +161,13 @@ OPERATIONS = {
     'createCrmUploadLink': ('post', '/crm/records/{id}/upload_links', 'crm.create_upload_link', False),
     'guessCrmImportColumns': ('post', '/crm/imports/columns', 'crm.guess_import_columns', False),
     'importCrmRecords': ('post', '/crm/imports', 'crm.import_records', False),
+    'testWebhookEndpoint': ('post', '/webhook_endpoints/{id}/test', 'webhooks.test_endpoint', False),
+    'redeliverWebhookDelivery': ('post', '/webhook_endpoints/{id}/deliveries/{delivery_id}/redeliver', 'webhooks.redeliver_delivery', False),
+    'rotateWebhookEndpointSecret': ('post', '/webhook_endpoints/{id}/rotate_secret', 'webhooks.rotate_endpoint_secret', False),
+    'markDialerFollowUpDone': ('post', '/dialer/follow-ups/{call_id}/done', 'dialer.mark_follow_up_done', False),
+    'setDialerCallDisposition': ('put', '/dialer/calls/{call_id}/disposition', 'dialer.set_call_disposition', False),
+    'addDialerCallNote': ('post', '/dialer/calls/{call_id}/notes', 'dialer.add_call_note', False),
+    'getChatAgent': ('get', '/chat/agents/{agent_id}', 'chat.get_agent', False),
+    'updateChatAgent': ('patch', '/chat/agents/{agent_id}', 'chat.update_agent', False),
+    'testChatAgent': ('post', '/chat/agents/{agent_id}/test_turn', 'chat.test_agent', False),
 }

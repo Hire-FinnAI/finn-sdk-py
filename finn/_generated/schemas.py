@@ -8,29 +8,35 @@ from typing import Any, Dict, List, Optional, Union
 from .._compat import Literal, TypedDict
 
 
-class ErrorDetailsItem(TypedDict):
-    index: int
+class _V1ErrorErrorFieldsItemRequired(TypedDict):
+    field: str
+    code: str
     message: str
 
 
-class _ErrorRequired(TypedDict):
-    error: str
+class V1ErrorErrorFieldsItem(_V1ErrorErrorFieldsItemRequired, total=False):
+    value: Any
 
 
-class Error(_ErrorRequired, total=False):
-    "Every error has a stable `error` code and, except for `internal_error`, a human-readable `message`. Check `error`, not `message`. Some errors add the optional fields below."
+class _V1ErrorErrorRequired(TypedDict):
+    code: str
     message: str
-    action_url: str
-    details: List[ErrorDetailsItem]
-    deployment_id: Optional[str]
-    errors: List[Any]
-    required_credits: float
-    available_credits: float
-    transaction_id: str
+    fields: List[V1ErrorErrorFieldsItem]
+    request_id: Optional[str]
+    doc_url: str
+
+
+class V1ErrorError(_V1ErrorErrorRequired, total=False):
     required_scope: str
-    contact_id: str
-    fields: List[str]
-    allowed_answers: List[str]
+
+
+class V1Error(TypedDict):
+    "The error body of every endpoint. Check `error.code`, not `message`. `fields` lists each invalid input plus context entries for extra facts; `request_id` matches the `X-Request-Id` header; `doc_url` links the code's documentation."
+    error: V1ErrorError
+
+
+class Error(V1Error, total=False):
+    "Deprecated alias of `V1Error`, kept so clients generated from older versions of this spec still compile. Every error has the `V1Error` shape."
 
 
 class CreateCallRequest(TypedDict):
@@ -609,14 +615,8 @@ class DoNotCallEntry(TypedDict):
     created_at: str
 
 
-class _OperatorErrorRequired(TypedDict):
-    code: str
-    message: str
-
-
-class OperatorError(_OperatorErrorRequired, total=False):
-    "Errors from Finn Operator (cases and approvals) are passed through as Operator returns them: `code` instead of `error`. Errors raised before the request reaches Operator (key, scope, rate limit, a path ID that isn't a UUID, a missing `answer`) use the usual `Error` shape. Read `error ?? code`."
-    details: Any
+class OperatorError(V1Error, total=False):
+    "Deprecated alias of `V1Error`. Errors from Finn Operator (cases and approvals) have the `V1Error` shape too; Operator's own `{ code, message, details }` is rewritten (its `details` become `fields` context entries)."
 
 
 class _RedactedValueRequired(TypedDict):
@@ -1049,29 +1049,6 @@ class ApprovalRequestedEvent(TypedDict):
     data: ApprovalRequestedEventData
 
 
-class V1ErrorErrorFieldsItem(TypedDict):
-    field: str
-    code: str
-    message: str
-
-
-class _V1ErrorErrorRequired(TypedDict):
-    code: str
-    message: str
-    fields: List[V1ErrorErrorFieldsItem]
-    request_id: Optional[str]
-    doc_url: str
-
-
-class V1ErrorError(_V1ErrorErrorRequired, total=False):
-    required_scope: str
-
-
-class V1Error(TypedDict):
-    "The unified error body used by newer endpoints (Agents, Chat). Check `error.code`, not `message`. `fields` lists each invalid input; `request_id` matches the `X-Request-Id` header."
-    error: V1ErrorError
-
-
 class _AgentSummaryRequired(TypedDict):
     id: str
     name: str
@@ -1174,6 +1151,7 @@ class WebhookDelivery(TypedDict):
     event: Literal['call.completed', 'contact.created', 'contact.assigned', 'contact.stage_changed', 'contact.substatus_changed', 'contact.section_row_added', 'contact.link_changed', 'lead.created', 'lead.status_changed', 'document.status_changed', 'contact.updated', 'case.created', 'case.completed', 'approval.requested']
     event_id: Optional[str]
     call_uuid: Optional[str]
+    redelivery_of: Optional[str]
     status: Literal['pending', 'delivered', 'failed']
     attempts: int
     response_status: Optional[int]
@@ -1434,6 +1412,7 @@ class ApiKeyInfo(TypedDict):
     last_used_at: Optional[str]
     revoked_at: Optional[str]
     expires_at: Optional[str]
+    expiring_soon: bool
 
 
 class ApiKeyInfoList(TypedDict):
@@ -1578,6 +1557,104 @@ class ApiHoldResult(TypedDict, total=False):
 
 
 ApiHold = TypedDict('ApiHold', {'id': 'str', 'object': "Literal['approval']", 'source': "Literal['api_hold']", 'status': "Literal['pending', 'running', 'succeeded', 'failed', 'declined', 'expired']", 'action': "Literal['call.create', 'phone_number.rent', 'deployment.create', 'chat.start', 'chat.send', 'case.start']", 'class': "Literal['outward', 'money']", 'summary': 'Optional[str]', 'approve_url': 'Optional[str]', 'expires_at': 'str', 'created_at': 'str', 'decided_at': 'Optional[str]', 'finished_at': 'Optional[str]', 'outcome_unknown': 'bool', 'result': 'Optional[ApiHoldResult]'}, total=False)
+
+
+class UsageReportDataCredentialsItemTotalsCalls(TypedDict):
+    read: int
+    write: int
+    refused: int
+
+
+class UsageReportDataCredentialsItemTotals(TypedDict):
+    calls: UsageReportDataCredentialsItemTotalsCalls
+    holds_created: int
+
+
+class UsageReportDataCredentialsItemDaysItemCalls(TypedDict):
+    read: int
+    write: int
+    refused: int
+
+
+class UsageReportDataCredentialsItemDaysItem(TypedDict):
+    date: str
+    calls: UsageReportDataCredentialsItemDaysItemCalls
+    holds_created: int
+
+
+class UsageReportDataCredentialsItem(TypedDict):
+    credential_id: str
+    credential_kind: Optional[Literal['org_key', 'mcp_key', 'oauth_token']]
+    channel: Optional[str]
+    name: Optional[str]
+    totals: UsageReportDataCredentialsItemTotals
+    days: List[UsageReportDataCredentialsItemDaysItem]
+
+
+class UsageReportDataSpendTotals(TypedDict):
+    credits_spent: float
+    credits_added: float
+    transactions: int
+
+
+class UsageReportDataSpendDaysItem(TypedDict):
+    date: str
+    credits_spent: float
+    credits_added: float
+    transactions: int
+
+
+class UsageReportDataSpend(TypedDict):
+    scope: Literal['organization']
+    totals: UsageReportDataSpendTotals
+    days: List[UsageReportDataSpendDaysItem]
+
+
+class UsageReportDataLimitsPerMinute(TypedDict, total=False):
+    read: int
+    write: int
+    credential_ceiling: Optional[int]
+
+
+class UsageReportDataLimitsDailyCapsValue(TypedDict, total=False):
+    cap: int
+    used_today: Optional[int]
+
+
+class UsageReportDataLimits(TypedDict):
+    per_minute: UsageReportDataLimitsPerMinute
+    daily_caps: Optional[Dict[str, UsageReportDataLimitsDailyCapsValue]]
+
+
+class UsageReportDataCoverage(TypedDict, total=False):
+    "What each count covers: `all`, `sensitive_reads_only`, `organization`, or `unavailable` where the source is not set up yet."
+    reads: str
+    writes: str
+    holds: str
+    spend: str
+
+
+UsageReportData = TypedDict('UsageReportData', {'from': 'str', 'to': 'str', 'group_by': "Literal['day']", 'timezone': "Literal['UTC']", 'credentials': 'List[UsageReportDataCredentialsItem]', 'spend': 'UsageReportDataSpend', 'limits': 'UsageReportDataLimits', 'coverage': 'UsageReportDataCoverage'}, total=False)
+
+
+class UsageReport(TypedDict):
+    data: UsageReportData
+
+
+class WebhookTestResult(TypedDict):
+    "The outcome of one test send."
+    object: Literal['webhook_test']
+    endpoint_id: str
+    event: Literal['webhook.test']
+    delivered: bool
+    response_status: Optional[int]
+    error: Optional[str]
+    duration_ms: int
+
+
+class WebhookEndpointRotated(WebhookEndpoint):
+    secret: Optional[str]
+    previous_secret_expires_at: str
 
 
 class ListCallsResponse(TypedDict):
@@ -2277,4 +2354,39 @@ class _ImportCrmRecordsBodyRequired(TypedDict):
 class ImportCrmRecordsBody(_ImportCrmRecordsBodyRequired, total=False):
     dry_run: bool
     first_row: int
+
+
+class _SetDialerCallDispositionBodyRequired(TypedDict):
+    outcome: Literal['interested', 'callback', 'send_info', 'left_voicemail', 'wrong_person', 'not_interested', 'do_not_call']
+
+
+class SetDialerCallDispositionBody(_SetDialerCallDispositionBodyRequired, total=False):
+    callback_at: int
+
+
+class AddDialerCallNoteBody(TypedDict):
+    note: str
+
+
+class UpdateChatAgentBody(TypedDict, total=False):
+    hours: Optional[Dict[str, Any]]
+    handoff: Optional[Dict[str, Any]]
+    quick_replies: Optional[Union[List[Any], Dict[str, Any]]]
+    resolution: Optional[Dict[str, Any]]
+    booking: Optional[Dict[str, Any]]
+
+
+class TestChatAgentBodyHistoryItem(TypedDict):
+    role: Literal['user', 'assistant']
+    content: str
+
+
+class _TestChatAgentBodyRequired(TypedDict):
+    latest: str
+
+
+class TestChatAgentBody(_TestChatAgentBodyRequired, total=False):
+    history: List[TestChatAgentBodyHistoryItem]
+    channel: str
+    session: str
 

@@ -69,7 +69,7 @@ def _resolve(finn: Any, trail: Tuple[str, ...]) -> Any:
 
 def test_the_sdk_has_a_method_for_every_operation_in_the_spec():
     covered = {m["op"] for _, m in METHODS}
-    assert len(OPS) == 154
+    assert len(OPS) == 165
     assert covered == set(OPS)
 
 
@@ -141,7 +141,19 @@ def test_generated_names_mirror_the_typescript_sdk():
     assert OPERATIONS["getOrganization"][2] == "organization.get"
     assert OPERATIONS["runSalesPlay"] == ("post", "/sales/plays/{slug}/run", "sales.run_play", True)
     assert OPERATIONS["createCall"][2] == "calls.create"  # hand-written names are kept
-    assert len(OPERATIONS) == 154
+    assert len(OPERATIONS) == 165
+    # Rolling out (flag-gated, from open backend PRs); same names as finn-sdk-ts.
+    assert OPERATIONS["testWebhookEndpoint"][2] == "webhooks.test_endpoint"
+    assert OPERATIONS["redeliverWebhookDelivery"][2] == "webhooks.redeliver_delivery"
+    assert OPERATIONS["rotateWebhookEndpointSecret"][2] == "webhooks.rotate_endpoint_secret"
+    assert OPERATIONS["archiveAgent"][2] == "agents.archive"
+    assert OPERATIONS["getUsage"][2] == "organization.get_usage"
+    assert OPERATIONS["markDialerFollowUpDone"][2] == "dialer.mark_follow_up_done"
+    assert OPERATIONS["setDialerCallDisposition"][2] == "dialer.set_call_disposition"
+    assert OPERATIONS["addDialerCallNote"][2] == "dialer.add_call_note"
+    assert OPERATIONS["getChatAgent"][2] == "chat.get_agent"
+    assert OPERATIONS["updateChatAgent"][2] == "chat.update_agent"
+    assert OPERATIONS["testChatAgent"][2] == "chat.test_agent"
     assert {k for k, v in OPERATIONS.items() if v[3]} == {
         "listSalesPlays", "listSalesPlayRuns", "listSalesProspects", "runSalesPlay", "listSalesDrafts",
         "updateSalesDraft", "skipSalesDraft", "listSalesThreads", "getSalesThread",
@@ -157,7 +169,7 @@ def test_strip_noun_removes_whole_words_only():
 
 def test_readme_coverage_is_current():
     readme = (ROOT / "README.md").read_text("utf-8")
-    assert "The SDK covers **154 of 154** operations" in readme
+    assert "The SDK covers **165 of 165** operations" in readme
     assert "| `finn.sales` (experimental) |" in readme
 
 

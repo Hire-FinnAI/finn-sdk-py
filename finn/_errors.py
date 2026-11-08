@@ -141,6 +141,7 @@ class FinnError(FinnSdkError):
                 request_id=_str(obj.get("request_id")) or header_request_id,
                 action_url=_str(obj.get("action_url")),
                 required_scope=_str(obj.get("required_scope")),
+                fields=_legacy_fields(obj.get("fields"), obj["error"], _str(obj.get("message"))),
                 details={k: v for k, v in obj.items() if k not in skip},
             )
         if obj is not None and isinstance(obj.get("code"), str):
@@ -263,6 +264,19 @@ def _header(headers: Mapping[str, str], name: str) -> Optional[str]:
             if k.lower() == name:
                 return v
     return value
+
+
+def _legacy_fields(v: Any, code: str, message: Optional[str]) -> List[FinnFieldError]:
+    # Legacy bodies list the offending fields by name (``fields: ['dob']``) or as field errors.
+    if not isinstance(v, list):
+        return []
+    out: List[FinnFieldError] = []
+    for f in v:
+        if isinstance(f, str):
+            out.append({"field": f, "code": code, "message": message or code})
+        elif isinstance(f, dict) and isinstance(f.get("field"), str):
+            out.append(cast(FinnFieldError, f))
+    return out
 
 
 def _str(v: Any) -> Optional[str]:

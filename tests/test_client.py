@@ -11,6 +11,9 @@ import pytest
 from helpers import async_client, body_of, client, json_, text_
 
 from finn import (
+    DEFAULT_FINN_VERSION,
+    DEFAULT_MAX_RETRY_WAIT,
+    __version__,
     honours_idempotency_key,
     AUTO_IDEMPOTENCY_ROUTES,
     BadRequestError,
@@ -70,8 +73,14 @@ class TestConstructionAndHeaders:
         assert req.headers["authorization"] == "Bearer finn_live_test_key"
         assert req.headers["accept"] == "application/json"
         assert "finn-org" not in req.headers
-        assert "finn-version" not in req.headers
+        assert req.headers["finn-version"] == DEFAULT_FINN_VERSION
+        assert req.headers["user-agent"] == f"finn-python/{__version__}"
         assert "idempotency-key" not in req.headers
+
+    def test_sends_no_finn_version_when_version_is_none(self):
+        finn, calls, _ = client([json_(200, {"success": True, "data": {}})], version=None)
+        finn.wallet.retrieve()
+        assert "finn-version" not in calls[0].headers
 
     def test_sends_finn_org_and_finn_version_from_the_client_overridable_per_request(self):
         finn, calls, _ = client(
@@ -224,7 +233,7 @@ class TestRetries:
     def test_does_not_retry_a_post_without_an_idempotency_key(self):
         finn, calls, _ = client([json_(503, {"error": "unavailable"}), json_(201, {})])
         with pytest.raises(FinnError):
-            finn.finns.create({})  # type: ignore[typeddict-item]
+            finn.finns.create({})
         assert len(calls) == 1
 
     def test_does_not_retry_a_post_without_a_key_on_network_errors_either(self):
@@ -261,11 +270,11 @@ class TestRetries:
     def test_does_not_retry_a_keyed_post_on_a_route_that_ignores_the_key(self):
         finn, calls, _ = client([json_(503, {"error": "unavailable"}), json_(201, {})])
         with pytest.raises(FinnError):
-            finn.finns.create({}, idempotency_key="k1")  # type: ignore[typeddict-item]
+            finn.finns.create({}, idempotency_key="k1")
         assert len(calls) == 1
         finn2, calls2, _ = client([httpx.RemoteProtocolError("socket hang up"), json_(201, {})])
         with pytest.raises(FinnConnectionError):
-            finn2.finns.create({}, idempotency_key="k2")  # type: ignore[typeddict-item]
+            finn2.finns.create({}, idempotency_key="k2")
         assert len(calls2) == 1
 
     def test_retries_a_keyed_raw_post_to_a_dedupe_route_given_as_a_filled_in_path(self):
@@ -299,7 +308,7 @@ class TestRetries:
         assert len(a_calls) == 2
         b, b_calls, _ = client([json_(409, {"error": "deployment_already_active", "message": "x", "deployment_id": "d1"})])
         with pytest.raises(ConflictError) as ei:
-            b.deployments.create_outbound({})  # type: ignore[typeddict-item]
+            b.deployments.create_outbound({})
         assert len(b_calls) == 1
         assert ei.value.code == "deployment_already_active"
         assert ei.value.details["deployment_id"] == "d1"
@@ -369,11 +378,19 @@ class TestErrors:
                                          "action_url": "https://app/wallet", "required_credits": 50},
                                    {"x-request-id": "req_9"})])
         with pytest.raises(PaymentRequiredError) as ei:
-            finn.phone_numbers.rent({})  # type: ignore[typeddict-item]
+            finn.phone_numbers.rent({})
         e = ei.value
         assert (e.status, e.code, e.message, e.request_id, e.action_url) == (
             402, "insufficient_credits", "Top up", "req_9", "https://app/wallet")
         assert e.details["required_credits"] == 50
+
+    def test_maps_a_legacy_string_list_of_fields_to_field_errors(self):
+        finn, _, _ = client([json_(400, {"error": "unsupported_field", "message": "Not editable with an API key: dob",
+                                         "fields": ["dob"]})])
+        with pytest.raises(BadRequestError) as ei:
+            finn.contacts.update("rec_1", {})
+        assert ei.value.code == "unsupported_field"
+        assert ei.value.fields == [{"field": "dob", "code": "unsupported_field", "message": "Not editable with an API key: dob"}]
 
     def test_reads_insufficient_scope_with_required_scope(self):
         finn, _, _ = client([json_(403, {"error": "insufficient_scope", "message": "Needs crm:write",
@@ -399,6 +416,23 @@ class TestErrors:
 
 
 class TestPagination:
+    def test_pages_case_events_with_after_and_next_after(self):
+        finn, calls, _ = client([
+            json_(200, {"events": [{"seq": 1}, {"seq": 2}], "next_after": 2}),
+            json_(200, {"events": [{"seq": 3}], "next_after": 3}),
+            json_(200, {"events": [], "next_after": 3}),
+        ])
+        assert [e["seq"] for e in finn.cases.list_all_events("case_1")] == [1, 2, 3]
+        assert [urlsplit(str(c.url)).path + search(c) for c in calls] == [
+            "/v1/cases/case_1/events", "/v1/cases/case_1/events?after=2", "/v1/cases/case_1/events?after=3"]
+
+    def test_stops_case_events_on_a_short_page_when_limit_is_set(self):
+        finn, calls, _ = client([json_(200, {"events": [{"seq": 4}], "next_after": 4})])
+        assert [e["seq"] for e in finn.cases.list_all_events("case_1", after=3, limit=50)] == [4]
+        assert len(calls) == 1
+        finn.cases.list_events("case_1", after=4, limit=10)
+        assert search(calls[1]) == "?after=4&limit=10"
+
     def test_walks_offset_lists_until_a_short_page(self):
         finn, calls, _ = client([
             json_(200, {"success": True, "data": [{"call_uuid": "1"}, {"call_uuid": "2"}], "total": 5, "limit": 2, "offset": 0}),
@@ -428,10 +462,17 @@ class TestPagination:
                           json_(200, {"approvals": [{"id": "y"}], "next_cursor": None})])
         assert [x["id"] for x in a.approvals.list_all().to_list()] == ["x", "y"]
 
-        c, c_calls, _ = client([json_(200, {"cases": [{"id": "1"}], "next_before": "2026-11-01T00:00:00Z"}),
-                                json_(200, {"cases": [{"id": "2"}], "next_before": None})])
-        assert len(c.cases.list_all().to_list()) == 2
-        assert qparam(c_calls[1], "before") == "2026-11-01T00:00:00Z"
+        # The runtime sets next_before on every page with cases and drops hidden cases after paging, so a page can be
+        # empty with next_before set; only an empty page without it ends the list.
+        c, c_calls, _ = client([
+            json_(200, {"cases": [{"id": "1"}], "next_before": "2026-11-03T00:00:00Z"}),
+            json_(200, {"cases": [], "next_before": "2026-11-02T00:00:00Z"}),
+            json_(200, {"cases": [{"id": "2"}], "next_before": "2026-11-01T00:00:00Z"}),
+            json_(200, {"cases": [], "next_before": None}),
+        ])
+        assert [x["id"] for x in c.cases.list_all().to_list()] == ["1", "2"]
+        assert [qparam(x, "before") for x in c_calls[1:]] == [
+            "2026-11-03T00:00:00Z", "2026-11-02T00:00:00Z", "2026-11-01T00:00:00Z"]
 
         r, r_calls, _ = client([
             json_(200, {"contacts": [{"id": "r1"}], "page": 1, "pageSize": 1, "totalCount": 2, "totalPages": 2}),
@@ -452,10 +493,23 @@ class TestPagination:
             break
         assert pages[0]["next_cursor"] == "c"
 
-    def test_stops_on_an_empty_page(self):
+    def test_follows_a_cursor_past_an_empty_page(self):
+        # finn-chat drops notes after paging, so a page of notes comes back empty with a cursor.
+        finn, calls, _ = client([
+            json_(200, {"data": [], "next_cursor": "c1", "has_more": True}),
+            json_(200, {"data": [{"id": "m1"}], "next_cursor": None, "has_more": False}),
+        ])
+        assert [m["id"] for m in finn.chat.conversations.list_all_messages("conv_1").to_list()] == ["m1"]
+        assert len(calls) == 2
+
+    def test_stops_when_the_cursor_does_not_move_and_on_an_empty_offset_page(self):
         finn, calls, _ = client([json_(200, {"data": [], "next_cursor": "loop", "has_more": True})])
         assert finn.agents.list_all().to_list() == []
-        assert len(calls) == 1
+        assert len(calls) == 2
+
+        o, o_calls, _ = client([json_(200, {"success": True, "data": [], "limit": 20, "offset": 0})])
+        assert o.calls.list_all().to_list() == []
+        assert len(o_calls) == 1
 
 
 # ---------------------------------------------------------------- pending approval (202)
@@ -497,7 +551,14 @@ class TestPendingApproval:
         assert waits == [1, 1]
         assert all(str(c.url) == "https://api.hirefinn.ai/v1/approvals/hold_1" for c in calls)
 
-    def test_wait_for_approval_treats_an_operator_approval_leaving_open_as_final_and_unwraps_data(self):
+    def test_wait_for_approval_treats_an_operator_approval_leaving_open_as_final(self):
+        # Unwrapped, as the API answers GET /approvals/{id}.
+        finn, _, _ = client([json_(200, {"id": "a1", "status": "open"}),
+                             json_(200, {"id": "a1", "status": "decided"})])
+        out = finn.wait_for_approval("a1", sleep=lambda s: None)
+        assert out["status"] == "decided"
+
+    def test_wait_for_approval_also_unwraps_a_data_body(self):
         finn, _, _ = client([json_(200, {"data": {"id": "a1", "status": "open"}}),
                              json_(200, {"data": {"id": "a1", "status": "decided"}})])
         out = finn.wait_for_approval("a1", sleep=lambda s: None)
@@ -508,3 +569,64 @@ class TestPendingApproval:
         with pytest.raises(FinnApprovalTimeoutError) as ei:
             finn.wait_for_approval("h", interval=0.01, timeout=0, sleep=lambda s: None)
         assert ei.value.last_status == "pending"
+
+
+class TestRetryBudget:
+    """max_retry_wait (default 20 s) caps the total wait between retries of one request."""
+
+    def test_waits_out_retry_after_on_503_for_a_get_while_it_fits_the_budget(self):
+        finn, calls, sleeps = client(
+            [json_(503, {"error": "unavailable"}, {"retry-after": "8"}),
+             json_(503, {"error": "unavailable"}, {"retry-after": "8"}),
+             json_(200, {"success": True, "data": []})]
+        )
+        finn.finns.list()
+        assert len(calls) == 3
+        assert sleeps == [8, 8]
+
+    def test_stops_before_the_total_wait_would_pass_20s_and_raises_the_last_error(self):
+        finn, calls, sleeps = client(
+            [json_(503, {"error": "unavailable"}, {"retry-after": "15"}),
+             json_(503, {"error": "unavailable"}, {"retry-after": "15"})],
+            max_retries=5,
+        )
+        with pytest.raises(FinnError) as ei:
+            finn.finns.list()
+        assert ei.value.status == 503
+        assert len(calls) == 2
+        assert sleeps == [15]
+
+    def test_can_be_raised_per_client(self):
+        finn, calls, _ = client(
+            [json_(504, {}, {"retry-after": "30"}), json_(200, {"success": True, "data": []})], max_retry_wait=60
+        )
+        finn.finns.list()
+        assert len(calls) == 2
+
+    def test_async_respects_the_budget_too(self):
+        finn, calls, sleeps = async_client(
+            [json_(502, {}, {"retry-after": "12"}), json_(502, {}, {"retry-after": "12"})], max_retries=5
+        )
+        with pytest.raises(FinnError):
+            asyncio.run(finn.finns.list())
+        assert len(calls) == 2
+        assert sleeps == [12]
+
+    def test_retries_a_keyed_dialer_note_but_never_an_unkeyed_one(self):
+        finn, calls, _ = client([json_(502, {}), json_(201, {"success": True, "data": {}})])
+        finn.dialer.add_call_note("c1", {"note": "hi"}, idempotency_key="k1")
+        assert len(calls) == 2
+        assert calls[0].headers["idempotency-key"] == calls[1].headers["idempotency-key"] == "k1"
+
+        finn, calls, _ = client([json_(502, {}), json_(201, {})])
+        with pytest.raises(FinnError):
+            finn.dialer.add_call_note("c1", {"note": "hi"})
+        assert len(calls) == 1
+
+    def test_new_rolling_out_writes_are_deduped_only_where_the_api_dedupes_them(self):
+        assert honours_idempotency_key("PATCH", "/chat/agents/a1")
+        assert honours_idempotency_key("POST", "/chat/agents/a1/test_turn")
+        assert honours_idempotency_key("POST", "/dialer/follow-ups/c1/done")
+        assert not honours_idempotency_key("POST", "/webhook_endpoints/w1/rotate_secret")
+        assert not honours_idempotency_key("POST", "/agents/a1/archive")
+        assert DEFAULT_MAX_RETRY_WAIT == 20.0

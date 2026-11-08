@@ -24,13 +24,27 @@ WEBHOOK_EVENT_HEADER = "X-Finn-Event"
 DEFAULT_WEBHOOK_TOLERANCE = 300
 
 
-class WebhookEvent(TypedDict):
-    """The body of every webhook delivery."""
-
+class _WebhookEventBase(TypedDict):
     #: e.g. ``call.completed``, ``contact.created``, ``case.completed``.
     event: str
+    #: When this delivery was sent.
     created_at: str
     data: Dict[str, Any]
+
+
+class WebhookEvent(_WebhookEventBase, total=False):
+    """The body of a webhook delivery (the Finn envelope).
+
+    Endpoints imported from Finn Chat with the ``chat`` envelope get Finn Chat's own body instead:
+    ``{id, event, createdAt, orgId, data}``.
+    """
+
+    #: Unique per event, and the same on every retry or redelivery of it: dedupe on it.
+    event_id: str
+    #: When the event happened.
+    occurred_at: str
+    #: The organization the event belongs to.
+    org_id: str
 
 
 class FinnWebhookVerificationError(FinnSdkError):
