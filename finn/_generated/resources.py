@@ -1509,7 +1509,7 @@ class Crm(Resource):
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
         )
 
-    def list_forms(self, *, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> Dict[str, Any]:
+    def list_forms(self, *, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> t.ListCrmFormsResponse:
         """List forms.
 
         ``GET /crm/forms`` (listCrmForms).
@@ -3760,7 +3760,7 @@ class AsyncCrm(AsyncResource):
             idempotency_key=idempotency_key, org=org, version=version, max_retries=max_retries, timeout=timeout, extra_headers=extra_headers,
         )
 
-    async def list_forms(self, *, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> Dict[str, Any]:
+    async def list_forms(self, *, idempotency_key: Union[str, bool, None] = None, org: Optional[str] = None, version: Optional[str] = None, max_retries: Optional[int] = None, timeout: Optional[float] = None, extra_headers: Optional[Mapping[str, str]] = None) -> t.ListCrmFormsResponse:
         """List forms.
 
         ``GET /crm/forms`` (listCrmForms).
