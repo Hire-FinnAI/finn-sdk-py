@@ -25090,6 +25090,74 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "properties": {
+                    "forms": {
+                      "type": "array",
+                      "description": "The organization's forms that are not archived, most recently changed first.",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "format": "uuid"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "status": {
+                            "type": "string",
+                            "enum": [
+                              "draft",
+                              "live",
+                              "closed"
+                            ]
+                          },
+                          "audience": {
+                            "type": "string",
+                            "enum": [
+                              "public",
+                              "links",
+                              "staff"
+                            ],
+                            "description": "Who can fill it: anyone with the public link, only people sent a link, or only staff."
+                          },
+                          "url": {
+                            "type": [
+                              "string",
+                              "null"
+                            ],
+                            "description": "The public link, or null when the form is not public."
+                          },
+                          "responses": {
+                            "type": "integer"
+                          },
+                          "last_response_at": {
+                            "type": [
+                              "string",
+                              "null"
+                            ],
+                            "format": "date-time"
+                          },
+                          "updated_at": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "staff_fill": {
+                            "type": "boolean",
+                            "description": "Whether staff can fill this form on a record."
+                          },
+                          "discovery": {
+                            "type": "boolean",
+                            "description": "Whether the form is a discovery questionnaire: it has a section group marked as discovery, or its discovery flow is on."
+                          }
+                        },
+                        "additionalProperties": true
+                      }
+                    },
+                    "success": {
+                      "type": "boolean"
+                    }
+                  },
                   "additionalProperties": true
                 }
               }

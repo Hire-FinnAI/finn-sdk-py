@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.5.0 (2026-11-25)
+
+### Added
+
+- `finn.crm.list_forms()` now has a typed response (`ListCrmFormsResponse` / `forms[i]["discovery"]`). Each form carries `discovery`: true when it is a discovery
+  questionnaire (a section group marked as discovery, or its discovery flow on). Needs the 2026-11-25 backend release (live); older
+  servers simply omit the field.
+
 ## 0.4.0 (2026-11-08)
 
 First release on PyPI since 0.2.0 (0.3.0 was tagged in the repo but never uploaded).

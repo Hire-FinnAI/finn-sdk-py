@@ -2210,6 +2210,24 @@ class AttachCrmFileBody(_AttachCrmFileBodyRequired, total=False):
     doc_type: str
 
 
+class ListCrmFormsResponseFormsItem(TypedDict, total=False):
+    id: str
+    name: str
+    status: Literal['draft', 'live', 'closed']
+    audience: Literal['public', 'links', 'staff']
+    url: Optional[str]
+    responses: int
+    last_response_at: Optional[str]
+    updated_at: str
+    staff_fill: bool
+    discovery: bool
+
+
+class ListCrmFormsResponse(TypedDict, total=False):
+    forms: List[ListCrmFormsResponseFormsItem]
+    success: bool
+
+
 class _ListCrmFollowUpsResponseRequired(TypedDict):
     data: List[Dict[str, Any]]
     next_cursor: Optional[str]
