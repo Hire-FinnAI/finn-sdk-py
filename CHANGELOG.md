@@ -1,11 +1,11 @@
 # Changelog
 
-## Unreleased
+## 0.5.0 (2026-11-25)
 
 ### Added
 
 - `finn.crm.list_forms()` now has a typed response (`ListCrmFormsResponse` / `forms[i]["discovery"]`). Each form carries `discovery`: true when it is a discovery
-  questionnaire (a section group marked as discovery, or its discovery flow on). Needs backend #848 live; older
+  questionnaire (a section group marked as discovery, or its discovery flow on). Needs the 2026-11-25 backend release (live); older
   servers simply omit the field.
 
 ## 0.4.0 (2026-11-08)
