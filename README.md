@@ -184,7 +184,9 @@ ignores it there, so the SDK does not retry that write. Check with `finns.list` 
 
 ## Webhooks
 
-Finn signs each delivery with `X-Finn-Signature: t=<unix>,v1=<hex HMAC-SHA256(secret, "<t>.<raw body>")>`.
+Finn signs each delivery with `X-Webhook-Signature: t=<unix>,v1=<hex HMAC-SHA256(secret, "<t>.<raw body>")>`
+(also sent as `X-Finn-Signature` until that name is retired; `verify_webhook` reads either, new name first). The event
+name is in `X-Webhook-Event` (older `X-Finn-Event`); `read_webhook_header(request.headers, "event")` reads it the same way.
 `verify_webhook` checks it in constant time, refuses timestamps more than 300 s from now, and returns the parsed
 event. Pass the **raw** body, not re-serialised JSON.
 

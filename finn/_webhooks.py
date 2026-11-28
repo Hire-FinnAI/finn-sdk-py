@@ -1,8 +1,10 @@
 """Webhook signature checks.
 
-Finn signs every delivery with ``X-Finn-Signature: t=<unix seconds>,v1=<hex HMAC-SHA256(secret, "<t>.<raw body>")>``
-and names the event in ``X-Finn-Event``. :func:`verify_webhook` checks the signature in constant time and refuses
-deliveries whose timestamp is too far from now, so a captured request cannot be replayed later.
+Finn signs every delivery with ``X-Webhook-Signature: t=<unix seconds>,v1=<hex HMAC-SHA256(secret, "<t>.<raw body>")>``
+and names the event in ``X-Webhook-Event``. Deliveries also carry the same values under the older ``X-Finn-*`` names
+until those are retired; the readers here take the neutral name first and fall back to the old one.
+:func:`verify_webhook` checks the signature in constant time and refuses deliveries whose timestamp is too far from
+now, so a captured request cannot be replayed later.
 """
 from __future__ import annotations
 
@@ -16,10 +18,26 @@ from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple, Union
 from ._compat import TypedDict
 from ._errors import FinnSdkError
 
-#: Header that carries the signature.
-WEBHOOK_SIGNATURE_HEADER = "X-Finn-Signature"
-#: Header that carries the event name.
-WEBHOOK_EVENT_HEADER = "X-Finn-Event"
+#: Webhook header names, by kind. Read these first.
+WEBHOOK_HEADERS: Dict[str, str] = {
+    "signature": "X-Webhook-Signature",
+    "event": "X-Webhook-Event",
+    "delivery": "X-Webhook-Delivery",
+    "timestamp": "X-Webhook-Timestamp",
+}
+#: The older names for the same headers, sent alongside :data:`WEBHOOK_HEADERS` until they are retired.
+LEGACY_WEBHOOK_HEADERS: Dict[str, str] = {
+    "signature": "X-Finn-Signature",
+    "event": "X-Finn-Event",
+    "delivery": "X-Finn-Delivery",
+    "timestamp": "X-Finn-Timestamp",
+}
+#: Header that carries the signature (older name). Deprecated: use ``WEBHOOK_HEADERS["signature"]``;
+#: :func:`verify_webhook` reads either.
+WEBHOOK_SIGNATURE_HEADER = LEGACY_WEBHOOK_HEADERS["signature"]
+#: Header that carries the event name (older name). Deprecated: use ``WEBHOOK_HEADERS["event"]``;
+#: :func:`read_webhook_header` reads either.
+WEBHOOK_EVENT_HEADER = LEGACY_WEBHOOK_HEADERS["event"]
 #: Default largest gap, in seconds, between the signed timestamp and now.
 DEFAULT_WEBHOOK_TOLERANCE = 300
 
@@ -73,21 +91,44 @@ def sign_webhook_payload(secret: str, timestamp: Union[int, str], payload: Union
     return hmac.new(secret.encode("utf-8"), f"{timestamp}.".encode("utf-8") + body, hashlib.sha256).hexdigest()
 
 
-def _read_header(headers: Optional[Mapping[str, Any]]) -> Optional[str]:
-    if headers is None:
-        return None
+def _read_one(headers: Mapping[str, Any], name: str) -> Optional[str]:
     getter = getattr(headers, "get", None)
     # Case-insensitive mappings (httpx, requests, Starlette, Werkzeug) answer either spelling.
     if callable(getter):
-        for name in (WEBHOOK_SIGNATURE_HEADER, WEBHOOK_SIGNATURE_HEADER.lower()):
-            value = getter(name)
+        for candidate in (name, name.lower()):
+            value = getter(candidate)
+            if isinstance(value, (list, tuple)):
+                value = value[0] if value else None
             if value:
-                return str(value[0] if isinstance(value, (list, tuple)) else value)
-    want = WEBHOOK_SIGNATURE_HEADER.lower()
+                return str(value)
+    want = name.lower()
     for k, v in headers.items():
+        if isinstance(v, (list, tuple)):
+            v = v[0] if v else None
         if str(k).lower() == want and v:
-            return str(v[0] if isinstance(v, (list, tuple)) else v)
+            return str(v)
     return None
+
+
+def read_webhook_header(headers: Optional[Mapping[str, Any]], kind: str) -> Optional[str]:
+    """Reads a webhook header: the neutral ``X-Webhook-*`` name first, then the older ``X-Finn-*`` name.
+
+    Args:
+        headers: The request's headers (any mapping; case-insensitive ones and plain dicts in any case).
+        kind: ``"signature"``, ``"event"``, ``"delivery"`` or ``"timestamp"``.
+
+    Returns:
+        The header value, or None when neither name is set.
+
+    Example::
+
+        event_name = read_webhook_header(request.headers, "event")  # "call.completed"
+    """
+    if kind not in WEBHOOK_HEADERS:
+        raise ValueError(f"Unknown webhook header kind {kind!r}; expected one of {sorted(WEBHOOK_HEADERS)}.")
+    if headers is None:
+        return None
+    return _read_one(headers, WEBHOOK_HEADERS[kind]) or _read_one(headers, LEGACY_WEBHOOK_HEADERS[kind])
 
 
 def verify_webhook(
@@ -104,7 +145,8 @@ def verify_webhook(
     Args:
         payload: The raw request body, exactly as received (``request.get_data()``, ``await request.body()``).
             Not re-serialised JSON: that changes the bytes that were signed.
-        header: The ``X-Finn-Signature`` value. Or pass ``headers=`` to read it from the request's headers.
+        header: The ``X-Webhook-Signature`` (or older ``X-Finn-Signature``) value. Or pass ``headers=`` to read it
+            from the request's headers (the new name first, then the old one).
         secret: The endpoint's signing secret (``whsec_...``). Pass a list while you rotate secrets.
         tolerance: Largest gap between the signed timestamp and now, in seconds. Default 300.
         now: Current unix time (for tests).
@@ -127,12 +169,16 @@ def verify_webhook(
     if not secrets:
         raise FinnWebhookVerificationError("Missing webhook signing secret.")
 
-    value = header if header is not None else _read_header(headers)
+    value = header if header is not None else read_webhook_header(headers, "signature")
     if not value:
-        raise FinnWebhookVerificationError(f"Missing {WEBHOOK_SIGNATURE_HEADER} header.")
+        raise FinnWebhookVerificationError(
+            f"Missing {WEBHOOK_HEADERS['signature']} (or {LEGACY_WEBHOOK_HEADERS['signature']}) header."
+        )
     timestamp, signatures = parse_signature_header(value)
     if timestamp is None or not signatures:
-        raise FinnWebhookVerificationError(f"Malformed {WEBHOOK_SIGNATURE_HEADER} header: expected t=<unix>,v1=<hex>.")
+        raise FinnWebhookVerificationError(
+            f"Malformed {WEBHOOK_HEADERS['signature']} header: expected t=<unix>,v1=<hex>."
+        )
 
     current = time.time() if now is None else now
     if abs(current - timestamp) > tolerance:

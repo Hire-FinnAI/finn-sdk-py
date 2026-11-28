@@ -41,11 +41,14 @@ from ._types import ApprovalHold, FinnResponse
 from ._version import __version__
 from ._webhooks import (
     DEFAULT_WEBHOOK_TOLERANCE,
+    LEGACY_WEBHOOK_HEADERS,
     WEBHOOK_EVENT_HEADER,
+    WEBHOOK_HEADERS,
     WEBHOOK_SIGNATURE_HEADER,
     FinnWebhookVerificationError,
     WebhookEvent,
     parse_signature_header,
+    read_webhook_header,
     sign_webhook_payload,
     verify_webhook,
 )
@@ -57,7 +60,9 @@ __all__ = [
     "IDEMPOTENT_WRITE_ROUTES",
     "DEFAULT_MAX_RETRY_WAIT",
     "DEFAULT_FINN_VERSION",
+    "LEGACY_WEBHOOK_HEADERS",
     "WEBHOOK_EVENT_HEADER",
+    "WEBHOOK_HEADERS",
     "WEBHOOK_SIGNATURE_HEADER",
     "ApprovalHold",
     "AsyncFinn",
@@ -90,6 +95,7 @@ __all__ = [
     "is_pending_approval",
     "parse_retry_after",
     "parse_signature_header",
+    "read_webhook_header",
     "sign_webhook_payload",
     "types",
     "verify_webhook",
