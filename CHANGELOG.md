@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.5.1 (unreleased)
+
+### Added
+
+- Webhooks accept the neutral header names Finn now sends alongside the old ones: `X-Webhook-Signature`, `X-Webhook-Event`,
+  `X-Webhook-Delivery`, `X-Webhook-Timestamp`. `verify_webhook()` reads `X-Webhook-Signature` first and falls back to
+  `X-Finn-Signature`, so it works against servers that send either or both.
+- `read_webhook_header(headers, "signature" | "event" | "delivery" | "timestamp")` reads any webhook header the same way, and
+  `WEBHOOK_HEADERS` / `LEGACY_WEBHOOK_HEADERS` export both sets of names.
+
+### Deprecated
+
+- `WEBHOOK_SIGNATURE_HEADER` and `WEBHOOK_EVENT_HEADER` (still `X-Finn-Signature` / `X-Finn-Event`). The `X-Finn-*` names will be
+  retired at a later date; use `WEBHOOK_HEADERS` or `read_webhook_header()`.
+
 ## 0.5.0 (2026-11-25)
 
 ### Added

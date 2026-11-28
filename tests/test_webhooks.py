@@ -7,7 +7,15 @@ import json
 
 import pytest
 
-from finn import FinnWebhookVerificationError, parse_signature_header, sign_webhook_payload, verify_webhook
+from finn import (
+    LEGACY_WEBHOOK_HEADERS,
+    WEBHOOK_HEADERS,
+    FinnWebhookVerificationError,
+    parse_signature_header,
+    read_webhook_header,
+    sign_webhook_payload,
+    verify_webhook,
+)
 
 SECRET = "whsec_test_0123456789abcdef"
 BODY = json.dumps({"event": "call.completed", "created_at": "2026-11-06T10:00:00.000Z", "data": {"call_uuid": "c1"}})
@@ -43,7 +51,7 @@ def test_sign_webhook_payload_matches_the_backend():
         (BODY.replace("c1", "c2"), backend_sign(SECRET, T, BODY), SECRET, "does not match"),
         (BODY, "v1=abc", SECRET, "Malformed"),
         (BODY, f"t={T},v1=zzé", SECRET, "does not match"),
-        (BODY, None, SECRET, "Missing X-Finn-Signature"),
+        (BODY, None, SECRET, r"Missing X-Webhook-Signature \(or X-Finn-Signature\)"),
         (BODY, backend_sign(SECRET, T, BODY), "", "Missing webhook signing secret"),
     ],
 )
@@ -91,3 +99,52 @@ def test_refuses_parsed_json_as_the_payload():
 
 def test_parses_the_header():
     assert parse_signature_header("t=12, v1=AB ,v1=cd,v0=x") == (12, ["ab", "cd"])
+
+
+class _CaseInsensitive(dict):
+    """Stands in for httpx/Starlette headers: get() ignores case."""
+
+    def get(self, key, default=None):
+        for k, v in self.items():
+            if k.lower() == key.lower():
+                return v
+        return default
+
+
+def test_neutral_signature_header_only():
+    sig = backend_sign(SECRET, T, BODY)
+    assert verify_webhook(BODY, secret=SECRET, headers={"X-Webhook-Signature": sig}, now=T)
+    assert verify_webhook(BODY, secret=SECRET, headers={"x-webhook-signature": sig}, now=T)
+    assert verify_webhook(BODY, secret=SECRET, headers=_CaseInsensitive({"X-WEBHOOK-SIGNATURE": sig}), now=T)
+
+
+def test_legacy_signature_header_only():
+    sig = backend_sign(SECRET, T, BODY)
+    assert verify_webhook(BODY, secret=SECRET, headers={"X-Finn-Signature": sig}, now=T)
+    assert verify_webhook(BODY, secret=SECRET, headers=_CaseInsensitive({"x-finn-signature": sig}), now=T)
+
+
+def test_both_signature_headers_prefer_the_neutral_one():
+    sig = backend_sign(SECRET, T, BODY)
+    assert verify_webhook(BODY, secret=SECRET, headers={"X-Webhook-Signature": sig, "X-Finn-Signature": sig}, now=T)
+    bad = f"t={T},v1={'0' * 64}"
+    with pytest.raises(FinnWebhookVerificationError, match="does not match"):
+        verify_webhook(BODY, secret=SECRET, headers={"X-Webhook-Signature": bad, "X-Finn-Signature": sig}, now=T)
+    # An empty neutral header falls back to the old one.
+    assert verify_webhook(BODY, secret=SECRET, headers={"x-webhook-signature": "", "x-finn-signature": sig}, now=T)
+
+
+@pytest.mark.parametrize("kind", ["signature", "event", "delivery", "timestamp"])
+def test_read_webhook_header_new_old_both(kind):
+    new, old = WEBHOOK_HEADERS[kind], LEGACY_WEBHOOK_HEADERS[kind]
+    assert read_webhook_header({new.lower(): "new"}, kind) == "new"
+    assert read_webhook_header({old: "old"}, kind) == "old"
+    assert read_webhook_header({new: "new", old: "old"}, kind) == "new"
+    assert read_webhook_header(_CaseInsensitive({old: "old", new: ["new"]}), kind) == "new"
+    assert read_webhook_header({}, kind) is None
+    assert read_webhook_header(None, kind) is None
+
+
+def test_read_webhook_header_rejects_unknown_kind():
+    with pytest.raises(ValueError):
+        read_webhook_header({}, "count")
